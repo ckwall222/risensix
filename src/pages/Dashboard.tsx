@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { supabase } from '../lib/supabase'
 import { AppLayout } from '../components/AppLayout'
-import { getProgressCountsByFocusArea } from '../lib/lessonProgress'
+import { JourneyTimeline } from '../components/JourneyTimeline'
+import { computeMilestoneStatus, MILESTONES } from '../lib/milestones'
 
 type FocusArea = {
   id: string
@@ -28,6 +29,8 @@ export function Dashboard() {
   const [focusAreas, setFocusAreas] = useState<FocusArea[]>([])
   const [counts, setCounts] = useState<Record<string, { completed: number; total: number }>>({})
   const [next, setNext] = useState<RecommendedLesson | null>(null)
+  const [completedSlugs, setCompletedSlugs] = useState<Set<string>>(new Set())
+  const [startedSlugs, setStartedSlugs] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -36,13 +39,46 @@ export function Dashboard() {
       if (!user || !profile) return
       setLoading(true)
 
-      const [{ data: areas }, c, recommended] = await Promise.all([
+      const [{ data: areas }, allLessonsRes, progressRes, recommended] = await Promise.all([
         supabase.from('focus_areas').select('*').order('sort_order'),
-        getProgressCountsByFocusArea(user.id),
+        supabase.from('lessons').select('id, slug, focus_area_id'),
+        supabase.from('lesson_progress').select('lesson_id, status').eq('user_id', user.id),
         recommendNextLesson(user.id, profile.ability_level),
       ])
       if (!mounted) return
       setFocusAreas((areas as FocusArea[] | null) ?? [])
+
+      const lessons = (allLessonsRes.data as { id: string; slug: string; focus_area_id: string }[] | null) ?? []
+      const progress = (progressRes.data as { lesson_id: string; status: string }[] | null) ?? []
+
+      // Build slug ↔ id maps
+      const idToSlug = new Map(lessons.map(l => [l.id, l.slug] as const))
+      const completed = new Set<string>()
+      const started = new Set<string>()
+      const completedByArea: Record<string, number> = {}
+
+      for (const row of progress) {
+        const slug = idToSlug.get(row.lesson_id)
+        if (!slug) continue
+        if (row.status === 'completed') completed.add(slug)
+        if (row.status === 'in_progress' || row.status === 'completed') started.add(slug)
+      }
+      for (const lesson of lessons) {
+        if (completed.has(lesson.slug)) {
+          completedByArea[lesson.focus_area_id] = (completedByArea[lesson.focus_area_id] ?? 0) + 1
+        }
+      }
+      const totalsByArea: Record<string, number> = {}
+      for (const lesson of lessons) {
+        totalsByArea[lesson.focus_area_id] = (totalsByArea[lesson.focus_area_id] ?? 0) + 1
+      }
+      const c: Record<string, { completed: number; total: number }> = {}
+      for (const a of (areas as FocusArea[] | null) ?? []) {
+        c[a.id] = { completed: completedByArea[a.id] ?? 0, total: totalsByArea[a.id] ?? 0 }
+      }
+
+      setCompletedSlugs(completed)
+      setStartedSlugs(started)
       setCounts(c)
       setNext(recommended)
       setLoading(false)
@@ -53,13 +89,26 @@ export function Dashboard() {
 
   const greeting = profile?.display_name ? `Welcome back, ${profile.display_name}.` : 'Welcome back.'
 
+  const earnedCount = MILESTONES.filter(
+    m => computeMilestoneStatus(m, completedSlugs, startedSlugs) === 'earned'
+  ).length
+  const totalAvailable = MILESTONES.filter(m => m.requiredLessonSlugs.length > 0).length
+
   return (
     <AppLayout>
       <div className="max-w-6xl mx-auto px-5 sm:px-6 py-12 md:py-16">
         <div className="eyebrow mb-3">Dashboard</div>
-        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-10">
+        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-3">
           {greeting}
         </h1>
+        {!loading && totalAvailable > 0 && (
+          <p className="text-cream-50/55 text-sm mb-10">
+            <span className="text-gold-100">{earnedCount}</span> of{' '}
+            <span className="text-cream-50">{totalAvailable}</span> milestones earned
+            {' · '}
+            <span className="text-cream-50/40">{MILESTONES.length - totalAvailable} on the path ahead</span>
+          </p>
+        )}
 
         {/* Recommended next lesson */}
         {next ? (
@@ -85,8 +134,21 @@ export function Dashboard() {
           )
         )}
 
-        {/* Focus areas */}
+        {/* Journey */}
         <div className="mt-16">
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="h-section">Your journey</h2>
+          </div>
+          <div className="hairline mb-10" />
+          {loading ? (
+            <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
+          ) : (
+            <JourneyTimeline completedSlugs={completedSlugs} startedSlugs={startedSlugs} />
+          )}
+        </div>
+
+        {/* Focus areas */}
+        <div className="mt-20">
           <div className="flex items-baseline justify-between mb-6">
             <h2 className="h-section">Focus areas</h2>
             <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">
@@ -127,7 +189,7 @@ export function Dashboard() {
 
         {/* Profile snapshot */}
         {profile && (
-          <div className="mt-16">
+          <div className="mt-20">
             <h2 className="h-section mb-6">Your profile</h2>
             <div className="hairline mb-6" />
             <dl className="grid grid-cols-2 md:grid-cols-4 gap-y-5 gap-x-8 text-sm">
