@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 240" role="img" aria-labelledby="rsh-title">
+  <title id="rsh-title">Risen Six — Six strings. Endless rise.</title>
+
+  <defs>
+    <linearGradient id="rshGold" x1="0" y1="0" x2="0" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#F8DC91"/>
+      <stop offset="50%"  stop-color="#C9962B"/>
+      <stop offset="100%" stop-color="#6B4515"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Mark (cloned from risen-six-mark.svg) -->
+  <g>
+    <path d="M 102 22 L 110 6 L 118 22 L 120 4 L 122 22 L 130 6 L 138 22 Z" fill="url(#rshGold)"/>
+    <g fill="none" stroke="url(#rshGold)" stroke-width="9" stroke-linecap="round">
+      <path d="M 58 205 C 25 130, 20 80, 60 78"/>
+      <path d="M 84 205 C 75 140, 70 70, 90 45"/>
+      <path d="M 108 205 C 105 130, 110 60, 116 28"/>
+      <path d="M 132 205 C 135 130, 130 60, 124 28"/>
+      <path d="M 156 205 C 165 140, 170 70, 150 45"/>
+      <path d="M 182 205 C 215 130, 220 80, 180 78"/>
+    </g>
+    <line x1="52" y1="208" x2="188" y2="208" stroke="url(#rshGold)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g font-family="'Cinzel', 'Trajan Pro', 'Cormorant Garamond', 'Times New Roman', serif" fill="#1A1A1A">
+    <text x="270" y="140" font-size="78" font-weight="700" letter-spacing="6">RISEN SIX</text>
+    <text x="272" y="180" font-size="20" font-weight="400" letter-spacing="8" fill="#7A4F12" font-style="italic">Six strings. Endless rise.</text>
+  </g>
+</svg>

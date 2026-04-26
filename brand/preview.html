@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Risen Six — Brand Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold-100: #F8DC91;
+      --gold-500: #C9962B;
+      --gold-900: #6B4515;
+      --night-900: #0A0A0A;
+      --night-700: #1A1A1A;
+      --cream-50: #FAF6EE;
+      --ember-500: #E25C2B;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--cream-50);
+      color: var(--night-700);
+    }
+    header {
+      padding: 64px 32px 32px;
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    header h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    header p { margin: 0; color: var(--gold-900); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    section {
+      max-width: 1080px;
+      margin: 48px auto;
+      padding: 0 32px;
+    }
+    h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 0 0 16px;
+      color: var(--gold-900);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding-bottom: 8px;
+    }
+
+    .tile {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .tile.dark { background: var(--night-900); }
+    .tile.cream { background: var(--cream-50); }
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .tile img { max-width: 100%; height: auto; }
+
+    .mark-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .mark-row figure { margin: 0; text-align: center; }
+    .mark-row figcaption { margin-top: 8px; font-size: 12px; color: var(--gold-900); letter-spacing: 0.08em; text-transform: uppercase; }
+    .mark-row .size-256 { width: 256px; height: 256px; }
+    .mark-row .size-128 { width: 128px; height: 128px; }
+    .mark-row .size-64  { width: 64px;  height: 64px;  }
+    .mark-row .size-32  { width: 32px;  height: 32px;  }
+
+    .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .swatch { border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
+    .swatch .chip { height: 96px; }
+    .swatch .meta { padding: 12px 14px; font-size: 13px; background: white; }
+    .swatch .meta strong { display: block; font-family: 'Cinzel', serif; letter-spacing: 0.08em; }
+    .swatch .meta code { color: var(--gold-900); }
+
+    .type-row { display: flex; flex-direction: column; gap: 24px; }
+    .type-sample { padding: 24px 32px; background: white; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; }
+    .type-sample .label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-900); margin-bottom: 8px; }
+    .display-cinzel { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 0.12em; font-size: 48px; }
+    .body-inter { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; }
+
+    .hero-mock {
+      background: linear-gradient(180deg, var(--night-900) 0%, #14110A 100%);
+      border-radius: 16px;
+      padding: 80px 48px;
+      color: var(--cream-50);
+      text-align: center;
+    }
+    .hero-mock h3 {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 56px;
+      letter-spacing: 0.12em;
+      margin: 24px 0 8px;
+    }
+    .hero-mock p { font-style: italic; color: var(--gold-100); letter-spacing: 0.06em; margin: 0 0 32px; }
+    .hero-mock .cta {
+      display: inline-block;
+      background: var(--ember-500);
+      color: var(--cream-50);
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    footer { text-align: center; padding: 48px 32px 64px; color: var(--gold-900); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>RISEN SIX</h1>
+  <p>Brand preview · v0.1</p>
+</header>
+
+<section>
+  <h2>Hero treatment (homepage feel)</h2>
+  <div class="hero-mock">
+    <img src="risen-six-mark.svg" alt="Risen Six mark" width="200" height="200" />
+    <h3>RISEN SIX</h3>
+    <p>Six strings. Endless rise.</p>
+    <a href="#" class="cta">Start your path</a>
+  </div>
+</section>
+
+<section>
+  <h2>Primary mark</h2>
+  <div class="mark-row">
+    <figure>
+      <div class="tile cream"><img class="size-256" src="risen-six-mark.svg" alt="Risen Six mark, gold on cream" /></div>
+      <figcaption>Gold on cream</figcaption>
+    </figure>
+    <figure>
+      <div class="tile dark"><img class="size-256" src="risen-six-mark.svg" alt="Risen Six mark, gold on black" /></div>
+      <figcaption>Gold on stage black</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h2>Monochrome variants</h2>
+  <div class="mark-row">
+    <figure>
+      <div class="tile cream"><img class="size-256" src="risen-six-mark-mono-dark.svg" alt="Mono dark" /></div>
+      <figcaption>Charcoal on cream</figcaption>
+    </figure>
+    <figure>
+      <div class="tile dark"><img class="size-256" src="risen-six-mark-mono-light.svg" alt="Mono light" /></div>
+      <figcaption>Cream on stage black</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h2>Scale test (favicon → display)</h2>
+  <div class="mark-row">
+    <figure><div class="tile cream"><img class="size-256" src="risen-six-mark.svg" alt="" /></div><figcaption>256 px</figcaption></figure>
+    <figure><div class="tile cream"><img class="size-128" src="risen-six-mark.svg" alt="" /></div><figcaption>128 px</figcaption></figure>
+    <figure><div class="tile cream"><img class="size-64" src="risen-six-mark.svg" alt="" /></div><figcaption>64 px</figcaption></figure>
+    <figure><div class="tile cream"><img class="size-32" src="risen-six-mark.svg" alt="" /></div><figcaption>32 px (favicon)</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>Lockups</h2>
+  <div class="tile-grid">
+    <div class="tile"><img src="risen-six-horizontal.svg" alt="Horizontal lockup" /></div>
+    <div class="tile"><img src="risen-six-stacked.svg" alt="Stacked lockup" /></div>
+  </div>
+</section>
+
+<section>
+  <h2>Color palette</h2>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#F8DC91"></div><div class="meta"><strong>Gold 100</strong><code>#F8DC91</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#C9962B"></div><div class="meta"><strong>Gold 500</strong><code>#C9962B</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#6B4515"></div><div class="meta"><strong>Gold 900</strong><code>#6B4515</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#0A0A0A"></div><div class="meta"><strong>Stage Black</strong><code>#0A0A0A</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#1A1A1A"></div><div class="meta"><strong>Charcoal</strong><code>#1A1A1A</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#FAF6EE"></div><div class="meta"><strong>Cream</strong><code>#FAF6EE</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#E25C2B"></div><div class="meta"><strong>Ember</strong><code>#E25C2B</code></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Type</h2>
+  <div class="type-row">
+    <div class="type-sample">
+      <div class="label">Display · Cinzel 700</div>
+      <div class="display-cinzel">CHORD VOCABULARY</div>
+    </div>
+    <div class="type-sample">
+      <div class="label">Body · Inter 400/500</div>
+      <div class="body-inter">The CAGED system organizes the fretboard into five movable shapes. Once you can see all five, every major chord and its scale lives under your fingers — anywhere on the neck.</div>
+    </div>
+  </div>
+</section>
+
+<footer>RISEN SIX · A CW Custom Guitars venture · 2026</footer>
+
+</body>
+</html>
