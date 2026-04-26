@@ -1,13 +1,11 @@
 import { FormEvent, useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { AuthLayout } from '../components/AuthLayout'
 
 export function SignIn() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
-  const location = useLocation()
-  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/dashboard'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -20,7 +18,8 @@ export function SignIn() {
     const { error } = await signIn(email, password)
     setSubmitting(false)
     if (error) { setError(error); return }
-    navigate(from, { replace: true })
+    // Always land on the dashboard after sign-in — never deep into a previous URL.
+    navigate('/dashboard', { replace: true })
   }
 
   return (

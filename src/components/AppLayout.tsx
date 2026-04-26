@@ -1,22 +1,27 @@
 import { ReactNode } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const { profile, signOut } = useAuth()
+  const navigate = useNavigate()
   const initial = (profile?.display_name?.[0] ?? '?').toUpperCase()
+  const handleSignOut = async () => {
+    await signOut()
+    navigate('/', { replace: true })
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-night-900 text-cream-50">
       <header className="border-b border-cream-50/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link to="/dashboard" className="flex items-center gap-3 shrink-0">
+          <Link to="/dashboard" className="flex items-center gap-3 shrink-0" aria-label="Risen Six — Dashboard">
             <img src="/risensix-logo.png" alt="" className="h-9 w-9 object-contain" />
             <span className="hidden sm:inline font-display tracking-[0.28em] text-xs text-gold-100">RISEN&nbsp;SIX</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-7 text-[11px] uppercase tracking-[0.28em]">
-            <NavItem to="/dashboard">Dashboard</NavItem>
+          <nav className="flex items-center gap-4 sm:gap-7 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.28em]">
+            <NavItem to="/dashboard">Home</NavItem>
             <NavItem to="/theory">Theory</NavItem>
           </nav>
 
@@ -32,7 +37,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
             </div>
             <button
               type="button"
-              onClick={() => signOut()}
+              onClick={handleSignOut}
               className="text-[10px] uppercase tracking-[0.22em] text-gold-900 hover:text-gold-100 transition px-2"
             >
               Sign out
