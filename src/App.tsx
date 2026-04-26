@@ -1,16 +1,16 @@
-import { RisenSixMark } from './components/RisenSixMark'
-
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-night-900 text-cream-50">
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
-        <RisenSixMark className="w-32 h-32 mb-8" />
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
+        <h1 className="sr-only">Risen Six</h1>
 
-        <h1 className="font-display text-6xl md:text-7xl font-bold tracking-[0.12em]">
-          RISEN SIX
-        </h1>
+        <img
+          src="/risensix-logo.png"
+          alt="Risen Six"
+          className="w-full max-w-sm md:max-w-md mb-2"
+        />
 
-        <p className="mt-3 text-gold-100 italic tracking-[0.18em] text-sm uppercase">
+        <p className="text-gold-100 italic tracking-[0.32em] text-xs uppercase">
           Six strings · Endless rise
         </p>
 
