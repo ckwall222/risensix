@@ -218,7 +218,7 @@ export function Fretboard({
             </g>
           )
         }
-        if (n.emphasis === 'open' || (n.fret === 0 && n.emphasis !== 'muted')) {
+        if (n.emphasis === 'open' || n.fret === 0) {
           return (
             <g key={`note-${i}`}>
               <circle cx={cx} cy={cy} r={6} fill="none" stroke="#FAF6EE" strokeWidth={1.4} />
