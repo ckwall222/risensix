@@ -78,7 +78,7 @@ export function Onboarding() {
             type="text"
             value={displayName}
             onChange={e => setDisplayName(e.target.value)}
-            placeholder="Chris"
+            placeholder="First name"
             autoFocus
             className="input"
           />

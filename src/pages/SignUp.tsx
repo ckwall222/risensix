@@ -49,12 +49,12 @@ export function SignUp() {
   return (
     <AuthLayout title="Create your account" subtitle="A few seconds. Then we'll learn what kind of guitarist you want to become.">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Field label="Your name (or what to call you)">
+        <Field label="First name (or what to call you)">
           <input
             type="text"
             value={displayName}
             onChange={e => setDisplayName(e.target.value)}
-            placeholder="Chris"
+            placeholder="First name"
             className="input"
           />
         </Field>
