@@ -52,9 +52,9 @@ export function Home() {
           </h2>
 
           <p className="mx-auto mt-8 max-w-2xl text-lg md:text-xl text-cream-50/75 leading-relaxed">
-            A complete method that meets you where you are — and takes you
-            where you want to go. From your first chord to fluent
-            improvisation, at your pace, on your instrument.
+            A complete method that meets you at your first awkward chord and
+            takes you somewhere unrecognizable. Beginner to advanced, at your
+            pace, on your instrument.
           </p>
 
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -71,6 +71,21 @@ export function Home() {
       </section>
 
       <hr className="hairline" />
+
+      {/* Manifesto */}
+      <section className="border-y border-cream-50/[0.06]">
+        <div className="max-w-4xl mx-auto px-5 sm:px-6 py-20 md:py-24 text-center">
+          <p className="font-display text-2xl md:text-4xl tracking-[0.04em] leading-[1.25] text-cream-50">
+            Where you start has nothing to do with{' '}
+            <em className="not-italic text-gold-100">where you end up.</em>
+          </p>
+          <p className="mt-6 text-cream-50/55 text-base md:text-lg max-w-xl mx-auto">
+            What changes here isn't the guitar. It's you. The first month is
+            friction — buzzing strings, missed beats, calluses still forming.
+            The years after are music. The path is built around the difference.
+          </p>
+        </div>
+      </section>
 
       {/* Pillars — what you build */}
       <section className="max-w-7xl mx-auto px-5 sm:px-6 py-24 md:py-28">
@@ -107,7 +122,7 @@ export function Home() {
             <div className="eyebrow mb-4">Where you go</div>
             <h3 className="h-display text-3xl md:text-4xl max-w-3xl mx-auto leading-[1.15]">
               Most courses teach techniques.{' '}
-              <em className="not-italic text-gold-100">This one builds a guitarist.</em>
+              <em className="not-italic text-gold-100">This one transforms a player.</em>
             </h3>
           </div>
 
