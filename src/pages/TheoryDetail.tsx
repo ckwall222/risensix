@@ -44,30 +44,31 @@ export function TheoryDetail() {
     return () => { mounted = false }
   }, [id])
 
-  if (loading) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-12 text-cream-50/60">Loading…</div></AppLayout>
-  if (!entry) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-12 text-cream-50/60">Not found.</div></AppLayout>
+  if (loading) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/40 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
+  if (!entry) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/55">Not found.</div></AppLayout>
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <Link to="/theory" className="text-xs uppercase tracking-widest text-gold-500 hover:text-gold-100">← Theory library</Link>
-        <h1 className="mt-3 font-display text-3xl md:text-4xl tracking-[0.08em] text-cream-50">{entry.title}</h1>
-        {entry.summary && <p className="text-lg text-cream-50/70 mt-3">{entry.summary}</p>}
+      <div className="max-w-4xl mx-auto px-5 sm:px-6 py-12">
+        <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Theory library</Link>
+        <div className="eyebrow mt-6 mb-3">Theory · Difficulty {entry.difficulty} / 5</div>
+        <h1 className="h-display text-4xl md:text-5xl tracking-[0.04em] leading-[1.08]">{entry.title}</h1>
+        {entry.summary && <p className="text-lg text-cream-50/70 mt-5 leading-relaxed">{entry.summary}</p>}
 
-        <div className="mt-10">
-          {entry.body && <Markdown>{entry.body}</Markdown>}
-        </div>
+        <div className="hairline mt-10 mb-10" />
+
+        {entry.body && <Markdown>{entry.body}</Markdown>}
 
         {lessons.length > 0 && (
-          <div className="mt-12 rounded-xl border border-night-700 p-5">
-            <div className="text-xs uppercase tracking-widest text-gold-500 mb-3">Lessons that use this</div>
-            <ul className="space-y-2">
+          <div className="mt-16 pt-8 border-t border-cream-50/[0.06]">
+            <div className="eyebrow mb-4">Lessons that use this</div>
+            <ul className="space-y-3">
               {lessons.map(l => (
-                <li key={l.id}>
-                  <Link to={`/lessons/${l.slug}`} className="text-cream-50 hover:text-gold-100 underline underline-offset-4">
+                <li key={l.id} className="flex items-baseline gap-3">
+                  <Link to={`/lessons/${l.slug}`} className="text-cream-50 hover:text-gold-100 transition">
                     {l.title}
                   </Link>
-                  <span className="ml-2 text-xs text-gold-900 tracking-widest uppercase">{l.focus_area_id}</span>
+                  <span className="text-[10px] text-gold-900 tracking-[0.28em] uppercase">{l.focus_area_id}</span>
                 </li>
               ))}
             </ul>

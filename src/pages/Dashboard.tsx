@@ -55,59 +55,69 @@ export function Dashboard() {
 
   return (
     <AppLayout>
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Greeting */}
-        <h1 className="font-display text-3xl md:text-4xl tracking-[0.1em] text-cream-50 mb-3">{greeting}</h1>
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 py-12 md:py-16">
+        <div className="eyebrow mb-3">Dashboard</div>
+        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-10">
+          {greeting}
+        </h1>
 
         {/* Recommended next lesson */}
         {next ? (
           <Link
             to={`/lessons/${next.slug}`}
-            className="block rounded-xl border border-gold-500/30 bg-gold-500/5 p-6 hover:border-gold-500 hover:bg-gold-500/10 transition"
+            className="block card is-feature group"
+            style={{ padding: '1.75rem 2rem' }}
           >
-            <div className="text-xs uppercase tracking-widest text-gold-500 mb-2">Your next lesson · {next.focus_area_id}</div>
-            <div className="font-display text-2xl tracking-wider text-cream-50 mb-2">{next.title}</div>
-            {next.summary && <p className="text-cream-50/70">{next.summary}</p>}
-            <div className="mt-4 inline-flex items-center gap-2 text-ember-500 font-semibold tracking-[0.18em] uppercase text-xs">
-              Open lesson →
+            <div className="eyebrow mb-3">Your next lesson · {next.focus_area_id}</div>
+            <div className="h-display text-2xl md:text-3xl mb-3 group-hover:text-gold-100 transition">{next.title}</div>
+            {next.summary && <p className="text-cream-50/70 text-base md:text-lg max-w-2xl">{next.summary}</p>}
+            <div className="mt-5 inline-flex items-center gap-2 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[11px]">
+              Open lesson <span className="transition group-hover:translate-x-1">→</span>
             </div>
           </Link>
         ) : (
           !loading && (
-            <div className="rounded-xl border border-night-700 p-6">
-              <div className="text-xs uppercase tracking-widest text-gold-500 mb-2">All caught up</div>
-              <div className="font-display text-2xl tracking-wider text-cream-50">Nice work.</div>
-              <p className="text-cream-50/70 mt-1">You've completed every lesson available at your level.</p>
+            <div className="card is-feature" style={{ padding: '1.75rem 2rem' }}>
+              <div className="eyebrow mb-3">All caught up</div>
+              <div className="h-display text-2xl">Nice work.</div>
+              <p className="text-cream-50/65 mt-2">You've completed every lesson available at your level.</p>
             </div>
           )
         )}
 
         {/* Focus areas */}
-        <div className="mt-12">
-          <div className="flex items-baseline justify-between mb-5">
-            <h2 className="font-display text-xl tracking-[0.18em] text-gold-100 uppercase">Focus areas</h2>
-            <Link to="/theory" className="text-xs uppercase tracking-widest text-gold-500 hover:text-gold-100">Theory library →</Link>
+        <div className="mt-16">
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="h-section">Focus areas</h2>
+            <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">
+              Theory library →
+            </Link>
           </div>
+          <div className="hairline mb-6" />
+
           {loading ? (
-            <div className="text-sm text-cream-50/50">Loading…</div>
+            <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {focusAreas.map(fa => {
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-50/[0.06]">
+              {focusAreas.map((fa, idx) => {
                 const c = counts[fa.id] ?? { completed: 0, total: 0 }
                 const pct = c.total === 0 ? 0 : Math.round((c.completed / c.total) * 100)
                 return (
                   <Link
                     key={fa.id}
                     to={`/focus/${fa.id}`}
-                    className="block rounded-xl border border-night-700 hover:border-gold-500/60 transition p-5"
+                    className="block bg-night-900 hover:bg-night-700/30 transition p-7"
                   >
-                    <div className="text-xs uppercase tracking-widest text-gold-500 mb-2">{fa.id}</div>
-                    <div className="font-display text-lg tracking-wider text-cream-50 mb-2">{fa.name}</div>
-                    <p className="text-sm text-cream-50/65 leading-relaxed mb-4 line-clamp-2">{fa.description}</p>
-                    <div className="h-1.5 bg-night-700 rounded-full overflow-hidden mb-2">
+                    <div className="flex items-baseline justify-between mb-5">
+                      <div className="prefix-num">0{idx + 1}</div>
+                      <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/40">{c.completed}/{c.total}</div>
+                    </div>
+                    <div className="h-display text-xl md:text-2xl mb-3">{fa.name}</div>
+                    <p className="text-sm text-cream-50/60 leading-relaxed line-clamp-2 mb-5">{fa.description}</p>
+                    <div className="h-px bg-night-700">
                       <div className="h-full bg-gold-500" style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="text-xs text-cream-50/50">{c.completed} / {c.total} lessons · {pct}%</div>
+                    <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/45 mt-2">{pct}% complete</div>
                   </Link>
                 )
               })}
@@ -117,9 +127,10 @@ export function Dashboard() {
 
         {/* Profile snapshot */}
         {profile && (
-          <div className="mt-12 rounded-xl border border-night-700 p-5">
-            <h2 className="font-display text-base tracking-[0.18em] text-gold-100 mb-4 uppercase">Your profile</h2>
-            <dl className="grid grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm">
+          <div className="mt-16">
+            <h2 className="h-section mb-6">Your profile</h2>
+            <div className="hairline mb-6" />
+            <dl className="grid grid-cols-2 md:grid-cols-4 gap-y-5 gap-x-8 text-sm">
               <Item label="Ability">{prettyAbility(profile.ability_level)}</Item>
               <Item label="Reads tab">{profile.reads_tab ? 'Yes' : 'Not yet'}</Item>
               <Item label="Gear">{[profile.has_acoustic && 'Acoustic', profile.has_electric && 'Electric'].filter(Boolean).join(' · ') || '—'}</Item>
@@ -164,7 +175,7 @@ async function recommendNextLesson(userId: string, abilityLevel: string): Promis
 function Item({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-xs uppercase tracking-widest text-gold-900 mb-0.5">{label}</dt>
+      <dt className="text-[10px] uppercase tracking-[0.28em] text-gold-900 mb-1">{label}</dt>
       <dd className="text-cream-50">{children}</dd>
     </div>
   )

@@ -20,11 +20,7 @@ type Lesson = {
   sort_order: number
 }
 
-type TheoryEntry = {
-  id: string
-  title: string
-  summary: string | null
-}
+type TheoryEntry = { id: string; title: string; summary: string | null }
 
 export function LessonPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -103,60 +99,50 @@ export function LessonPage() {
     setSaving(false)
   }
 
-  const goNext = () => {
-    if (neighbors.next) navigate(`/lessons/${neighbors.next.slug}`)
-  }
+  const goNext = () => { if (neighbors.next) navigate(`/lessons/${neighbors.next.slug}`) }
 
-  if (loading) {
-    return (
-      <AppLayout>
-        <div className="max-w-5xl mx-auto px-6 py-12 text-cream-50/60">Loading lesson…</div>
-      </AppLayout>
-    )
-  }
-  if (!lesson) {
-    return (
-      <AppLayout>
-        <div className="max-w-5xl mx-auto px-6 py-12 text-cream-50/60">Lesson not found.</div>
-      </AppLayout>
-    )
-  }
+  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/40 tracking-widest uppercase text-sm">Loading lesson…</div></AppLayout>
+  if (!lesson) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/55">Lesson not found.</div></AppLayout>
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto px-6 py-10">
-        <div className="mb-6 flex items-center gap-3 text-xs uppercase tracking-widest">
-          <Link to={`/focus/${lesson.focus_area_id}`} className="text-gold-500 hover:text-gold-100">
+      <div className="max-w-5xl mx-auto px-5 sm:px-6 py-12">
+        <div className="flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] mb-6">
+          <Link to={`/focus/${lesson.focus_area_id}`} className="text-gold-500 hover:text-gold-100 transition">
             ← {lesson.focus_area_id}
           </Link>
-          <span className="text-gold-900">·</span>
-          <span className="text-gold-900">Difficulty {lesson.difficulty} / 5</span>
+          <span className="text-cream-50/30">·</span>
+          <span className="text-cream-50/45">Difficulty {lesson.difficulty} / 5</span>
           {lesson.duration_minutes && (
             <>
-              <span className="text-gold-900">·</span>
-              <span className="text-gold-900">{lesson.duration_minutes} min</span>
+              <span className="text-cream-50/30">·</span>
+              <span className="text-cream-50/45">{lesson.duration_minutes} min</span>
             </>
           )}
+          <span className="ml-auto">
+            {status === 'completed' && <span className="pill">✓ Completed</span>}
+          </span>
         </div>
 
-        <h1 className="font-display text-3xl md:text-4xl tracking-[0.08em] text-cream-50 mb-3">{lesson.title}</h1>
-        {lesson.summary && <p className="text-lg text-cream-50/70 mb-8">{lesson.summary}</p>}
+        <div className="eyebrow mb-3">Lesson</div>
+        <h1 className="h-display text-4xl md:text-5xl tracking-[0.04em] leading-[1.08]">{lesson.title}</h1>
+        {lesson.summary && <p className="text-lg text-cream-50/70 mt-5 max-w-3xl leading-relaxed">{lesson.summary}</p>}
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10">
+        <div className="hairline mt-10 mb-10" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-12">
           <div>
             {lesson.body && <Markdown>{lesson.body}</Markdown>}
 
-            <div className="mt-12 flex items-center gap-3 border-t border-night-700 pt-6">
+            <div className="mt-16 pt-6 border-t border-cream-50/[0.06] flex flex-col sm:flex-row items-start sm:items-center gap-4">
               {status === 'completed' ? (
-                <span className="px-5 py-2.5 bg-gold-500/15 border border-gold-500/40 text-gold-100 text-sm tracking-widest uppercase rounded">
-                  ✓ Completed
-                </span>
+                <span className="pill">✓ Completed</span>
               ) : (
                 <button
                   type="button"
                   onClick={markComplete}
                   disabled={saving}
-                  className="px-6 py-3 bg-ember-500 hover:bg-ember-500/90 text-cream-50 font-semibold tracking-[0.18em] uppercase text-sm rounded transition disabled:opacity-50"
+                  className="btn btn-primary"
                 >
                   {saving ? 'Saving…' : 'Mark complete'}
                 </button>
@@ -166,7 +152,7 @@ export function LessonPage() {
                 <button
                   type="button"
                   onClick={goNext}
-                  className="ml-auto px-5 py-2.5 border border-gold-500/40 text-gold-100 hover:bg-gold-500/10 text-sm tracking-widest uppercase rounded transition"
+                  className="btn btn-ghost sm:ml-auto"
                 >
                   Next lesson →
                 </button>
@@ -174,8 +160,8 @@ export function LessonPage() {
             </div>
 
             {neighbors.prev && (
-              <div className="mt-4 text-sm">
-                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-cream-50/55 hover:text-gold-100">
+              <div className="mt-6">
+                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-[11px] uppercase tracking-[0.22em] text-cream-50/45 hover:text-gold-100 transition">
                   ← Prev: {neighbors.prev.title}
                 </Link>
               </div>
@@ -184,14 +170,14 @@ export function LessonPage() {
 
           <aside className="space-y-6">
             {theory.length > 0 && (
-              <div className="rounded-xl border border-gold-500/25 bg-gold-500/5 p-5">
-                <div className="text-xs uppercase tracking-widest text-gold-500 mb-3">Theory in this lesson</div>
+              <div className="card is-feature">
+                <div className="eyebrow mb-3">Theory in this lesson</div>
                 <ul className="space-y-3">
                   {theory.map(t => (
                     <li key={t.id}>
                       <Link to={`/theory/${t.id}`} className="block group">
-                        <div className="font-display text-base tracking-wide text-cream-50 group-hover:text-gold-100 transition">{t.title}</div>
-                        {t.summary && <div className="text-xs text-cream-50/55 mt-0.5">{t.summary}</div>}
+                        <div className="font-display text-base tracking-[0.04em] text-cream-50 group-hover:text-gold-100 transition">{t.title}</div>
+                        {t.summary && <div className="text-xs text-cream-50/55 mt-1 leading-relaxed">{t.summary}</div>}
                       </Link>
                     </li>
                   ))}
@@ -200,8 +186,8 @@ export function LessonPage() {
             )}
 
             {(lesson.video_url || lesson.tab_url) && (
-              <div className="rounded-xl border border-night-700 p-5">
-                <div className="text-xs uppercase tracking-widest text-gold-500 mb-3">Resources</div>
+              <div className="card">
+                <div className="eyebrow mb-3">Resources</div>
                 {lesson.video_url && (
                   <a href={lesson.video_url} target="_blank" rel="noopener noreferrer" className="block text-sm text-cream-50 hover:text-gold-100 mb-2 underline underline-offset-4">
                     Watch video →

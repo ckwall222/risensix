@@ -20,25 +20,151 @@ body {
   color: var(--color-cream-50);
 }
 
+::selection { background: rgba(226, 92, 43, 0.35); }
+
+/* ===========================================================
+   Shared design system
+   =========================================================== */
+
+/* Tiny gold uppercase label that sits above headings */
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-gold-500);
+  font-family: var(--font-sans);
+}
+
+/* Large heading style for sections */
+.h-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-cream-50);
+  line-height: 1.1;
+}
+
+/* Small section header (with hairline rule beneath) */
+.h-section {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-gold-100);
+}
+
+/* Sharp hairline divider with subtle gold gradient */
+.hairline {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201,150,43,0.4), transparent);
+  border: 0;
+}
+
+/* Solid hairline (for vertical separators inside grids) */
+.hairline-solid {
+  background-color: rgba(250, 246, 238, 0.06);
+}
+
+/* Modern card — sharp edges, hairline border */
+.card {
+  background-color: var(--color-night-900);
+  border: 1px solid rgba(250, 246, 238, 0.06);
+  padding: 1.25rem 1.5rem;
+  transition: border-color 150ms;
+}
+.card:hover {
+  border-color: rgba(201, 150, 43, 0.5);
+}
+.card.is-feature {
+  border: 1px solid rgba(201, 150, 43, 0.3);
+  background-color: rgba(201, 150, 43, 0.05);
+}
+
 /* Form inputs */
 .input {
   width: 100%;
   padding: 0.75rem 1rem;
   background-color: var(--color-night-900);
-  border: 1px solid var(--color-night-700);
-  border-radius: 0.5rem;
+  border: 1px solid rgba(250, 246, 238, 0.12);
+  border-radius: 2px;
   color: var(--color-cream-50);
   font-size: 0.95rem;
+  font-family: inherit;
   transition: border-color 150ms;
 }
 .input:focus {
   outline: none;
   border-color: var(--color-gold-500);
-  box-shadow: 0 0 0 3px rgba(201, 150, 43, 0.1);
+  box-shadow: 0 0 0 3px rgba(201, 150, 43, 0.12);
 }
-.input::placeholder { color: rgba(250, 246, 238, 0.35); }
+.input::placeholder { color: rgba(250, 246, 238, 0.32); }
 
-/* Markdown body styling for lesson + theory pages */
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 150ms, border-color 150ms, color 150ms, transform 150ms;
+  border: 1px solid transparent;
+  border-radius: 0;
+  text-decoration: none;
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-primary {
+  background-color: var(--color-ember-500);
+  color: var(--color-cream-50);
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: rgba(226, 92, 43, 0.9);
+}
+.btn-ghost {
+  border-color: rgba(201, 150, 43, 0.4);
+  color: var(--color-gold-100);
+}
+.btn-ghost:hover:not(:disabled) {
+  background-color: rgba(201, 150, 43, 0.08);
+  border-color: var(--color-gold-500);
+}
+.btn-link {
+  border: none;
+  padding: 0.5rem 0;
+  color: rgba(250, 246, 238, 0.65);
+  letter-spacing: 0.18em;
+}
+.btn-link:hover { color: var(--color-gold-100); }
+
+/* Status pill */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  border: 1px solid rgba(201, 150, 43, 0.4);
+  background-color: rgba(201, 150, 43, 0.08);
+  color: var(--color-gold-100);
+}
+
+/* Number prefix (used in lesson lists, pillar cards) */
+.prefix-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--color-gold-500);
+}
+
+/* ===========================================================
+   Markdown body for lesson + theory pages
+   =========================================================== */
 .prose-rs {
   color: rgba(250, 246, 238, 0.85);
   font-size: 16px;
@@ -51,11 +177,19 @@ body {
   letter-spacing: 0.06em;
   margin-top: 1.6em;
   margin-bottom: 0.6em;
+  font-weight: 700;
 }
 .prose-rs h1 { font-size: 1.85em; }
 .prose-rs h2 { font-size: 1.45em; }
 .prose-rs h3 { font-size: 1.2em; }
-.prose-rs h4 { font-size: 1em; text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-gold-500); }
+.prose-rs h4 {
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  color: var(--color-gold-500);
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
 .prose-rs p { margin: 1em 0; }
 .prose-rs strong { color: var(--color-cream-50); font-weight: 600; }
 .prose-rs em { color: var(--color-gold-100); }
@@ -63,18 +197,18 @@ body {
 .prose-rs a:hover { color: var(--color-gold-500); }
 .prose-rs code {
   font-family: var(--font-mono);
-  font-size: 0.9em;
+  font-size: 0.88em;
   background: rgba(201, 150, 43, 0.1);
   border: 1px solid rgba(201, 150, 43, 0.2);
   padding: 0.1em 0.4em;
-  border-radius: 0.25rem;
+  border-radius: 2px;
   color: var(--color-gold-100);
 }
 .prose-rs pre {
-  background: var(--color-night-700);
-  border: 1px solid rgba(201, 150, 43, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(250, 246, 238, 0.06);
   padding: 1em 1.2em;
-  border-radius: 0.5rem;
+  border-radius: 0;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 0.9em;
@@ -83,7 +217,7 @@ body {
 }
 .prose-rs pre code { background: none; border: none; padding: 0; color: inherit; }
 .prose-rs blockquote {
-  border-left: 3px solid var(--color-gold-500);
+  border-left: 2px solid var(--color-gold-500);
   padding-left: 1.2em;
   margin: 1.4em 0;
   color: rgba(250, 246, 238, 0.7);
@@ -93,20 +227,27 @@ body {
 .prose-rs ul li { list-style: disc; margin: 0.4em 0; }
 .prose-rs ol li { list-style: decimal; margin: 0.4em 0; }
 .prose-rs ul li::marker, .prose-rs ol li::marker { color: var(--color-gold-500); }
-.prose-rs hr { border: none; border-top: 1px solid var(--color-night-700); margin: 2em 0; }
+.prose-rs hr { border: 0; border-top: 1px solid rgba(250, 246, 238, 0.08); margin: 2em 0; }
 .prose-rs table {
   border-collapse: collapse;
   width: 100%;
   margin: 1.2em 0;
+  font-size: 0.95em;
 }
 .prose-rs th, .prose-rs td {
-  border: 1px solid var(--color-night-700);
-  padding: 0.5em 0.8em;
+  border-bottom: 1px solid rgba(250, 246, 238, 0.06);
+  padding: 0.55em 0.8em;
   text-align: left;
 }
 .prose-rs th {
-  background: rgba(201, 150, 43, 0.08);
-  color: var(--color-gold-100);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold-500);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(201, 150, 43, 0.3);
+}
+.prose-rs .diagram-error {
+  border-color: rgba(226, 92, 43, 0.5);
+  color: rgba(255, 200, 180, 0.9);
 }

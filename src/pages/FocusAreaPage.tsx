@@ -5,11 +5,7 @@ import { supabase } from '../lib/supabase'
 import { AppLayout } from '../components/AppLayout'
 import { getProgressForLessons, LessonProgressRow } from '../lib/lessonProgress'
 
-type FocusArea = {
-  id: string
-  name: string
-  description: string | null
-}
+type FocusArea = { id: string; name: string; description: string | null }
 
 type LessonRow = {
   id: string
@@ -51,61 +47,60 @@ export function FocusAreaPage() {
     return () => { mounted = false }
   }, [id, user])
 
-  if (loading) {
-    return <AppLayout><div className="max-w-5xl mx-auto px-6 py-12 text-cream-50/60">Loading…</div></AppLayout>
-  }
-
-  if (!area) {
-    return <AppLayout><div className="max-w-5xl mx-auto px-6 py-12 text-cream-50/60">Focus area not found.</div></AppLayout>
-  }
+  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/40 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
+  if (!area) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/55">Focus area not found.</div></AppLayout>
 
   const completedCount = Object.values(progress).filter(p => p.status === 'completed').length
   const pct = lessons.length === 0 ? 0 : Math.round((completedCount / lessons.length) * 100)
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto px-6 py-10">
-        <Link to="/dashboard" className="text-xs uppercase tracking-widest text-gold-500 hover:text-gold-100">← Dashboard</Link>
-        <h1 className="mt-3 font-display text-3xl md:text-4xl tracking-[0.08em] text-cream-50">{area.name}</h1>
-        {area.description && <p className="text-lg text-cream-50/70 mt-3 max-w-3xl">{area.description}</p>}
+      <div className="max-w-5xl mx-auto px-5 sm:px-6 py-12 md:py-16">
+        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Dashboard</Link>
+        <div className="eyebrow mt-6 mb-3">Focus area</div>
+        <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">{area.name}</h1>
+        {area.description && <p className="text-lg text-cream-50/70 mt-4 max-w-3xl leading-relaxed">{area.description}</p>}
 
-        <div className="mt-8 mb-8">
-          <div className="flex items-center justify-between mb-2 text-xs uppercase tracking-widest">
+        <div className="mt-10 mb-10">
+          <div className="flex items-center justify-between mb-2 text-[10px] uppercase tracking-[0.28em]">
             <span className="text-gold-500">Progress</span>
-            <span className="text-cream-50/65">{completedCount} / {lessons.length} · {pct}%</span>
+            <span className="text-cream-50/55">{completedCount} / {lessons.length} · {pct}%</span>
           </div>
-          <div className="h-2 bg-night-700 rounded-full overflow-hidden">
-            <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-px bg-night-700">
+            <div className="h-full bg-gold-500" style={{ width: `${pct}%` }} />
           </div>
         </div>
 
         {lessons.length === 0 ? (
           <p className="text-cream-50/55">Lessons coming soon.</p>
         ) : (
-          <ol className="space-y-2">
+          <div className="border-t border-cream-50/[0.06]">
             {lessons.map((l, idx) => {
               const status = progress[l.id]?.status ?? 'not_started'
-              const dot = status === 'completed' ? 'bg-gold-500' : status === 'in_progress' ? 'bg-ember-500' : 'bg-night-700 border border-night-700'
+              const dot =
+                status === 'completed' ? 'bg-gold-500' :
+                status === 'in_progress' ? 'bg-ember-500' :
+                'bg-transparent border border-cream-50/20'
               return (
-                <li key={l.id}>
-                  <Link
-                    to={`/lessons/${l.slug}`}
-                    className="flex items-center gap-4 p-4 rounded-lg border border-night-700 hover:border-gold-500/50 transition group"
-                  >
-                    <div className="text-xs text-gold-900 tracking-widest w-8">{String(idx + 1).padStart(2, '0')}</div>
-                    <div className={`h-2 w-2 rounded-full ${dot}`} />
-                    <div className="flex-1">
-                      <div className="font-display text-base tracking-wide text-cream-50 group-hover:text-gold-100">{l.title}</div>
-                      {l.summary && <div className="text-xs text-cream-50/55 mt-0.5 line-clamp-1">{l.summary}</div>}
-                    </div>
-                    <div className="text-xs text-gold-900 tracking-widest hidden sm:block">
-                      D{l.difficulty}{l.duration_minutes ? ` · ${l.duration_minutes}m` : ''}
-                    </div>
-                  </Link>
-                </li>
+                <Link
+                  key={l.id}
+                  to={`/lessons/${l.slug}`}
+                  className="flex items-center gap-5 py-5 border-b border-cream-50/[0.06] hover:bg-cream-50/[0.02] transition group px-2 -mx-2"
+                >
+                  <div className="prefix-num w-10 shrink-0">{String(idx + 1).padStart(2, '0')}</div>
+                  <div className={`h-2 w-2 rounded-full shrink-0 ${dot}`} />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-display text-base md:text-lg tracking-[0.04em] text-cream-50 group-hover:text-gold-100 transition">{l.title}</div>
+                    {l.summary && <div className="text-xs md:text-sm text-cream-50/55 mt-1 line-clamp-1">{l.summary}</div>}
+                  </div>
+                  <div className="hidden sm:block text-[10px] uppercase tracking-[0.22em] text-cream-50/40 shrink-0">
+                    D{l.difficulty}{l.duration_minutes ? ` · ${l.duration_minutes}m` : ''}
+                  </div>
+                  <div className="text-cream-50/30 group-hover:text-gold-100 transition">→</div>
+                </Link>
               )
             })}
-          </ol>
+          </div>
         )}
       </div>
     </AppLayout>
