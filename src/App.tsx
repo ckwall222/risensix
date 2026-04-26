@@ -10,6 +10,7 @@ import { LessonPage } from './pages/LessonPage'
 import { FocusAreaPage } from './pages/FocusAreaPage'
 import { TheoryList } from './pages/TheoryList'
 import { TheoryDetail } from './pages/TheoryDetail'
+import { ChordsPage } from './pages/ChordsPage'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/lessons/:slug" element={<AuthGate requireOnboarded><LessonPage /></AuthGate>} />
           <Route path="/theory" element={<AuthGate requireOnboarded><TheoryList /></AuthGate>} />
           <Route path="/theory/:id" element={<AuthGate requireOnboarded><TheoryDetail /></AuthGate>} />
+          <Route path="/chords" element={<AuthGate requireOnboarded><ChordsPage /></AuthGate>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
