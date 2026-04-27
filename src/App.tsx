@@ -18,6 +18,7 @@ import { CircleToolPage } from './pages/CircleToolPage'
 import { DailyPage } from './pages/DailyPage'
 import { LicksPage } from './pages/LicksPage'
 import { LickDetailPage } from './pages/LickDetailPage'
+import { JamPage } from './pages/JamPage'
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/daily" element={<AuthGate requireOnboarded><DailyPage /></AuthGate>} />
           <Route path="/licks" element={<AuthGate requireOnboarded><LicksPage /></AuthGate>} />
           <Route path="/licks/:slug" element={<AuthGate requireOnboarded><LickDetailPage /></AuthGate>} />
+          <Route path="/jam" element={<AuthGate requireOnboarded><JamPage /></AuthGate>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

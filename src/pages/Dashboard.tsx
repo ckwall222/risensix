@@ -183,6 +183,12 @@ export function Dashboard() {
               <p className="text-cream-50/80 text-sm leading-relaxed">Curated blues, rock, country, jazz, and folk licks with playback at any tempo.</p>
               <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Browse →</div>
             </Link>
+            <Link to="/jam" className="block bg-night-900 hover:bg-night-700/30 transition p-6 group">
+              <div className="eyebrow mb-3">Jam Tracks Studio</div>
+              <div className="h-display text-xl mb-2 group-hover:text-gold-100 transition">Solo over a real groove</div>
+              <p className="text-cream-50/80 text-sm leading-relaxed">Drums, bass, and chord pad in any key. Pick a progression and start practicing.</p>
+              <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Open studio →</div>
+            </Link>
           </div>
         </div>
 
