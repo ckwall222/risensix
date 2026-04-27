@@ -119,6 +119,19 @@ export function Dashboard() {
           </p>
         )}
 
+        {/* Today's practice routine */}
+        <Link
+          to="/routine"
+          className="block card is-feature group mb-6"
+          style={{ padding: '1.75rem 2rem' }}
+        >
+          <div className="eyebrow mb-3">Today's routine</div>
+          <div className="h-display text-2xl md:text-3xl mb-2 group-hover:text-gold-100 transition">Open today's session →</div>
+          <p className="text-cream-50/80 text-sm md:text-base max-w-2xl">
+            A short, focused practice session generated for your level — warmup, drill, theory, jam, cooldown. 10, 20, or 30 minutes.
+          </p>
+        </Link>
+
         {/* Today's challenge */}
         {dailyChallenge && (
           <Link
