@@ -2,6 +2,8 @@
  * Chord diagram (compact box). Shows a chord shape on a small section of the neck
  * with finger numbers and open/muted indicators above each string.
  *
+ * Interactive: click anywhere on the diagram to hear the chord strummed.
+ *
  * Embed in markdown via:
  *
  *   ```chord
@@ -15,6 +17,9 @@
  * String order in `frets` and `fingers`: low E to high E (string 6 to string 1).
  * Each entry: 0 = open, "x" = muted, integer = fret number.
  */
+
+import { useState } from 'react'
+import { strumChord } from '../lib/audio'
 
 export type ChordDiagramProps = {
   name?: string
@@ -48,27 +53,35 @@ export function ChordDiagram({
   startFret,
   barre,
 }: ChordDiagramProps) {
+  const [playing, setPlaying] = useState(false)
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setPlaying(true)
+    try {
+      await strumChord(frets)
+    } finally {
+      setTimeout(() => setPlaying(false), 700)
+    }
+  }
+
   const showNut = !startFret || startFret === 1
   const baseFret = showNut ? 1 : startFret
 
   const width = PAD_X * 2 + (STRING_COUNT - 1) * STRING_SPACING + 24
   const height = PAD_TOP + FRETS_SHOWN * FRET_HEIGHT + PAD_BOTTOM
 
-  // String 6 (low E) on left, String 1 (high E) on right (standard chord-box convention)
   function stringX(stringNum: number): number {
-    // stringNum: 1 (high E) ... 6 (low E)
-    // Visually: string 6 leftmost, string 1 rightmost
     const indexFromLeft = 6 - stringNum
     return PAD_X + 12 + indexFromLeft * STRING_SPACING
   }
 
   function fretY(fretFromTop: number): number {
-    // fretFromTop: 1 = first row inside diagram, 4 = last row
     return PAD_TOP + (fretFromTop - 0.5) * FRET_HEIGHT
   }
 
   function fretLineY(line: number): number {
-    // line 0 = nut/top, line 4 = bottom
     return PAD_TOP + line * FRET_HEIGHT
   }
 
@@ -77,9 +90,12 @@ export function ChordDiagram({
       xmlns="http://www.w3.org/2000/svg"
       viewBox={`0 0 ${width} ${height}`}
       width="100%"
-      style={{ maxWidth: width, display: 'block', margin: '1.5em auto' }}
-      role="img"
-      aria-label={name ? `${name} chord diagram` : 'Chord diagram'}
+      style={{ maxWidth: width, display: 'block', margin: '1.5em auto', cursor: 'pointer' }}
+      role="button"
+      aria-label={name ? `Play ${name} chord` : 'Play chord'}
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e as unknown as React.MouseEvent) } }}
     >
       {name && (
         <text
@@ -95,11 +111,17 @@ export function ChordDiagram({
         </text>
       )}
 
+      {/* Play affordance — small triangle in upper right */}
+      <g transform={`translate(${width - 14}, 10)`} opacity={playing ? 1 : 0.55}>
+        <circle r={6} fill="rgba(226,92,43,0.15)" stroke={DOT_FILL} strokeWidth={0.8} />
+        <path d="M -1.5 -2.5 L 2.5 0 L -1.5 2.5 Z" fill={DOT_FILL} />
+      </g>
+
       {/* Strings (vertical) */}
       {[1, 2, 3, 4, 5, 6].map(s => {
         const x = stringX(s)
         const indexFromLeft = 6 - s
-        const w = 1.4 - indexFromLeft * 0.12 // visual approximation: low E thicker
+        const w = 1.4 - indexFromLeft * 0.12
         return (
           <line
             key={`string-${s}`}
@@ -147,7 +169,6 @@ export function ChordDiagram({
 
       {/* Open / muted indicators above each string */}
       {frets.map((f, i) => {
-        // i 0 -> string 6 (low E), i 5 -> string 1 (high E)
         const stringNum = 6 - i
         const x = stringX(stringNum)
         const y = PAD_TOP - 8
@@ -169,7 +190,7 @@ export function ChordDiagram({
       {barre && (
         <rect
           x={stringX(barre.to) - 5}
-          y={fretLineY(barre.fret - baseFret + 1) - 6}
+          y={fretLineY(barre.fret - (baseFret ?? 1) + 1) - 6}
           width={Math.abs(stringX(barre.from) - stringX(barre.to)) + 10}
           height={12}
           rx={6}
@@ -184,7 +205,7 @@ export function ChordDiagram({
         if (typeof f !== 'number' || f === 0) return null
         const stringNum = 6 - i
         const x = stringX(stringNum)
-        const fretFromTop = f - baseFret + 1
+        const fretFromTop = f - (baseFret ?? 1) + 1
         if (fretFromTop < 1 || fretFromTop > FRETS_SHOWN) return null
         const y = fretY(fretFromTop)
         const finger = fingers?.[i]

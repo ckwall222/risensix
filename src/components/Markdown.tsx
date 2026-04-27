@@ -3,6 +3,7 @@ import remarkGfm from 'remark-gfm'
 import { Fretboard } from './Fretboard'
 import { ChordDiagram } from './ChordDiagram'
 import { CircleOfFifths } from './CircleOfFifths'
+import { GuitarDiagram } from './GuitarDiagram'
 
 const components: Components = {
   code({ className, children, node: _node, ref: _ref, ...rest }) {
@@ -41,6 +42,18 @@ const components: Components = {
         return (
           <pre className="diagram-error">
             Invalid <code>cof</code> JSON: {(e as Error).message}
+          </pre>
+        )
+      }
+    }
+    if (lang === 'guitar-anatomy') {
+      try {
+        const data = JSON.parse(raw)
+        return <GuitarDiagram {...data} />
+      } catch (e) {
+        return (
+          <pre className="diagram-error">
+            Invalid <code>guitar-anatomy</code> JSON: {(e as Error).message}
           </pre>
         )
       }

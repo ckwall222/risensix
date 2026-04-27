@@ -2,6 +2,8 @@
  * Fretboard diagram. Renders a horizontal section of a guitar neck with optional
  * highlighted notes (roots, scale degrees, CAGED shapes, single positions, etc.).
  *
+ * Interactive: tap a marked note to hear its pitch.
+ *
  * Embed in markdown via:
  *
  *   ```fretboard
@@ -18,6 +20,8 @@
  * String numbering: 1 = high E (top), 6 = low E (bottom) — matches tab convention.
  */
 
+import { playFret } from '../lib/audio'
+
 export type FretboardNote = {
   string: number          // 1 (high E) ... 6 (low E)
   fret: number            // 0 (open) ... 24
@@ -33,7 +37,7 @@ export type FretboardProps = {
 }
 
 const FRET_WIDTH = 56
-const OPEN_ZONE = 24            // x-space for "open / muted" indicators left of nut
+const OPEN_ZONE = 24
 const STRING_SPACING = 18
 const TOP_PADDING = 36
 const LEFT_PADDING = 32
@@ -65,7 +69,6 @@ export function Fretboard({
   const totalWidth = LEFT_PADDING + fretboardWidth + RIGHT_PADDING
   const totalHeight = TOP_PADDING + (6 - 1) * STRING_SPACING + BOTTOM_PADDING
 
-  // x at the LEFT side of fret n's cell (i.e., the fret wire BEFORE n)
   function fretLineX(fret: number): number {
     if (showOpen) {
       if (fret === 0) return LEFT_PADDING + OPEN_ZONE
@@ -74,17 +77,14 @@ export function Fretboard({
     return LEFT_PADDING + (fret - startFret) * FRET_WIDTH
   }
 
-  // x in the CENTER of fret n's cell (where a finger marker sits)
   function fretCenterX(fret: number): number {
     if (fret === 0) {
-      // open string indicator: in the OPEN_ZONE
       return showOpen ? LEFT_PADDING + OPEN_ZONE / 2 : LEFT_PADDING + 6
     }
     return fretLineX(fret) - FRET_WIDTH / 2
   }
 
   function stringY(stringNum: number): number {
-    // string 1 (high E) at top, string 6 (low E) at bottom
     return TOP_PADDING + (stringNum - 1) * STRING_SPACING
   }
 
@@ -135,7 +135,7 @@ export function Fretboard({
         const y = stringY(s)
         const x1 = LEFT_PADDING + (showOpen ? OPEN_ZONE : 0)
         const x2 = LEFT_PADDING + fretboardWidth
-        const w = 0.6 + (s - 1) * 0.18 // low E thicker than high E
+        const w = 0.6 + (s - 1) * 0.18
         return (
           <line
             key={`string-${s}`}
@@ -206,10 +206,16 @@ export function Fretboard({
         )
       })}
 
-      {/* Highlighted notes */}
+      {/* Highlighted notes — clickable to play */}
       {notes.map((n, i) => {
         const cx = fretCenterX(n.fret)
         const cy = stringY(n.string)
+        const handlePlay = (e: React.MouseEvent | React.KeyboardEvent) => {
+          e.preventDefault()
+          e.stopPropagation()
+          playFret(n.string, n.fret)
+        }
+
         if (n.emphasis === 'muted') {
           return (
             <g key={`note-${i}`}>
@@ -220,7 +226,16 @@ export function Fretboard({
         }
         if (n.emphasis === 'open' || n.fret === 0) {
           return (
-            <g key={`note-${i}`}>
+            <g
+              key={`note-${i}`}
+              role="button"
+              aria-label={`Play open string ${n.string}`}
+              tabIndex={0}
+              onClick={handlePlay}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handlePlay(e) }}
+              style={{ cursor: 'pointer' }}
+            >
+              <circle cx={cx} cy={cy} r={9} fill="transparent" />
               <circle cx={cx} cy={cy} r={6} fill="none" stroke="#FAF6EE" strokeWidth={1.4} />
               {n.label && (
                 <text x={cx} y={cy + 3} textAnchor="middle" fontSize={8.5} fontFamily="Inter, sans-serif" fontWeight={600} fill="#FAF6EE">
@@ -232,7 +247,15 @@ export function Fretboard({
         }
         const fill = n.emphasis === 'root' ? ROOT_FILL : NOTE_FILL
         return (
-          <g key={`note-${i}`}>
+          <g
+            key={`note-${i}`}
+            role="button"
+            aria-label={`Play string ${n.string} fret ${n.fret}`}
+            tabIndex={0}
+            onClick={handlePlay}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handlePlay(e) }}
+            style={{ cursor: 'pointer' }}
+          >
             <circle cx={cx} cy={cy} r={9} fill={fill} stroke="#0A0A0A" strokeWidth={1.2} />
             {n.label && (
               <text
