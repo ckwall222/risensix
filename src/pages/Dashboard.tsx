@@ -5,6 +5,8 @@ import { supabase } from '../lib/supabase'
 import { AppLayout } from '../components/AppLayout'
 import { JourneyTimeline } from '../components/JourneyTimeline'
 import { computeMilestoneStatus, MILESTONES } from '../lib/milestones'
+import { pickChallengeFor, todayDateStr, type DailyChallenge } from '../lib/dailyChallenges'
+import { isCompletedToday, getStreak } from '../lib/dailyProgress'
 
 type FocusArea = {
   id: string
@@ -32,6 +34,9 @@ export function Dashboard() {
   const [completedSlugs, setCompletedSlugs] = useState<Set<string>>(new Set())
   const [startedSlugs, setStartedSlugs] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
+  const [dailyChallenge, setDailyChallenge] = useState<DailyChallenge | null>(null)
+  const [dailyDone, setDailyDone] = useState(false)
+  const [streak, setStreak] = useState(0)
 
   useEffect(() => {
     let mounted = true
@@ -39,14 +44,22 @@ export function Dashboard() {
       if (!user || !profile) return
       setLoading(true)
 
-      const [{ data: areas }, allLessonsRes, progressRes, recommended] = await Promise.all([
+      const today = todayDateStr()
+      const challenge = pickChallengeFor(user.id, today, profile.ability_level)
+
+      const [{ data: areas }, allLessonsRes, progressRes, recommended, doneToday, streakCount] = await Promise.all([
         supabase.from('focus_areas').select('*').order('sort_order'),
         supabase.from('lessons').select('id, slug, focus_area_id'),
         supabase.from('lesson_progress').select('lesson_id, status').eq('user_id', user.id),
         recommendNextLesson(user.id, profile.ability_level),
+        isCompletedToday(user.id),
+        getStreak(user.id),
       ])
       if (!mounted) return
       setFocusAreas((areas as FocusArea[] | null) ?? [])
+      setDailyChallenge(challenge)
+      setDailyDone(doneToday)
+      setStreak(streakCount)
 
       const lessons = (allLessonsRes.data as { id: string; slug: string; focus_area_id: string }[] | null) ?? []
       const progress = (progressRes.data as { lesson_id: string; status: string }[] | null) ?? []
@@ -104,6 +117,35 @@ export function Dashboard() {
             {' · '}
             <span className="text-cream-50/80">{MILESTONES.length - totalAvailable} on the path ahead</span>
           </p>
+        )}
+
+        {/* Today's challenge */}
+        {dailyChallenge && (
+          <Link
+            to="/daily"
+            className="block card group mb-6"
+            style={{ padding: '1.5rem 1.75rem' }}
+          >
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="flex-1 min-w-0">
+                <div className="eyebrow mb-2">Today's challenge · {dailyChallenge.duration} min</div>
+                <div className="h-display text-xl md:text-2xl mb-2 group-hover:text-gold-100 transition">{dailyChallenge.title}</div>
+                <p className="text-cream-50/80 text-sm md:text-base">{dailyChallenge.summary}</p>
+              </div>
+              <div className="flex flex-col items-end gap-2 shrink-0">
+                {dailyDone ? (
+                  <span className="pill">✓ Done today</span>
+                ) : (
+                  <span className="text-ember-500 font-semibold tracking-[0.22em] uppercase text-[11px]">
+                    Start →
+                  </span>
+                )}
+                <span className="text-cream-50/80 text-[11px] uppercase tracking-[0.22em]">
+                  🔥 {streak === 0 ? 'No streak yet' : `${streak} day${streak === 1 ? '' : 's'}`}
+                </span>
+              </div>
+            </div>
+          </Link>
         )}
 
         {/* Recommended next lesson */}
