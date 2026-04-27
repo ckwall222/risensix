@@ -42,7 +42,6 @@ const STRING_COLOR = '#C9962B'
 const FRET_COLOR = '#6B4515'
 const NUT_COLOR = '#FAF6EE'
 const DOT_FILL = '#E25C2B'
-const TEXT_DIM = '#6B4515'
 const TEXT_BRIGHT = '#FAF6EE'
 const TEXT_TITLE = '#F8DC91'
 
@@ -161,7 +160,8 @@ export function ChordDiagram({
           textAnchor="end"
           fontSize={10}
           fontFamily="Cinzel, serif"
-          fill={TEXT_DIM}
+          fill={TEXT_BRIGHT}
+          letterSpacing="0.06em"
         >
           {baseFret}fr
         </text>

@@ -137,7 +137,11 @@ export function Dashboard() {
           {loading ? (
             <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
           ) : (
-            <JourneyTimeline completedSlugs={completedSlugs} startedSlugs={startedSlugs} />
+            <JourneyTimeline
+              completedSlugs={completedSlugs}
+              startedSlugs={startedSlugs}
+              abilityLevel={profile?.ability_level}
+            />
           )}
         </div>
 

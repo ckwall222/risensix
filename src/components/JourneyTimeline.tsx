@@ -1,24 +1,24 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Milestone, MilestoneStatus, MILESTONES, STAGES, computeMilestoneStatus } from '../lib/milestones'
+import {
+  Milestone, MilestoneStatus, MILESTONES, STAGES, STAGES_OPEN_FOR, computeMilestoneStatus,
+} from '../lib/milestones'
 
 type Props = {
   completedSlugs: Set<string>
   startedSlugs: Set<string>
+  abilityLevel?: string
 }
 
-/**
- * Pick the best lesson slug to link a milestone to:
- * - First not-yet-completed required lesson, if any
- * - Otherwise the first required lesson
- */
 function targetSlugFor(m: Milestone, completedSlugs: Set<string>): string | null {
   if (m.requiredLessonSlugs.length === 0) return null
   const next = m.requiredLessonSlugs.find(s => !completedSlugs.has(s))
   return next ?? m.requiredLessonSlugs[0]
 }
 
-export function JourneyTimeline({ completedSlugs, startedSlugs }: Props) {
+export function JourneyTimeline({ completedSlugs, startedSlugs, abilityLevel = 'beginner' }: Props) {
+  const stagesOpenByLevel = STAGES_OPEN_FOR[abilityLevel] ?? STAGES_OPEN_FOR['beginner']
+
   return (
     <div className="space-y-3">
       {STAGES.map((stage, idx) => {
@@ -29,9 +29,10 @@ export function JourneyTimeline({ completedSlugs, startedSlugs }: Props) {
         const inProgress = stageMilestones.filter(
           m => computeMilestoneStatus(m, completedSlugs, startedSlugs) === 'in_progress'
         ).length
-        const isComplete = earned === stageMilestones.length
-        // Default open: stages with anything in progress, or first not-yet-completed stage
-        const defaultOpen = inProgress > 0
+        const isComplete = stageMilestones.length > 0 && earned === stageMilestones.length
+        // Default open: any milestone in progress, OR this stage is in the user's
+        // current level band. Otherwise collapsed (out of the way).
+        const defaultOpen = inProgress > 0 || stagesOpenByLevel.includes(stage.id)
         return (
           <Stage
             key={stage.id}

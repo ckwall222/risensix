@@ -7,7 +7,7 @@
  * ahead and unlock when corresponding lesson content lands.
  */
 
-export type MilestoneStage = 'foundation' | 'movement' | 'voice' | 'mastery'
+export type MilestoneStage = 'foundation' | 'movement' | 'voice' | 'mastery' | 'craft'
 
 export type Milestone = {
   id: string
@@ -23,7 +23,21 @@ export const STAGES: { id: MilestoneStage; name: string; subtitle: string }[] = 
   { id: 'movement',   name: 'Movement',   subtitle: 'You start to navigate the neck.' },
   { id: 'voice',      name: 'Voice',      subtitle: 'You begin to sound like you.' },
   { id: 'mastery',    name: 'Mastery',    subtitle: 'You stop being a student.' },
+  { id: 'craft',      name: 'Craft',      subtitle: 'You make work the rest of us study.' },
 ]
+
+/**
+ * For a given ability level, which stages should default to "open" on the
+ * journey view? The rest collapse by default — visible if the user wants
+ * to peek, but out of the way.
+ */
+export const STAGES_OPEN_FOR: Record<string, MilestoneStage[]> = {
+  absolute_beginner: ['foundation'],
+  beginner:          ['foundation', 'movement'],
+  novice:            ['movement', 'voice'],
+  intermediate:      ['voice', 'mastery'],
+  advanced:          ['mastery', 'craft'],
+}
 
 export const MILESTONES: Milestone[] = [
   // ───────────────────────── Foundation ─────────────────────────
@@ -104,7 +118,7 @@ export const MILESTONES: Milestone[] = [
     stage: 'movement',
     title: 'Your first barre chord',
     description: 'F major, clean. The unlock for every chord, every key.',
-    requiredLessonSlugs: [], // future content
+    requiredLessonSlugs: ['rs-mvt-first-barre'],
   },
 
   // ───────────────────────── Voice ─────────────────────────
@@ -120,21 +134,21 @@ export const MILESTONES: Milestone[] = [
     stage: 'voice',
     title: 'CAGED across the neck',
     description: 'You can find one major chord in five different places — and connect them.',
-    requiredLessonSlugs: [],
+    requiredLessonSlugs: ['rs-voice-caged-positions'],
   },
   {
     id: 'all-pent-boxes',
     stage: 'voice',
     title: 'All five pentatonic positions',
     description: 'No corner of the fretboard is unfamiliar.',
-    requiredLessonSlugs: [],
+    requiredLessonSlugs: ['rs-voice-all-pent-boxes'],
   },
   {
     id: 'phrase-by-ear',
     stage: 'voice',
     title: 'A phrase by ear',
     description: 'You hear four notes and you can play them back. The eyes-closed test.',
-    requiredLessonSlugs: [],
+    requiredLessonSlugs: ['rs-voice-phrase-by-ear'],
   },
 
   // ───────────────────────── Mastery ─────────────────────────
@@ -143,34 +157,92 @@ export const MILESTONES: Milestone[] = [
     stage: 'mastery',
     title: 'Improvise over a 12-bar blues',
     description: 'Pentatonic, phrasing, dynamics, rest. Your first real solo.',
-    requiredLessonSlugs: [],
+    requiredLessonSlugs: ['rs-master-twelve-bar'],
   },
   {
     id: 'song-memory',
     stage: 'mastery',
     title: 'A song, start to finish',
     description: 'No tab. No video. The whole thing — beginning, middle, end.',
-    requiredLessonSlugs: [],
+    requiredLessonSlugs: ['rs-master-song-memory'],
   },
   {
     id: 'fingerstyle-piece',
     stage: 'mastery',
     title: 'A fingerstyle piece, in front of someone',
     description: 'Travis pattern, melody and bass at once, played for human ears.',
-    requiredLessonSlugs: [],
+    requiredLessonSlugs: ['rs-master-fingerstyle-piece'],
   },
   {
     id: 'mode-switch',
     stage: 'mastery',
     title: 'You hear modes',
     description: 'Dorian, Mixolydian, Phrygian — they\'re sounds, not theory.',
-    requiredLessonSlugs: [],
+    requiredLessonSlugs: ['rs-master-modes'],
   },
   {
     id: 'played-for-someone',
     stage: 'mastery',
     title: 'You played for someone',
     description: 'Anyone — a friend, a partner, a stage. The milestone that matters most.',
+    requiredLessonSlugs: ['rs-master-played-for-someone'],
+  },
+
+  // ───────────────────────── Craft (truly advanced) ─────────────────────────
+  {
+    id: 'chord-tone-solo',
+    stage: 'craft',
+    title: 'Chord-tone soloing',
+    description: 'You target chord tones (root, 3, 5, 7) on the change — your solos follow the harmony, not just the key.',
+    requiredLessonSlugs: [],
+  },
+  {
+    id: 'read-notation',
+    stage: 'craft',
+    title: 'Read standard notation fluently',
+    description: 'Sight-read a piece of sheet music for guitar without translating to tab.',
+    requiredLessonSlugs: [],
+  },
+  {
+    id: 'hybrid-picking',
+    stage: 'craft',
+    title: 'Hybrid picking',
+    description: 'Pick and fingers at the same time — the technique behind country chicken-pickin\' and modern jazz fusion.',
+    requiredLessonSlugs: [],
+  },
+  {
+    id: 'reharmonize',
+    stage: 'craft',
+    title: 'Reharmonize a song',
+    description: 'Take a song you know and substitute different chords that fit the melody — the foundation of jazz comping and modern songwriting.',
+    requiredLessonSlugs: [],
+  },
+  {
+    id: 'composed-original',
+    stage: 'craft',
+    title: 'Composed an original piece',
+    description: 'Beginning, middle, end. Original chord progression, melody, structure. Finished — not a fragment.',
+    requiredLessonSlugs: [],
+  },
+  {
+    id: 'recorded-track',
+    stage: 'craft',
+    title: 'Recorded a track that holds up',
+    description: 'You sat down, tracked it, mixed it, and listened back without flinching.',
+    requiredLessonSlugs: [],
+  },
+  {
+    id: 'gigged',
+    stage: 'craft',
+    title: 'Played a paid gig',
+    description: 'Someone paid you to play. Doesn\'t matter how much. The line crossed once is crossed for good.',
+    requiredLessonSlugs: [],
+  },
+  {
+    id: 'taught-someone',
+    stage: 'craft',
+    title: 'Taught someone else to play',
+    description: 'A friend, a kid, a stranger. The first time someone else plays a chord because you showed them how.',
     requiredLessonSlugs: [],
   },
 ]
