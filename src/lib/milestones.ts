@@ -42,6 +42,13 @@ export const STAGES_OPEN_FOR: Record<string, MilestoneStage[]> = {
 export const MILESTONES: Milestone[] = [
   // ───────────────────────── Foundation ─────────────────────────
   {
+    id: 'anatomy',
+    stage: 'foundation',
+    title: 'You know what every part is called',
+    description: 'Headstock, nut, fretboard, bridge — the vocabulary every other lesson assumes you know.',
+    requiredLessonSlugs: ['rs-tech-anatomy'],
+  },
+  {
     id: 'first-grip',
     stage: 'foundation',
     title: 'You can hold a guitar',
