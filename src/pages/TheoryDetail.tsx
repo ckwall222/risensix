@@ -44,13 +44,13 @@ export function TheoryDetail() {
     return () => { mounted = false }
   }, [id])
 
-  if (loading) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/60 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
+  if (loading) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/80 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
   if (!entry) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/70">Not found.</div></AppLayout>
 
   return (
     <AppLayout>
       <div className="max-w-4xl mx-auto px-5 sm:px-6 py-12">
-        <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Theory library</Link>
+        <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Theory library</Link>
         <div className="eyebrow mt-6 mb-3">Theory · Difficulty {entry.difficulty} / 5</div>
         <h1 className="h-display text-4xl md:text-5xl tracking-[0.04em] leading-[1.08]">{entry.title}</h1>
         {entry.summary && <p className="text-lg text-cream-50/70 mt-5 leading-relaxed">{entry.summary}</p>}
@@ -68,7 +68,7 @@ export function TheoryDetail() {
                   <Link to={`/lessons/${l.slug}`} className="text-cream-50 hover:text-gold-100 transition">
                     {l.title}
                   </Link>
-                  <span className="text-[10px] text-cream-50/65 tracking-[0.28em] uppercase">{l.focus_area_id}</span>
+                  <span className="text-[10px] text-cream-50/80 tracking-[0.28em] uppercase">{l.focus_area_id}</span>
                 </li>
               ))}
             </ul>

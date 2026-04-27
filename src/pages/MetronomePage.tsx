@@ -99,7 +99,7 @@ export function MetronomePage() {
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Home</Link>
+        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
         <div className="eyebrow mt-6 mb-3">Tools</div>
         <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Metronome</h1>
         <p className="text-lg text-cream-50/70 mt-4 max-w-2xl leading-relaxed">
@@ -113,7 +113,7 @@ export function MetronomePage() {
           <div className="font-display text-7xl md:text-9xl tracking-[0.04em] text-cream-50 leading-none">
             {bpm}
           </div>
-          <div className="text-[10px] uppercase tracking-[0.32em] text-gold-500 mt-2">
+          <div className="text-[10px] uppercase tracking-[0.32em] text-gold-100 mt-2">
             BPM · {tempoNameFor(bpm)}
           </div>
         </div>
@@ -133,7 +133,7 @@ export function MetronomePage() {
           className="w-full accent-ember-500"
           style={{ accentColor: '#E25C2B' }}
         />
-        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.22em] text-cream-50/60 mt-1">
+        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.22em] text-cream-50/80 mt-1">
           <span>{BPM_MIN}</span>
           <span>{BPM_MAX}</span>
         </div>

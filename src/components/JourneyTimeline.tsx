@@ -78,11 +78,11 @@ function Stage({
         aria-expanded={open}
       >
         <div className="flex items-baseline gap-4 mb-1.5">
-          <span className={`text-gold-500 transition-transform inline-block ${open ? 'rotate-90' : ''}`}>▸</span>
+          <span className={`text-gold-100 transition-transform inline-block ${open ? 'rotate-90' : ''}`}>▸</span>
           <div className="prefix-num">{num}</div>
           <h3 className="font-display text-lg md:text-xl tracking-[0.06em] text-cream-50">{name}</h3>
           {isComplete && <span className="pill">✓ Stage complete</span>}
-          <div className="ml-auto text-[10px] uppercase tracking-[0.28em] text-cream-50/65">
+          <div className="ml-auto text-[10px] uppercase tracking-[0.28em] text-cream-50/80">
             {earned} / {total}
           </div>
         </div>
@@ -120,11 +120,11 @@ function MilestoneRow({ m, status, targetSlug }: { m: Milestone; status: Milesto
         <div className={`font-display text-base tracking-[0.04em] ${status === 'earned' ? 'text-cream-50' : 'text-cream-50/70'}`}>
           {m.title}
         </div>
-        <div className="text-xs text-cream-50/65 mt-0.5 leading-relaxed">{m.description}</div>
+        <div className="text-xs text-cream-50/80 mt-0.5 leading-relaxed">{m.description}</div>
       </div>
       <StatusLabel status={status} />
       {targetSlug && (
-        <span className="text-cream-50/55 group-hover:text-gold-100 group-hover:translate-x-1 transition shrink-0 mt-1" aria-hidden="true">→</span>
+        <span className="text-cream-50/75 group-hover:text-gold-100 group-hover:translate-x-1 transition shrink-0 mt-1" aria-hidden="true">→</span>
       )}
     </>
   )
@@ -179,6 +179,6 @@ function StatusIcon({ status }: { status: MilestoneStatus }) {
 function StatusLabel({ status }: { status: MilestoneStatus }) {
   if (status === 'earned') return <span className="text-[10px] uppercase tracking-[0.28em] text-gold-100 shrink-0 mt-1">Earned</span>
   if (status === 'in_progress') return <span className="text-[10px] uppercase tracking-[0.28em] text-ember-500 shrink-0 mt-1">In progress</span>
-  if (status === 'future') return <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/55 shrink-0 mt-1">Coming</span>
+  if (status === 'future') return <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/75 shrink-0 mt-1">Coming</span>
   return null
 }

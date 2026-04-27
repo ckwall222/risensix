@@ -200,7 +200,7 @@ export function GuitarDiagram({ variant }: GuitarDiagramProps) {
 
   return (
     <div className="my-8">
-      <div className="text-[10px] uppercase tracking-[0.28em] text-gold-500 mb-3 text-center">
+      <div className="text-[10px] uppercase tracking-[0.28em] text-gold-100 mb-3 text-center">
         {variant === 'acoustic' ? 'Acoustic anatomy' : 'Electric anatomy'} · Tap any part
       </div>
       <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
@@ -265,7 +265,7 @@ export function GuitarDiagram({ variant }: GuitarDiagramProps) {
               <button
                 type="button"
                 onClick={() => setSelectedId(null)}
-                className="mt-4 text-[10px] uppercase tracking-[0.22em] text-gold-500 hover:text-gold-100 transition"
+                className="mt-4 text-[10px] uppercase tracking-[0.22em] text-gold-100 hover:text-cream-50 transition"
               >
                 Close
               </button>
@@ -273,7 +273,7 @@ export function GuitarDiagram({ variant }: GuitarDiagramProps) {
           ) : (
             <div className="card" style={{ padding: '1.25rem 1.5rem' }}>
               <div className="eyebrow mb-2">{variant} guitar</div>
-              <p className="text-cream-50/65 text-sm leading-relaxed">
+              <p className="text-cream-50/80 text-sm leading-relaxed">
                 Tap any part of the photo to see its name and what it does. Most parts work the same on both acoustic and electric — the body, pickups, and bridge style are where they diverge.
               </p>
             </div>

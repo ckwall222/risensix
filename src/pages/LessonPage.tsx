@@ -101,22 +101,22 @@ export function LessonPage() {
 
   const goNext = () => { if (neighbors.next) navigate(`/lessons/${neighbors.next.slug}`) }
 
-  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/60 tracking-widest uppercase text-sm">Loading lesson…</div></AppLayout>
+  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/80 tracking-widest uppercase text-sm">Loading lesson…</div></AppLayout>
   if (!lesson) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/70">Lesson not found.</div></AppLayout>
 
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto px-5 sm:px-6 py-12">
         <div className="flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] mb-6">
-          <Link to={`/focus/${lesson.focus_area_id}`} className="text-gold-500 hover:text-gold-100 transition">
+          <Link to={`/focus/${lesson.focus_area_id}`} className="text-gold-100 hover:text-cream-50 transition">
             ← {lesson.focus_area_id}
           </Link>
-          <span className="text-cream-50/55">·</span>
-          <span className="text-cream-50/65">Difficulty {lesson.difficulty} / 5</span>
+          <span className="text-cream-50/75">·</span>
+          <span className="text-cream-50/80">Difficulty {lesson.difficulty} / 5</span>
           {lesson.duration_minutes && (
             <>
-              <span className="text-cream-50/55">·</span>
-              <span className="text-cream-50/65">{lesson.duration_minutes} min</span>
+              <span className="text-cream-50/75">·</span>
+              <span className="text-cream-50/80">{lesson.duration_minutes} min</span>
             </>
           )}
           <span className="ml-auto">
@@ -168,7 +168,7 @@ export function LessonPage() {
 
             {neighbors.prev && (
               <div className="mt-6">
-                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-[11px] uppercase tracking-[0.22em] text-cream-50/65 hover:text-gold-100 transition">
+                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-[11px] uppercase tracking-[0.22em] text-cream-50/80 hover:text-gold-100 transition">
                   ← Prev: {neighbors.prev.title}
                 </Link>
               </div>

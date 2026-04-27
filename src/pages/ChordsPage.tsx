@@ -11,7 +11,7 @@ export function ChordsPage() {
   return (
     <AppLayout>
       <div className="max-w-6xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Home</Link>
+        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
         <div className="eyebrow mt-6 mb-3">Library</div>
         <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Chords</h1>
         <p className="text-lg text-cream-50/70 mt-4 max-w-3xl leading-relaxed">
@@ -36,7 +36,7 @@ export function ChordsPage() {
                 }`}
               >
                 {cat.name}
-                <span className="ml-2 text-cream-50/60">{cat.chords.length}</span>
+                <span className="ml-2 text-cream-50/80">{cat.chords.length}</span>
               </button>
             )
           })}
@@ -45,7 +45,7 @@ export function ChordsPage() {
         {/* Active category description + grid */}
         <div className="mb-8">
           <h2 className="h-section mb-3">{active.name}</h2>
-          <p className="text-cream-50/65 max-w-2xl text-sm md:text-base leading-relaxed">{active.description}</p>
+          <p className="text-cream-50/80 max-w-2xl text-sm md:text-base leading-relaxed">{active.description}</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -73,10 +73,10 @@ export function ChordsPage() {
               >
                 <div className="flex items-baseline justify-between mb-3">
                   <div className="prefix-num">{String(idx + 1).padStart(2, '0')}</div>
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/60">{cat.chords.length} chords</div>
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/80">{cat.chords.length} chords</div>
                 </div>
                 <div className="font-display text-lg tracking-[0.04em] text-cream-50 mb-2">{cat.name}</div>
-                <p className="text-sm text-cream-50/60 leading-relaxed line-clamp-2">{cat.description}</p>
+                <p className="text-sm text-cream-50/80 leading-relaxed line-clamp-2">{cat.description}</p>
               </button>
             ))}
           </div>

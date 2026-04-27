@@ -36,9 +36,9 @@ export function SignUp() {
             Click the link in that email to verify your account, then come back and sign in. The link expires in 24 hours.
           </p>
         </div>
-        <p className="text-center text-sm text-cream-50/60 pt-6">
+        <p className="text-center text-sm text-cream-50/80 pt-6">
           Already confirmed?{' '}
-          <Link to="/signin" className="text-gold-100 underline underline-offset-4 hover:text-gold-500">
+          <Link to="/signin" className="text-gold-100 underline underline-offset-4 hover:text-gold-100">
             Sign in
           </Link>
         </p>
@@ -96,9 +96,9 @@ export function SignUp() {
           {submitting ? 'Creating…' : 'Create account'}
         </button>
 
-        <p className="text-center text-sm text-cream-50/60 pt-2">
+        <p className="text-center text-sm text-cream-50/80 pt-2">
           Already have one?{' '}
-          <Link to="/signin" className="text-gold-100 underline underline-offset-4 hover:text-gold-500">
+          <Link to="/signin" className="text-gold-100 underline underline-offset-4 hover:text-gold-100">
             Sign in
           </Link>
         </p>
@@ -110,7 +110,7 @@ export function SignUp() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-xs uppercase tracking-widest text-cream-50/65 mb-2">{label}</span>
+      <span className="block text-xs uppercase tracking-widest text-cream-50/80 mb-2">{label}</span>
       {children}
     </label>
   )

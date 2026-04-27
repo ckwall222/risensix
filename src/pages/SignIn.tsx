@@ -60,9 +60,9 @@ export function SignIn() {
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
 
-        <p className="text-center text-sm text-cream-50/60 pt-2">
+        <p className="text-center text-sm text-cream-50/80 pt-2">
           New here?{' '}
-          <Link to="/signup" className="text-gold-100 underline underline-offset-4 hover:text-gold-500">
+          <Link to="/signup" className="text-gold-100 underline underline-offset-4 hover:text-gold-100">
             Create an account
           </Link>
         </p>
@@ -74,7 +74,7 @@ export function SignIn() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-xs uppercase tracking-widest text-cream-50/65 mb-2">{label}</span>
+      <span className="block text-xs uppercase tracking-widest text-cream-50/80 mb-2">{label}</span>
       {children}
     </label>
   )

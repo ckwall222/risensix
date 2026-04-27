@@ -23,7 +23,7 @@ export function AuthLayout({ children, title, subtitle, eyebrow }: { children: R
           {children}
         </div>
       </main>
-      <footer className="px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-cream-50/65">
+      <footer className="px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-cream-50/80">
         Risen Six · A CW Custom Guitars venture
       </footer>
     </div>

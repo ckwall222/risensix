@@ -147,22 +147,22 @@ export function CofTool({ initialKey = 'C', compact = false }: CofToolProps) {
           <div className="mt-3 grid grid-cols-3 gap-2 text-[10px] uppercase tracking-[0.22em]">
             <div className="flex items-center gap-2">
               <span className="inline-block h-3 w-3" style={{ backgroundColor: '#E25C2B' }} />
-              <span className="text-cream-50/65">I — selected</span>
+              <span className="text-cream-50/80">I — selected</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="inline-block h-3 w-3" style={{ backgroundColor: '#C9962B' }} />
-              <span className="text-cream-50/65">IV / V</span>
+              <span className="text-cream-50/80">IV / V</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="inline-block h-3 w-3" style={{ backgroundColor: '#7A4F12' }} />
-              <span className="text-cream-50/65">vi (relative)</span>
+              <span className="text-cream-50/80">vi (relative)</span>
             </div>
           </div>
         </div>
 
         <div>
           <div className="card is-feature" style={{ padding: '1.25rem 1.5rem' }}>
-            <div className="text-[10px] uppercase tracking-[0.32em] text-gold-500 mb-2">Selected key</div>
+            <div className="text-[10px] uppercase tracking-[0.32em] text-gold-100 mb-2">Selected key</div>
             <div className="font-display text-3xl tracking-[0.04em] text-cream-50 mb-2">{selectedKey} major</div>
             <div className="text-sm text-cream-50/75 leading-relaxed">
               {sigText} · relative minor: <span className="text-gold-100">{relMinor}</span>
@@ -170,7 +170,7 @@ export function CofTool({ initialKey = 'C', compact = false }: CofToolProps) {
           </div>
 
           <div className="mt-6">
-            <div className="text-[10px] uppercase tracking-[0.32em] text-gold-500 mb-2">Notes in scale</div>
+            <div className="text-[10px] uppercase tracking-[0.32em] text-gold-100 mb-2">Notes in scale</div>
             <div className="flex flex-wrap gap-2">
               {notes.map(n => (
                 <span key={n} className="px-3 py-1.5 border border-cream-50/[0.12] text-cream-50/85 text-sm tracking-wider">{n}</span>
@@ -183,13 +183,13 @@ export function CofTool({ initialKey = 'C', compact = false }: CofToolProps) {
       {/* Diatonic chords */}
       {!compact && (
         <div className="mt-8">
-          <div className="text-[10px] uppercase tracking-[0.32em] text-gold-500 mb-3">
+          <div className="text-[10px] uppercase tracking-[0.32em] text-gold-100 mb-3">
             The seven chords in {selectedKey} major
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {diatonic.map(c => (
               <div key={c.romanNumeral} className="card flex flex-col items-center" style={{ padding: '0.75rem 0.5rem' }}>
-                <div className="text-[10px] uppercase tracking-[0.28em] text-gold-500 mb-1">{c.romanNumeral}</div>
+                <div className="text-[10px] uppercase tracking-[0.28em] text-gold-100 mb-1">{c.romanNumeral}</div>
                 <ChordDiagram {...c.diagram} />
               </div>
             ))}

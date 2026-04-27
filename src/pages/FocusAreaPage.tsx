@@ -62,7 +62,7 @@ export function FocusAreaPage() {
     return () => { mounted = false }
   }, [id, user, refreshTick])
 
-  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/60 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
+  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/80 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
   if (!area) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/70">Focus area not found.</div></AppLayout>
 
   const completedCount = Object.values(progress).filter(p => p.status === 'completed').length
@@ -86,14 +86,14 @@ export function FocusAreaPage() {
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Home</Link>
+        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
         <div className="eyebrow mt-6 mb-3">Focus area</div>
         <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">{area.name}</h1>
         {area.description && <p className="text-lg text-cream-50/70 mt-4 max-w-3xl leading-relaxed">{area.description}</p>}
 
         <div className="mt-10 mb-10">
           <div className="flex items-center justify-between mb-2 text-[10px] uppercase tracking-[0.28em]">
-            <span className="text-gold-500">Progress</span>
+            <span className="text-gold-100">Progress</span>
             <span className="text-cream-50/70">{completedCount} / {lessons.length} · {pct}%</span>
           </div>
           <div className="h-px bg-night-700">
@@ -127,11 +127,11 @@ export function FocusAreaPage() {
                     onClick={() => setFoundationalOpen(o => !o)}
                     className="flex items-baseline gap-3 flex-1 text-left group"
                   >
-                    <span className={`text-gold-500 transition-transform ${foundationalOpen ? 'rotate-90' : ''}`}>▸</span>
+                    <span className={`text-gold-100 transition-transform ${foundationalOpen ? 'rotate-90' : ''}`}>▸</span>
                     <span className="font-display text-base tracking-[0.06em] text-cream-50 group-hover:text-gold-100 transition">
                       Foundational lessons
                     </span>
-                    <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/65">
+                    <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/80">
                       {foundationalCompleted}/{foundational.length}
                     </span>
                   </button>
@@ -140,7 +140,7 @@ export function FocusAreaPage() {
                       type="button"
                       onClick={handleBulkComplete}
                       disabled={bulkSaving}
-                      className="text-[10px] uppercase tracking-[0.22em] text-gold-500 hover:text-gold-100 transition border border-gold-500/40 hover:border-gold-500 px-3 py-1.5 disabled:opacity-50"
+                      className="text-[10px] uppercase tracking-[0.22em] text-gold-100 hover:text-cream-50 transition border border-gold-500/40 hover:border-gold-500 px-3 py-1.5 disabled:opacity-50"
                     >
                       {bulkSaving ? 'Marking…' : 'Mark all done'}
                     </button>
@@ -150,7 +150,7 @@ export function FocusAreaPage() {
 
                 {foundationalOpen && (
                   <div className="pt-2">
-                    <p className="text-xs text-cream-50/65 mt-3 mb-2 leading-relaxed max-w-2xl">
+                    <p className="text-xs text-cream-50/80 mt-3 mb-2 leading-relaxed max-w-2xl">
                       Below your current level — review them anytime, or mark them all done if you don't need to walk through them.
                     </p>
                     <LessonList
@@ -201,10 +201,10 @@ function LessonList({
               <div className="font-display text-base md:text-lg tracking-[0.04em] text-cream-50 group-hover:text-gold-100 transition">{l.title}</div>
               {l.summary && <div className="text-xs md:text-sm text-cream-50/70 mt-1 line-clamp-1">{l.summary}</div>}
             </div>
-            <div className="hidden sm:block text-[10px] uppercase tracking-[0.22em] text-cream-50/60 shrink-0">
+            <div className="hidden sm:block text-[10px] uppercase tracking-[0.22em] text-cream-50/80 shrink-0">
               D{l.difficulty}{l.duration_minutes ? ` · ${l.duration_minutes}m` : ''}
             </div>
-            <div className="text-cream-50/55 group-hover:text-gold-100 transition">→</div>
+            <div className="text-cream-50/75 group-hover:text-gold-100 transition">→</div>
           </Link>
         )
       })}

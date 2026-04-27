@@ -100,7 +100,7 @@ export function ChromaticTunerPage() {
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/tuner" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Basic tuner</Link>
+        <Link to="/tuner" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Basic tuner</Link>
         <div className="eyebrow mt-6 mb-3">Tools</div>
         <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Chromatic tuner</h1>
         <p className="text-lg text-cream-50/70 mt-4 max-w-2xl leading-relaxed">
@@ -175,7 +175,7 @@ export function ChromaticTunerPage() {
                 ) : 'Listening…'}
               </div>
               {displayHz > 0 && (
-                <div className="text-xs text-cream-50/60 tracking-widest uppercase">{displayHz.toFixed(2)} Hz</div>
+                <div className="text-xs text-cream-50/80 tracking-widest uppercase">{displayHz.toFixed(2)} Hz</div>
               )}
             </div>
 
@@ -195,7 +195,7 @@ export function ChromaticTunerPage() {
                       }`}
                     >
                       <div className="font-display text-lg tracking-[0.06em]">{s.name}</div>
-                      <div className="text-[10px] text-cream-50/60 tracking-widest mt-1">{s.freq.toFixed(2)} Hz</div>
+                      <div className="text-[10px] text-cream-50/80 tracking-widest mt-1">{s.freq.toFixed(2)} Hz</div>
                     </div>
                   )
                 })}

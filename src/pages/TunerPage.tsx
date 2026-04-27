@@ -99,7 +99,7 @@ export function TunerPage() {
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Home</Link>
+        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
         <div className="eyebrow mt-6 mb-3">Tools</div>
         <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Tuner</h1>
         <p className="text-lg text-cream-50/70 mt-4 max-w-2xl leading-relaxed">
@@ -123,7 +123,7 @@ export function TunerPage() {
                 className={`text-center py-6 sm:py-8 border-2 transition-all ${cls}`}
               >
                 <div className="font-display text-3xl sm:text-5xl tracking-[0.04em]">{s.name[0]}</div>
-                <div className="text-[9px] uppercase tracking-[0.22em] text-cream-50/60 mt-2">String {s.stringNum}</div>
+                <div className="text-[9px] uppercase tracking-[0.22em] text-cream-50/80 mt-2">String {s.stringNum}</div>
               </div>
             )
           })}
@@ -179,7 +179,7 @@ export function TunerPage() {
         <div className="mt-12 text-center">
           <Link
             to="/tuner/advanced"
-            className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition"
+            className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition"
           >
             Need more detail? Open the chromatic tuner →
           </Link>

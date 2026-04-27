@@ -169,11 +169,11 @@ export function Home() {
         <div className="max-w-7xl mx-auto px-5 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <img src="/risensix-logo.png" alt="" className="h-7 w-7 object-contain" />
-            <span className="font-display tracking-[0.28em] text-[11px] text-cream-50/65">
+            <span className="font-display tracking-[0.28em] text-[11px] text-cream-50/80">
               RISEN&nbsp;SIX · CURRICULUM&nbsp;BY&nbsp;CW&nbsp;CUSTOM&nbsp;GUITARS
             </span>
           </div>
-          <div className="text-[11px] tracking-[0.22em] uppercase text-cream-50/65">
+          <div className="text-[11px] tracking-[0.22em] uppercase text-cream-50/80">
             risensix.com
           </div>
         </div>
@@ -187,7 +187,7 @@ function Pillar({ num, title, body }: { num: string; title: string; body: string
     <div className="bg-night-900 p-10">
       <div className="prefix-num mb-6">{num}</div>
       <h4 className="font-display text-xl md:text-2xl tracking-[0.06em] text-cream-50 mb-4">{title}</h4>
-      <p className="text-cream-50/65 leading-relaxed text-[15px]">{body}</p>
+      <p className="text-cream-50/80 leading-relaxed text-[15px]">{body}</p>
     </div>
   )
 }
@@ -197,7 +197,7 @@ function Milestone({ when, what, detail }: { when: string; what: string; detail:
     <div className="card" style={{ padding: '1.75rem 1.75rem' }}>
       <div className="eyebrow mb-3">{when}</div>
       <div className="font-display text-lg md:text-xl tracking-[0.04em] text-cream-50 mb-3 leading-snug">{what}</div>
-      <p className="text-cream-50/60 leading-relaxed text-[14px]">{detail}</p>
+      <p className="text-cream-50/80 leading-relaxed text-[14px]">{detail}</p>
     </div>
   )
 }

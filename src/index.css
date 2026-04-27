@@ -18,6 +18,9 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-night-900);
   color: var(--color-cream-50);
+  font-weight: 450;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   /* iOS PWA: respect notch / Dynamic Island / home indicator */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
@@ -31,13 +34,14 @@ body {
    Shared design system
    =========================================================== */
 
-/* Tiny gold uppercase label that sits above headings */
+/* Tiny uppercase label that sits above headings — readable on black */
 .eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.42em;
+  font-size: 11px;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--color-gold-500);
+  color: var(--color-gold-100);
   font-family: var(--font-sans);
+  font-weight: 600;
 }
 
 /* Large heading style for sections */
@@ -52,10 +56,11 @@ body {
 /* Small section header (with hairline rule beneath) */
 .h-section {
   font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 0.32em;
+  font-size: 15px;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--color-gold-100);
+  color: var(--color-cream-50);
+  font-weight: 700;
 }
 
 /* Sharp hairline divider with subtle gold gradient */
@@ -162,9 +167,10 @@ body {
 /* Number prefix (used in lesson lists, pillar cards) */
 .prefix-num {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.32em;
-  color: var(--color-gold-500);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: var(--color-gold-100);
+  font-weight: 600;
 }
 
 /* ===========================================================
@@ -188,12 +194,12 @@ body {
 .prose-rs h2 { font-size: 1.45em; }
 .prose-rs h3 { font-size: 1.2em; }
 .prose-rs h4 {
-  font-size: 0.78em;
+  font-size: 0.82em;
   text-transform: uppercase;
-  letter-spacing: 0.32em;
-  color: var(--color-gold-500);
+  letter-spacing: 0.24em;
+  color: var(--color-gold-100);
   font-family: var(--font-sans);
-  font-weight: 600;
+  font-weight: 700;
 }
 .prose-rs p { margin: 1em 0; }
 .prose-rs strong { color: var(--color-cream-50); font-weight: 600; }
@@ -231,7 +237,7 @@ body {
 .prose-rs ul, .prose-rs ol { padding-left: 1.4em; }
 .prose-rs ul li { list-style: disc; margin: 0.4em 0; }
 .prose-rs ol li { list-style: decimal; margin: 0.4em 0; }
-.prose-rs ul li::marker, .prose-rs ol li::marker { color: var(--color-gold-500); }
+.prose-rs ul li::marker, .prose-rs ol li::marker { color: var(--color-gold-100); }
 .prose-rs hr { border: 0; border-top: 1px solid rgba(250, 246, 238, 0.08); margin: 2em 0; }
 .prose-rs table {
   border-collapse: collapse;
@@ -245,12 +251,12 @@ body {
   text-align: left;
 }
 .prose-rs th {
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-size: 12px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-gold-500);
-  font-weight: 600;
-  border-bottom: 1px solid rgba(201, 150, 43, 0.3);
+  color: var(--color-gold-100);
+  font-weight: 700;
+  border-bottom: 1px solid rgba(248, 220, 145, 0.4);
 }
 .prose-rs .diagram-error {
   border-color: rgba(226, 92, 43, 0.5);

@@ -58,7 +58,7 @@ export function CircleToolPage() {
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">← Home</Link>
+        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
         <div className="eyebrow mt-6 mb-3">Tools</div>
         <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Circle of Fifths</h1>
         <p className="text-lg text-cream-50/70 mt-4 max-w-2xl leading-relaxed">
@@ -182,14 +182,14 @@ export function CircleToolPage() {
             <h2 className="h-section">The seven chords in {selectedKey} major</h2>
           </div>
           <div className="hairline mb-6" />
-          <p className="text-cream-50/65 text-sm leading-relaxed mb-6 max-w-3xl">
+          <p className="text-cream-50/80 text-sm leading-relaxed mb-6 max-w-3xl">
             Almost every song in this key uses some combination of these. <strong className="text-cream-50">I, IV, V</strong> (the orange + amber wedges) carry most of the weight. <strong className="text-cream-50">vi</strong> is the relative minor — a common substitute for I that shifts the mood. <strong className="text-cream-50">ii</strong> and <strong className="text-cream-50">iii</strong> color the verses; <strong className="text-cream-50">vii°</strong> is rarely used as a chord but resolves powerfully back to I.
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {diatonic.map(c => (
               <div key={c.romanNumeral} className="card flex flex-col items-center" style={{ padding: '1rem 0.75rem' }}>
-                <div className="text-[10px] uppercase tracking-[0.28em] text-gold-500 mb-1">{c.romanNumeral}</div>
+                <div className="text-[10px] uppercase tracking-[0.28em] text-gold-100 mb-1">{c.romanNumeral}</div>
                 <ChordDiagram {...c.diagram} />
               </div>
             ))}
@@ -214,7 +214,7 @@ function Legend({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-2">
       <span className="inline-block h-3 w-3" style={{ backgroundColor: color }} />
-      <span className="text-cream-50/65">{label}</span>
+      <span className="text-cream-50/80">{label}</span>
     </div>
   )
 }

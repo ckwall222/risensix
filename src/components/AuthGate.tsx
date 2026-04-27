@@ -14,7 +14,7 @@ export function AuthGate({ children, requireOnboarded = false }: Props) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-night-900">
-        <div className="text-gold-500 tracking-widest text-xs uppercase">Loading…</div>
+        <div className="text-gold-100 tracking-widest text-xs uppercase">Loading…</div>
       </div>
     )
   }

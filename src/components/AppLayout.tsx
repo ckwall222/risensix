@@ -35,14 +35,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
                 {initial}
               </div>
               <div className="leading-tight">
-                <div className="text-[10px] text-cream-50/65 uppercase tracking-[0.22em]">Signed in</div>
+                <div className="text-[10px] text-cream-50/80 uppercase tracking-[0.22em]">Signed in</div>
                 <div className="text-sm text-cream-50">{profile?.display_name ?? '...'}</div>
               </div>
             </div>
             <button
               type="button"
               onClick={handleSignOut}
-              className="text-[10px] uppercase tracking-[0.22em] text-cream-50/65 hover:text-gold-100 transition px-2"
+              className="text-[10px] uppercase tracking-[0.22em] text-cream-50/80 hover:text-gold-100 transition px-2"
             >
               Sign out
             </button>
@@ -51,7 +51,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t border-cream-50/[0.06] mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-cream-50/65">
+        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-cream-50/80">
           Risen Six · A CW Custom Guitars venture · 2026
         </div>
       </footer>

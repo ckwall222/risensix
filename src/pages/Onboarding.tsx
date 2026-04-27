@@ -223,7 +223,7 @@ function Buttons({
         <button
           type="button"
           onClick={onBack}
-          className="px-5 py-3 text-sm tracking-widest uppercase text-cream-50/60 hover:text-cream-50"
+          className="px-5 py-3 text-sm tracking-widest uppercase text-cream-50/80 hover:text-cream-50"
         >
           ← Back
         </button>
