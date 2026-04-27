@@ -48,7 +48,8 @@ const NUT_COLOR = '#FAF6EE'
 const FRET_COLOR = '#6B4515'
 const STRING_COLOR = '#C9962B'
 const INLAY_COLOR = '#3a2f17'
-const TEXT_DIM = '#6B4515'
+const TEXT_DIM = '#C9962B'         // brand gold-500, readable on black
+const TEXT_TUNING = '#F8DC91'      // brand gold-100, brightest for tuning labels
 const TEXT_TITLE = '#F8DC91'
 const ROOT_FILL = '#E25C2B'
 const NOTE_FILL = '#C9962B'
@@ -177,9 +178,10 @@ export function Fretboard({
             x={LEFT_PADDING - 6}
             y={stringY(stringNum) + 3.5}
             textAnchor="end"
-            fontSize={10}
-            fontFamily="Cinzel, serif"
-            fill={TEXT_DIM}
+            fontSize={11}
+            fontFamily="Inter, system-ui, sans-serif"
+            fontWeight={600}
+            fill={TEXT_TUNING}
           >
             {t}
           </text>
@@ -196,10 +198,10 @@ export function Fretboard({
             x={cx}
             y={stringY(6) + 20}
             textAnchor="middle"
-            fontSize={10}
-            fontFamily="Cinzel, serif"
+            fontSize={11}
+            fontFamily="Inter, system-ui, sans-serif"
+            fontWeight={500}
             fill={TEXT_DIM}
-            letterSpacing="0.08em"
           >
             {fret}
           </text>
