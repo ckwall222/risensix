@@ -12,6 +12,7 @@ import { TheoryList } from './pages/TheoryList'
 import { TheoryDetail } from './pages/TheoryDetail'
 import { ChordsPage } from './pages/ChordsPage'
 import { TunerPage } from './pages/TunerPage'
+import { ChromaticTunerPage } from './pages/ChromaticTunerPage'
 import { MetronomePage } from './pages/MetronomePage'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/theory/:id" element={<AuthGate requireOnboarded><TheoryDetail /></AuthGate>} />
           <Route path="/chords" element={<AuthGate requireOnboarded><ChordsPage /></AuthGate>} />
           <Route path="/tuner" element={<AuthGate requireOnboarded><TunerPage /></AuthGate>} />
+          <Route path="/tuner/advanced" element={<AuthGate requireOnboarded><ChromaticTunerPage /></AuthGate>} />
           <Route path="/metronome" element={<AuthGate requireOnboarded><MetronomePage /></AuthGate>} />
         </Routes>
       </AuthProvider>
