@@ -1,9 +1,21 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Milestone, MilestoneStatus, MILESTONES, STAGES, computeMilestoneStatus } from '../lib/milestones'
 
 type Props = {
   completedSlugs: Set<string>
   startedSlugs: Set<string>
+}
+
+/**
+ * Pick the best lesson slug to link a milestone to:
+ * - First not-yet-completed required lesson, if any
+ * - Otherwise the first required lesson
+ */
+function targetSlugFor(m: Milestone, completedSlugs: Set<string>): string | null {
+  if (m.requiredLessonSlugs.length === 0) return null
+  const next = m.requiredLessonSlugs.find(s => !completedSlugs.has(s))
+  return next ?? m.requiredLessonSlugs[0]
 }
 
 export function JourneyTimeline({ completedSlugs, startedSlugs }: Props) {
@@ -84,7 +96,14 @@ function Stage({
         <ul className="ml-12 pb-6 pt-1 space-y-1">
           {milestones.map(m => {
             const status = computeMilestoneStatus(m, completedSlugs, startedSlugs)
-            return <MilestoneRow key={m.id} m={m} status={status} />
+            return (
+              <MilestoneRow
+                key={m.id}
+                m={m}
+                status={status}
+                targetSlug={targetSlugFor(m, completedSlugs)}
+              />
+            )
           })}
         </ul>
       )}
@@ -92,9 +111,9 @@ function Stage({
   )
 }
 
-function MilestoneRow({ m, status }: { m: Milestone; status: MilestoneStatus }) {
-  return (
-    <li className="flex items-start gap-4 py-2.5 border-b border-cream-50/[0.04]">
+function MilestoneRow({ m, status, targetSlug }: { m: Milestone; status: MilestoneStatus; targetSlug: string | null }) {
+  const inner = (
+    <>
       <StatusIcon status={status} />
       <div className="flex-1 min-w-0">
         <div className={`font-display text-base tracking-[0.04em] ${status === 'earned' ? 'text-cream-50' : 'text-cream-50/55'}`}>
@@ -103,6 +122,28 @@ function MilestoneRow({ m, status }: { m: Milestone; status: MilestoneStatus }) 
         <div className="text-xs text-cream-50/45 mt-0.5 leading-relaxed">{m.description}</div>
       </div>
       <StatusLabel status={status} />
+      {targetSlug && (
+        <span className="text-cream-50/30 group-hover:text-gold-100 group-hover:translate-x-1 transition shrink-0 mt-1" aria-hidden="true">→</span>
+      )}
+    </>
+  )
+
+  if (targetSlug) {
+    return (
+      <li>
+        <Link
+          to={`/lessons/${targetSlug}`}
+          className="flex items-start gap-4 py-2.5 border-b border-cream-50/[0.04] hover:bg-cream-50/[0.02] -mx-2 px-2 transition group"
+        >
+          {inner}
+        </Link>
+      </li>
+    )
+  }
+
+  return (
+    <li className="flex items-start gap-4 py-2.5 border-b border-cream-50/[0.04] -mx-2 px-2">
+      {inner}
     </li>
   )
 }
