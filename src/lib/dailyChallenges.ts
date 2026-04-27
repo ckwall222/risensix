@@ -140,7 +140,7 @@ Speed: 60 BPM, 4 notes per beat (16th notes). Stay relaxed.`,
     summary: 'C major in C-shape, A-shape, G-shape, E-shape, D-shape.',
     instructions: `Play **C major** in each of the 5 CAGED positions:
 
-1. C-shape (open position) — `[x, 3, 2, 0, 1, 0]`
+1. C-shape (open position) — frets x-3-2-0-1-0
 2. A-shape barred at fret 3
 3. G-shape at fret 5 (hardest stretch)
 4. E-shape at fret 8
