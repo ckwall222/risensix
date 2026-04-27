@@ -1,8 +1,8 @@
 /**
  * Audio playback for chord diagrams and fretboard notes.
  *
- * Uses Tone.js's PluckSynth (Karplus-Strong) to produce a plausible
- * plucked-string tone with no audio samples shipped.
+ * PluckSynth (Karplus-Strong) running through a Freeverb tail for body.
+ * Tuned for warmth + longer sustain so chords are actually understandable.
  *
  * PluckSynth isn't compatible with Tone.PolySynth (it's not Monophonic),
  * so we maintain a small pool of voices and round-robin them. 8 voices
@@ -15,28 +15,46 @@
 import * as Tone from 'tone'
 
 const VOICE_COUNT = 8
-let voicesPromise: Promise<Tone.PluckSynth[]> | null = null
+
+let initPromise: Promise<{
+  voices: Tone.PluckSynth[]
+}> | null = null
+
 let voiceIndex = 0
 
-async function getVoices(): Promise<Tone.PluckSynth[]> {
-  if (!voicesPromise) {
-    voicesPromise = (async () => {
-      return Array.from({ length: VOICE_COUNT }, () => {
+async function init() {
+  if (!initPromise) {
+    initPromise = (async () => {
+      // Effect chain: voices → eq → reverb → master → destination
+      // Subtle low-mid bump for body, then a touch of reverb for room
+      const eq = new Tone.EQ3({ low: 1.5, mid: 0.5, high: -1 })
+      const reverb = new Tone.Freeverb({
+        roomSize: 0.78,
+        dampening: 2800,
+      })
+      reverb.wet.value = 0.22
+      const master = new Tone.Gain(0.95)
+
+      eq.chain(reverb, master, Tone.getDestination())
+
+      const voices = Array.from({ length: VOICE_COUNT }, () => {
         const v = new Tone.PluckSynth({
-          attackNoise: 0.8,
-          dampening: 4500,
-          resonance: 0.95,
-        } as Partial<Tone.PluckSynthOptions>).toDestination()
-        v.volume.value = -10
+          attackNoise: 0.45,
+          dampening: 5500,
+          resonance: 0.988,
+        } as Partial<Tone.PluckSynthOptions>)
+        v.volume.value = -5
+        v.connect(eq)
         return v
       })
+      return { voices }
     })()
   }
-  return voicesPromise
+  return initPromise
 }
 
 async function nextVoice(): Promise<Tone.PluckSynth> {
-  const voices = await getVoices()
+  const { voices } = await init()
   const v = voices[voiceIndex]
   voiceIndex = (voiceIndex + 1) % VOICE_COUNT
   return v
@@ -54,13 +72,20 @@ function noteForFret(stringNum: number, fret: number): string {
   return Tone.Frequency(open).transpose(fret).toNote()
 }
 
+// Durations — set to ring long enough that you can actually hear and
+// recognize the chord. PluckSynth's natural decay is governed by resonance,
+// so the "duration" mostly affects when damping kicks in at the end.
+const NOTE_DURATION = '1n'      // ~2s at default tempo
+const CHORD_DURATION = '1m'     // ~2s at default tempo (one measure)
+const STRUM_GAP = 0.038         // 38ms between consecutive strings — feels like a real downstroke
+
 /** Play a single fretted note on a specific string (1 = high E, 6 = low E). */
 export async function playFret(stringNum: number, fret: number): Promise<void> {
   if (fret < 0 || stringNum < 1 || stringNum > 6) return
   await Tone.start()
   const voice = await nextVoice()
   const note = noteForFret(stringNum, fret)
-  voice.triggerAttackRelease(note, '2n')
+  voice.triggerAttackRelease(note, NOTE_DURATION)
 }
 
 /**
@@ -71,13 +96,12 @@ export async function playFret(stringNum: number, fret: number): Promise<void> {
 export async function strumChord(frets: Array<number | 'x'>): Promise<void> {
   await Tone.start()
   const now = Tone.now()
-  const STRUM_GAP = 0.022
   for (let i = 0; i < frets.length; i++) {
     const fret = frets[i]
     if (fret === 'x') continue
     const stringNum = 6 - i
     const note = noteForFret(stringNum, fret as number)
     const voice = await nextVoice()
-    voice.triggerAttackRelease(note, '2n', now + i * STRUM_GAP)
+    voice.triggerAttackRelease(note, CHORD_DURATION, now + i * STRUM_GAP)
   }
 }
