@@ -20,9 +20,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <span className="hidden sm:inline font-display tracking-[0.28em] text-xs text-gold-100">RISEN&nbsp;SIX</span>
           </Link>
 
-          <nav className="flex items-center gap-3 sm:gap-7 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.28em]">
+          <nav className="flex items-center gap-2 sm:gap-5 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] sm:tracking-[0.24em]">
             <NavItem to="/dashboard">Home</NavItem>
             <NavItem to="/chords">Chords</NavItem>
+            <NavItem to="/tuner">Tuner</NavItem>
+            <NavItem to="/metronome">Metronome</NavItem>
             <NavItem to="/theory">Theory</NavItem>
           </nav>
 
