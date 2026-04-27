@@ -148,7 +148,7 @@ export function LessonPage() {
                 </button>
               )}
 
-              {neighbors.next && (
+              {neighbors.next ? (
                 <button
                   type="button"
                   onClick={goNext}
@@ -156,6 +156,13 @@ export function LessonPage() {
                 >
                   Next lesson →
                 </button>
+              ) : (
+                <Link
+                  to="/dashboard"
+                  className="btn btn-ghost sm:ml-auto"
+                >
+                  Back to home →
+                </Link>
               )}
             </div>
 
