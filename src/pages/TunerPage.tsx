@@ -116,14 +116,14 @@ export function TunerPage() {
               isActive && direction === 'in'   ? 'border-gold-500 bg-gold-500/20 text-cream-50' :
               isActive && direction === 'up'   ? 'border-ember-500 bg-ember-500/20 text-cream-50' :
               isActive && direction === 'down' ? 'border-ember-500 bg-ember-500/20 text-cream-50' :
-              'border-cream-50/[0.12] text-cream-50/55'
+              'border-cream-50/[0.12] text-cream-50/70'
             return (
               <div
                 key={s.name}
                 className={`text-center py-6 sm:py-8 border-2 transition-all ${cls}`}
               >
                 <div className="font-display text-3xl sm:text-5xl tracking-[0.04em]">{s.name[0]}</div>
-                <div className="text-[9px] uppercase tracking-[0.22em] text-cream-50/40 mt-2">String {s.stringNum}</div>
+                <div className="text-[9px] uppercase tracking-[0.22em] text-cream-50/60 mt-2">String {s.stringNum}</div>
               </div>
             )
           })}
@@ -141,18 +141,18 @@ export function TunerPage() {
             <>
               <div className="text-7xl mb-2" style={{ color: '#E25C2B' }}>↑</div>
               <div className="text-base uppercase tracking-[0.16em] text-cream-50/85">Tune up</div>
-              <div className="text-xs text-cream-50/55 mt-1">Turn the peg to raise the pitch</div>
+              <div className="text-xs text-cream-50/70 mt-1">Turn the peg to raise the pitch</div>
             </>
           )}
           {direction === 'down' && (
             <>
               <div className="text-7xl mb-2" style={{ color: '#E25C2B' }}>↓</div>
               <div className="text-base uppercase tracking-[0.16em] text-cream-50/85">Tune down</div>
-              <div className="text-xs text-cream-50/55 mt-1">Turn the peg to lower the pitch</div>
+              <div className="text-xs text-cream-50/70 mt-1">Turn the peg to lower the pitch</div>
             </>
           )}
           {!direction && (
-            <div className="text-cream-50/55">{guidance}</div>
+            <div className="text-cream-50/70">{guidance}</div>
           )}
         </div>
 

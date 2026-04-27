@@ -79,7 +79,7 @@ export function Home() {
             Where you start has nothing to do with{' '}
             <em className="not-italic text-gold-100">where you end up.</em>
           </p>
-          <p className="mt-6 text-cream-50/55 text-base md:text-lg max-w-xl mx-auto">
+          <p className="mt-6 text-cream-50/70 text-base md:text-lg max-w-xl mx-auto">
             What changes here isn't the guitar. It's you. The first month is
             friction — buzzing strings, missed beats, calluses still forming.
             The years after are music. The path is built around the difference.
@@ -169,11 +169,11 @@ export function Home() {
         <div className="max-w-7xl mx-auto px-5 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <img src="/risensix-logo.png" alt="" className="h-7 w-7 object-contain" />
-            <span className="font-display tracking-[0.28em] text-[11px] text-gold-900">
+            <span className="font-display tracking-[0.28em] text-[11px] text-cream-50/65">
               RISEN&nbsp;SIX · CURRICULUM&nbsp;BY&nbsp;CW&nbsp;CUSTOM&nbsp;GUITARS
             </span>
           </div>
-          <div className="text-[11px] tracking-[0.22em] uppercase text-gold-900">
+          <div className="text-[11px] tracking-[0.22em] uppercase text-cream-50/65">
             risensix.com
           </div>
         </div>

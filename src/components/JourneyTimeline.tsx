@@ -82,12 +82,12 @@ function Stage({
           <div className="prefix-num">{num}</div>
           <h3 className="font-display text-lg md:text-xl tracking-[0.06em] text-cream-50">{name}</h3>
           {isComplete && <span className="pill">✓ Stage complete</span>}
-          <div className="ml-auto text-[10px] uppercase tracking-[0.28em] text-cream-50/45">
+          <div className="ml-auto text-[10px] uppercase tracking-[0.28em] text-cream-50/65">
             {earned} / {total}
           </div>
         </div>
         <div className="ml-12 flex items-center gap-3">
-          <p className="text-sm text-cream-50/55 flex-1">{subtitle}</p>
+          <p className="text-sm text-cream-50/70 flex-1">{subtitle}</p>
         </div>
         <div className="h-px bg-night-700 ml-12 mt-3">
           <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
@@ -117,14 +117,14 @@ function MilestoneRow({ m, status, targetSlug }: { m: Milestone; status: Milesto
     <>
       <StatusIcon status={status} />
       <div className="flex-1 min-w-0">
-        <div className={`font-display text-base tracking-[0.04em] ${status === 'earned' ? 'text-cream-50' : 'text-cream-50/55'}`}>
+        <div className={`font-display text-base tracking-[0.04em] ${status === 'earned' ? 'text-cream-50' : 'text-cream-50/70'}`}>
           {m.title}
         </div>
-        <div className="text-xs text-cream-50/45 mt-0.5 leading-relaxed">{m.description}</div>
+        <div className="text-xs text-cream-50/65 mt-0.5 leading-relaxed">{m.description}</div>
       </div>
       <StatusLabel status={status} />
       {targetSlug && (
-        <span className="text-cream-50/30 group-hover:text-gold-100 group-hover:translate-x-1 transition shrink-0 mt-1" aria-hidden="true">→</span>
+        <span className="text-cream-50/55 group-hover:text-gold-100 group-hover:translate-x-1 transition shrink-0 mt-1" aria-hidden="true">→</span>
       )}
     </>
   )
@@ -179,6 +179,6 @@ function StatusIcon({ status }: { status: MilestoneStatus }) {
 function StatusLabel({ status }: { status: MilestoneStatus }) {
   if (status === 'earned') return <span className="text-[10px] uppercase tracking-[0.28em] text-gold-100 shrink-0 mt-1">Earned</span>
   if (status === 'in_progress') return <span className="text-[10px] uppercase tracking-[0.28em] text-ember-500 shrink-0 mt-1">In progress</span>
-  if (status === 'future') return <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/30 shrink-0 mt-1">Coming</span>
+  if (status === 'future') return <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/55 shrink-0 mt-1">Coming</span>
   return null
 }

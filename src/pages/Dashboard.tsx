@@ -98,11 +98,11 @@ export function Dashboard() {
         <div className="eyebrow mb-3">Dashboard</div>
         <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-3">{greeting}</h1>
         {!loading && totalAvailable > 0 && (
-          <p className="text-cream-50/55 text-sm mb-10">
+          <p className="text-cream-50/70 text-sm mb-10">
             <span className="text-gold-100">{earnedCount}</span> of{' '}
             <span className="text-cream-50">{totalAvailable}</span> milestones earned
             {' · '}
-            <span className="text-cream-50/40">{MILESTONES.length - totalAvailable} on the path ahead</span>
+            <span className="text-cream-50/60">{MILESTONES.length - totalAvailable} on the path ahead</span>
           </p>
         )}
 
@@ -135,7 +135,7 @@ export function Dashboard() {
           <h2 className="h-section">Your journey</h2>
           <div className="hairline mt-2 mb-10" />
           {loading ? (
-            <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
+            <div className="text-sm text-cream-50/60 tracking-widest uppercase">Loading…</div>
           ) : (
             <JourneyTimeline
               completedSlugs={completedSlugs}
@@ -154,12 +154,12 @@ export function Dashboard() {
             </Link>
           </div>
           <div className="hairline mt-2 mb-6" />
-          <p className="text-xs text-cream-50/45 mb-5 leading-relaxed">
+          <p className="text-xs text-cream-50/65 mb-5 leading-relaxed">
             Click a topic to open its lessons. Foundational lessons (below your level) are collapsible inside each focus area, and you can mark them complete in bulk there.
           </p>
 
           {loading ? (
-            <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
+            <div className="text-sm text-cream-50/60 tracking-widest uppercase">Loading…</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-50/[0.06]">
               {focusAreas.map((fa, idx) => {
@@ -174,8 +174,8 @@ export function Dashboard() {
                     <div className="flex items-baseline justify-between mb-5">
                       <div className="prefix-num">{String(idx + 1).padStart(2, '0')}</div>
                       <div className="flex items-center gap-3">
-                        <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/40">{c.completed}/{c.total}</div>
-                        <span className="text-cream-50/30 group-hover:text-gold-100 group-hover:translate-x-1 transition">→</span>
+                        <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/60">{c.completed}/{c.total}</div>
+                        <span className="text-cream-50/55 group-hover:text-gold-100 group-hover:translate-x-1 transition">→</span>
                       </div>
                     </div>
                     <div className="h-display text-xl md:text-2xl mb-3 group-hover:text-gold-100 transition">{fa.name}</div>
@@ -183,7 +183,7 @@ export function Dashboard() {
                     <div className="h-px bg-night-700">
                       <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/45 mt-2">{pct}% complete</div>
+                    <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/65 mt-2">{pct}% complete</div>
                   </Link>
                 )
               })}
@@ -241,7 +241,7 @@ async function recommendNextLesson(userId: string, abilityLevel: string): Promis
 function Item({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-[10px] uppercase tracking-[0.28em] text-gold-900 mb-1">{label}</dt>
+      <dt className="text-[10px] uppercase tracking-[0.28em] text-cream-50/65 mb-1">{label}</dt>
       <dd className="text-cream-50">{children}</dd>
     </div>
   )

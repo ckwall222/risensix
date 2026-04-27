@@ -101,8 +101,8 @@ export function LessonPage() {
 
   const goNext = () => { if (neighbors.next) navigate(`/lessons/${neighbors.next.slug}`) }
 
-  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/40 tracking-widest uppercase text-sm">Loading lesson…</div></AppLayout>
-  if (!lesson) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/55">Lesson not found.</div></AppLayout>
+  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/60 tracking-widest uppercase text-sm">Loading lesson…</div></AppLayout>
+  if (!lesson) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/70">Lesson not found.</div></AppLayout>
 
   return (
     <AppLayout>
@@ -111,12 +111,12 @@ export function LessonPage() {
           <Link to={`/focus/${lesson.focus_area_id}`} className="text-gold-500 hover:text-gold-100 transition">
             ← {lesson.focus_area_id}
           </Link>
-          <span className="text-cream-50/30">·</span>
-          <span className="text-cream-50/45">Difficulty {lesson.difficulty} / 5</span>
+          <span className="text-cream-50/55">·</span>
+          <span className="text-cream-50/65">Difficulty {lesson.difficulty} / 5</span>
           {lesson.duration_minutes && (
             <>
-              <span className="text-cream-50/30">·</span>
-              <span className="text-cream-50/45">{lesson.duration_minutes} min</span>
+              <span className="text-cream-50/55">·</span>
+              <span className="text-cream-50/65">{lesson.duration_minutes} min</span>
             </>
           )}
           <span className="ml-auto">
@@ -168,7 +168,7 @@ export function LessonPage() {
 
             {neighbors.prev && (
               <div className="mt-6">
-                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-[11px] uppercase tracking-[0.22em] text-cream-50/45 hover:text-gold-100 transition">
+                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-[11px] uppercase tracking-[0.22em] text-cream-50/65 hover:text-gold-100 transition">
                   ← Prev: {neighbors.prev.title}
                 </Link>
               </div>
@@ -184,7 +184,7 @@ export function LessonPage() {
                     <li key={t.id}>
                       <Link to={`/theory/${t.id}`} className="block group">
                         <div className="font-display text-base tracking-[0.04em] text-cream-50 group-hover:text-gold-100 transition">{t.title}</div>
-                        {t.summary && <div className="text-xs text-cream-50/55 mt-1 leading-relaxed">{t.summary}</div>}
+                        {t.summary && <div className="text-xs text-cream-50/70 mt-1 leading-relaxed">{t.summary}</div>}
                       </Link>
                     </li>
                   ))}

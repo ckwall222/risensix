@@ -74,7 +74,7 @@ export function SignIn() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-xs uppercase tracking-widest text-gold-900 mb-2">{label}</span>
+      <span className="block text-xs uppercase tracking-widest text-cream-50/65 mb-2">{label}</span>
       {children}
     </label>
   )

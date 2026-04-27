@@ -62,8 +62,8 @@ export function FocusAreaPage() {
     return () => { mounted = false }
   }, [id, user, refreshTick])
 
-  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/40 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
-  if (!area) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/55">Focus area not found.</div></AppLayout>
+  if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/60 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
+  if (!area) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/70">Focus area not found.</div></AppLayout>
 
   const completedCount = Object.values(progress).filter(p => p.status === 'completed').length
   const pct = lessons.length === 0 ? 0 : Math.round((completedCount / lessons.length) * 100)
@@ -94,7 +94,7 @@ export function FocusAreaPage() {
         <div className="mt-10 mb-10">
           <div className="flex items-center justify-between mb-2 text-[10px] uppercase tracking-[0.28em]">
             <span className="text-gold-500">Progress</span>
-            <span className="text-cream-50/55">{completedCount} / {lessons.length} · {pct}%</span>
+            <span className="text-cream-50/70">{completedCount} / {lessons.length} · {pct}%</span>
           </div>
           <div className="h-px bg-night-700">
             <div className="h-full bg-gold-500" style={{ width: `${pct}%` }} />
@@ -102,7 +102,7 @@ export function FocusAreaPage() {
         </div>
 
         {lessons.length === 0 ? (
-          <p className="text-cream-50/55">Lessons coming soon.</p>
+          <p className="text-cream-50/70">Lessons coming soon.</p>
         ) : (
           <>
             {current.length > 0 && (
@@ -114,7 +114,7 @@ export function FocusAreaPage() {
             )}
 
             {current.length === 0 && foundational.length > 0 && (
-              <p className="text-cream-50/55 mb-8">
+              <p className="text-cream-50/70 mb-8">
                 No lessons at your level yet — more coming soon. Foundational material is below.
               </p>
             )}
@@ -131,7 +131,7 @@ export function FocusAreaPage() {
                     <span className="font-display text-base tracking-[0.06em] text-cream-50 group-hover:text-gold-100 transition">
                       Foundational lessons
                     </span>
-                    <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/45">
+                    <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/65">
                       {foundationalCompleted}/{foundational.length}
                     </span>
                   </button>
@@ -150,7 +150,7 @@ export function FocusAreaPage() {
 
                 {foundationalOpen && (
                   <div className="pt-2">
-                    <p className="text-xs text-cream-50/45 mt-3 mb-2 leading-relaxed max-w-2xl">
+                    <p className="text-xs text-cream-50/65 mt-3 mb-2 leading-relaxed max-w-2xl">
                       Below your current level — review them anytime, or mark them all done if you don't need to walk through them.
                     </p>
                     <LessonList
@@ -199,12 +199,12 @@ function LessonList({
             <div className={`h-2 w-2 rounded-full shrink-0 ${dot}`} />
             <div className="flex-1 min-w-0">
               <div className="font-display text-base md:text-lg tracking-[0.04em] text-cream-50 group-hover:text-gold-100 transition">{l.title}</div>
-              {l.summary && <div className="text-xs md:text-sm text-cream-50/55 mt-1 line-clamp-1">{l.summary}</div>}
+              {l.summary && <div className="text-xs md:text-sm text-cream-50/70 mt-1 line-clamp-1">{l.summary}</div>}
             </div>
-            <div className="hidden sm:block text-[10px] uppercase tracking-[0.22em] text-cream-50/40 shrink-0">
+            <div className="hidden sm:block text-[10px] uppercase tracking-[0.22em] text-cream-50/60 shrink-0">
               D{l.difficulty}{l.duration_minutes ? ` · ${l.duration_minutes}m` : ''}
             </div>
-            <div className="text-cream-50/30 group-hover:text-gold-100 transition">→</div>
+            <div className="text-cream-50/55 group-hover:text-gold-100 transition">→</div>
           </Link>
         )
       })}

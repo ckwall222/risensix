@@ -44,8 +44,8 @@ export function TheoryDetail() {
     return () => { mounted = false }
   }, [id])
 
-  if (loading) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/40 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
-  if (!entry) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/55">Not found.</div></AppLayout>
+  if (loading) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/60 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
+  if (!entry) return <AppLayout><div className="max-w-4xl mx-auto px-6 py-16 text-cream-50/70">Not found.</div></AppLayout>
 
   return (
     <AppLayout>
@@ -68,7 +68,7 @@ export function TheoryDetail() {
                   <Link to={`/lessons/${l.slug}`} className="text-cream-50 hover:text-gold-100 transition">
                     {l.title}
                   </Link>
-                  <span className="text-[10px] text-gold-900 tracking-[0.28em] uppercase">{l.focus_area_id}</span>
+                  <span className="text-[10px] text-cream-50/65 tracking-[0.28em] uppercase">{l.focus_area_id}</span>
                 </li>
               ))}
             </ul>

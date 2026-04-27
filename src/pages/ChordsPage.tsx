@@ -32,11 +32,11 @@ export function ChordsPage() {
                 className={`px-4 py-2 text-[10px] uppercase tracking-[0.22em] border transition ${
                   isActive
                     ? 'border-gold-500 bg-gold-500/10 text-gold-100'
-                    : 'border-cream-50/[0.12] text-cream-50/55 hover:border-gold-500/40 hover:text-gold-100'
+                    : 'border-cream-50/[0.12] text-cream-50/70 hover:border-gold-500/40 hover:text-gold-100'
                 }`}
               >
                 {cat.name}
-                <span className="ml-2 text-cream-50/40">{cat.chords.length}</span>
+                <span className="ml-2 text-cream-50/60">{cat.chords.length}</span>
               </button>
             )
           })}
@@ -73,7 +73,7 @@ export function ChordsPage() {
               >
                 <div className="flex items-baseline justify-between mb-3">
                   <div className="prefix-num">{String(idx + 1).padStart(2, '0')}</div>
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/40">{cat.chords.length} chords</div>
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/60">{cat.chords.length} chords</div>
                 </div>
                 <div className="font-display text-lg tracking-[0.04em] text-cream-50 mb-2">{cat.name}</div>
                 <p className="text-sm text-cream-50/60 leading-relaxed line-clamp-2">{cat.description}</p>

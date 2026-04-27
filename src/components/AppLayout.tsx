@@ -20,11 +20,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <span className="hidden sm:inline font-display tracking-[0.28em] text-xs text-gold-100">RISEN&nbsp;SIX</span>
           </Link>
 
-          <nav className="flex items-center gap-2 sm:gap-5 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] sm:tracking-[0.24em]">
+          <nav className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] uppercase tracking-[0.16em] sm:tracking-[0.22em]">
             <NavItem to="/dashboard">Home</NavItem>
             <NavItem to="/chords">Chords</NavItem>
             <NavItem to="/tuner">Tuner</NavItem>
-            <NavItem to="/metronome">Metronome</NavItem>
+            <NavItem to="/metronome">Metro</NavItem>
+            <NavItem to="/circle">Circle</NavItem>
             <NavItem to="/theory">Theory</NavItem>
           </nav>
 
@@ -34,14 +35,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
                 {initial}
               </div>
               <div className="leading-tight">
-                <div className="text-[10px] text-gold-900 uppercase tracking-[0.22em]">Signed in</div>
+                <div className="text-[10px] text-cream-50/65 uppercase tracking-[0.22em]">Signed in</div>
                 <div className="text-sm text-cream-50">{profile?.display_name ?? '...'}</div>
               </div>
             </div>
             <button
               type="button"
               onClick={handleSignOut}
-              className="text-[10px] uppercase tracking-[0.22em] text-gold-900 hover:text-gold-100 transition px-2"
+              className="text-[10px] uppercase tracking-[0.22em] text-cream-50/65 hover:text-gold-100 transition px-2"
             >
               Sign out
             </button>
@@ -50,7 +51,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t border-cream-50/[0.06] mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-gold-900">
+        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-cream-50/65">
           Risen Six · A CW Custom Guitars venture · 2026
         </div>
       </footer>
@@ -64,7 +65,7 @@ function NavItem({ to, children }: { to: string; children: ReactNode }) {
       to={to}
       end={to === '/dashboard'}
       className={({ isActive }) =>
-        `transition ${isActive ? 'text-gold-100' : 'text-cream-50/55 hover:text-cream-50'}`
+        `transition ${isActive ? 'text-gold-100' : 'text-cream-50/70 hover:text-cream-50'}`
       }
     >
       {children}

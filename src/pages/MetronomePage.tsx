@@ -133,7 +133,7 @@ export function MetronomePage() {
           className="w-full accent-ember-500"
           style={{ accentColor: '#E25C2B' }}
         />
-        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.22em] text-cream-50/40 mt-1">
+        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.22em] text-cream-50/60 mt-1">
           <span>{BPM_MIN}</span>
           <span>{BPM_MAX}</span>
         </div>
@@ -150,7 +150,7 @@ export function MetronomePage() {
                   type="button"
                   onClick={() => setBeatsPerBar(s.beats)}
                   className={`px-4 py-2 text-[11px] uppercase tracking-[0.22em] border transition ${
-                    isActive ? 'border-gold-500 bg-gold-500/10 text-gold-100' : 'border-cream-50/[0.12] text-cream-50/55 hover:border-gold-500/40'
+                    isActive ? 'border-gold-500 bg-gold-500/10 text-gold-100' : 'border-cream-50/[0.12] text-cream-50/70 hover:border-gold-500/40'
                   }`}
                 >
                   {s.id}

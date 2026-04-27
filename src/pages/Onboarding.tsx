@@ -101,7 +101,7 @@ export function Onboarding() {
                 }`}
               >
                 <div className="text-cream-50 font-medium">{opt.label}</div>
-                <div className="text-xs text-cream-50/55 mt-0.5">{opt.desc}</div>
+                <div className="text-xs text-cream-50/70 mt-0.5">{opt.desc}</div>
               </button>
             ))}
           </div>
@@ -167,7 +167,7 @@ export function Onboarding() {
               }`}
             >
               <div className="text-cream-50 font-medium">Acoustic</div>
-              <div className="text-xs text-cream-50/55 mt-0.5">Steel-string or classical</div>
+              <div className="text-xs text-cream-50/70 mt-0.5">Steel-string or classical</div>
             </button>
             <button
               type="button"
@@ -177,7 +177,7 @@ export function Onboarding() {
               }`}
             >
               <div className="text-cream-50 font-medium">Electric</div>
-              <div className="text-xs text-cream-50/55 mt-0.5">Strat, Tele, Les Paul, anything plugged in</div>
+              <div className="text-xs text-cream-50/70 mt-0.5">Strat, Tele, Les Paul, anything plugged in</div>
             </button>
           </div>
 
@@ -203,7 +203,7 @@ function Step({ heading, hint, children }: { heading: string; hint?: string; chi
   return (
     <div className="space-y-4">
       <h2 className="font-display text-xl tracking-wider text-cream-50">{heading}</h2>
-      {hint && <p className="text-sm text-cream-50/55">{hint}</p>}
+      {hint && <p className="text-sm text-cream-50/70">{hint}</p>}
       <div>{children}</div>
     </div>
   )

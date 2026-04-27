@@ -36,9 +36,9 @@ export function TheoryList() {
         <div className="hairline mt-10 mb-10" />
 
         {loading ? (
-          <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
+          <div className="text-sm text-cream-50/60 tracking-widest uppercase">Loading…</div>
         ) : entries.length === 0 ? (
-          <p className="text-cream-50/55">Theory entries coming soon.</p>
+          <p className="text-cream-50/70">Theory entries coming soon.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-cream-50/[0.06]">
             {entries.map((e, idx) => (
@@ -49,7 +49,7 @@ export function TheoryList() {
               >
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="prefix-num">{String(idx + 1).padStart(2, '0')}</div>
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/40">D{e.difficulty}</div>
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/60">D{e.difficulty}</div>
                 </div>
                 <div className="h-display text-xl md:text-2xl mb-3">{e.title}</div>
                 {e.summary && <p className="text-sm text-cream-50/65 leading-relaxed">{e.summary}</p>}

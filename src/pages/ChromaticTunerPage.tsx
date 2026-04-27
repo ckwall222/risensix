@@ -175,7 +175,7 @@ export function ChromaticTunerPage() {
                 ) : 'Listening…'}
               </div>
               {displayHz > 0 && (
-                <div className="text-xs text-cream-50/40 tracking-widest uppercase">{displayHz.toFixed(2)} Hz</div>
+                <div className="text-xs text-cream-50/60 tracking-widest uppercase">{displayHz.toFixed(2)} Hz</div>
               )}
             </div>
 
@@ -191,11 +191,11 @@ export function ChromaticTunerPage() {
                       className={`text-center py-3 border transition ${
                         isClosest && inTune ? 'border-gold-500 bg-gold-500/15 text-cream-50'
                         : isClosest ? 'border-ember-500 bg-ember-500/10 text-cream-50'
-                        : 'border-cream-50/[0.08] text-cream-50/55'
+                        : 'border-cream-50/[0.08] text-cream-50/70'
                       }`}
                     >
                       <div className="font-display text-lg tracking-[0.06em]">{s.name}</div>
-                      <div className="text-[10px] text-cream-50/40 tracking-widest mt-1">{s.freq.toFixed(2)} Hz</div>
+                      <div className="text-[10px] text-cream-50/60 tracking-widest mt-1">{s.freq.toFixed(2)} Hz</div>
                     </div>
                   )
                 })}

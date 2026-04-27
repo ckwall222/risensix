@@ -14,6 +14,7 @@ import { ChordsPage } from './pages/ChordsPage'
 import { TunerPage } from './pages/TunerPage'
 import { ChromaticTunerPage } from './pages/ChromaticTunerPage'
 import { MetronomePage } from './pages/MetronomePage'
+import { CircleToolPage } from './pages/CircleToolPage'
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/tuner" element={<AuthGate requireOnboarded><TunerPage /></AuthGate>} />
           <Route path="/tuner/advanced" element={<AuthGate requireOnboarded><ChromaticTunerPage /></AuthGate>} />
           <Route path="/metronome" element={<AuthGate requireOnboarded><MetronomePage /></AuthGate>} />
+          <Route path="/circle" element={<AuthGate requireOnboarded><CircleToolPage /></AuthGate>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
