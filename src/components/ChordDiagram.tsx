@@ -68,7 +68,7 @@ export function ChordDiagram({
   const showNut = !startFret || startFret === 1
   const baseFret = showNut ? 1 : startFret
 
-  const width = PAD_X * 2 + (STRING_COUNT - 1) * STRING_SPACING + 24
+  const width = PAD_X * 2 + (STRING_COUNT - 1) * STRING_SPACING + 36
   const height = PAD_TOP + FRETS_SHOWN * FRET_HEIGHT + PAD_BOTTOM
 
   function stringX(stringNum: number): number {
@@ -152,18 +152,18 @@ export function ChordDiagram({
         )
       })}
 
-      {/* Start-fret marker (e.g., "5fr") */}
-      {!showNut && (
+      {/* Start-fret marker (e.g., "Fret 5") */}
+      {!showNut && baseFret !== undefined && (
         <text
-          x={stringX(6) - 14}
+          x={stringX(1) + 10}
           y={fretLineY(1) + 4}
-          textAnchor="end"
+          textAnchor="start"
           fontSize={10}
-          fontFamily="Cinzel, serif"
+          fontFamily="Inter, system-ui, sans-serif"
+          fontWeight={600}
           fill={TEXT_BRIGHT}
-          letterSpacing="0.06em"
         >
-          {baseFret}fr
+          {`Fr ${baseFret}`}
         </text>
       )}
 
