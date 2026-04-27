@@ -19,6 +19,8 @@ import { DailyPage } from './pages/DailyPage'
 import { LicksPage } from './pages/LicksPage'
 import { LickDetailPage } from './pages/LickDetailPage'
 import { JamPage } from './pages/JamPage'
+import { SongbookPage } from './pages/SongbookPage'
+import { SongDetailPage } from './pages/SongDetailPage'
 
 export default function App() {
   return (
@@ -43,6 +45,8 @@ export default function App() {
           <Route path="/licks" element={<AuthGate requireOnboarded><LicksPage /></AuthGate>} />
           <Route path="/licks/:slug" element={<AuthGate requireOnboarded><LickDetailPage /></AuthGate>} />
           <Route path="/jam" element={<AuthGate requireOnboarded><JamPage /></AuthGate>} />
+          <Route path="/songs" element={<AuthGate requireOnboarded><SongbookPage /></AuthGate>} />
+          <Route path="/songs/:slug" element={<AuthGate requireOnboarded><SongDetailPage /></AuthGate>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

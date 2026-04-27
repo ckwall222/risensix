@@ -189,6 +189,12 @@ export function Dashboard() {
               <p className="text-cream-50/80 text-sm leading-relaxed">Drums, bass, and chord pad in any key. Pick a progression and start practicing.</p>
               <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Open studio →</div>
             </Link>
+            <Link to="/songs" className="block bg-night-900 hover:bg-night-700/30 transition p-6 group">
+              <div className="eyebrow mb-3">Songbook</div>
+              <div className="h-display text-xl mb-2 group-hover:text-gold-100 transition">Songs you can actually play</div>
+              <p className="text-cream-50/80 text-sm leading-relaxed">12 traditional folk tunes with auto-scrolling chord charts and click track.</p>
+              <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Browse songs →</div>
+            </Link>
           </div>
         </div>
 
