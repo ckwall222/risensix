@@ -4,6 +4,7 @@ import { Fretboard } from './Fretboard'
 import { ChordDiagram } from './ChordDiagram'
 import { CircleOfFifths } from './CircleOfFifths'
 import { GuitarDiagram } from './GuitarDiagram'
+import { CofTool } from './CofTool'
 
 const components: Components = {
   code({ className, children, node: _node, ref: _ref, ...rest }) {
@@ -42,6 +43,18 @@ const components: Components = {
         return (
           <pre className="diagram-error">
             Invalid <code>cof</code> JSON: {(e as Error).message}
+          </pre>
+        )
+      }
+    }
+    if (lang === 'cof-tool') {
+      try {
+        const data = raw ? JSON.parse(raw) : {}
+        return <CofTool {...data} />
+      } catch (e) {
+        return (
+          <pre className="diagram-error">
+            Invalid <code>cof-tool</code> JSON: {(e as Error).message}
           </pre>
         )
       }
