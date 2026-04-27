@@ -172,6 +172,20 @@ export function Dashboard() {
           )
         )}
 
+        {/* Practice tools */}
+        <div className="mt-16">
+          <h2 className="h-section">Practice tools</h2>
+          <div className="hairline mt-2 mb-6" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-50/[0.06]">
+            <Link to="/licks" className="block bg-night-900 hover:bg-night-700/30 transition p-6 group">
+              <div className="eyebrow mb-3">Lick Library</div>
+              <div className="h-display text-xl mb-2 group-hover:text-gold-100 transition">Solo phrases worth stealing</div>
+              <p className="text-cream-50/80 text-sm leading-relaxed">Curated blues, rock, country, jazz, and folk licks with playback at any tempo.</p>
+              <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Browse →</div>
+            </Link>
+          </div>
+        </div>
+
         {/* Journey */}
         <div className="mt-16">
           <h2 className="h-section">Your journey</h2>

@@ -105,3 +105,74 @@ export async function strumChord(frets: Array<number | 'x'>): Promise<void> {
     voice.triggerAttackRelease(note, CHORD_DURATION, now + i * STRUM_GAP)
   }
 }
+
+export type SequenceNote = {
+  string: number      // 1-6 (1 = high E, 6 = low E)
+  fret: number
+  beat: number        // start, in beats from 0
+  duration?: number   // in beats; defaults to 1
+  bend?: number       // semitones bent up after attack (0.5 = half, 1 = whole)
+}
+
+/**
+ * Play a timed sequence of notes (a lick, a phrase, a riff).
+ * Returns a handle with stop() so the caller can cancel mid-playback.
+ *
+ * `bpm` controls how long a beat lasts. `swing` true means eighth notes are
+ * delayed so the off-beat lands two-thirds through (shuffle/swing feel).
+ */
+export async function playSequence(
+  notes: SequenceNote[],
+  opts: { bpm?: number; swing?: boolean } = {}
+): Promise<{ stop: () => void; durationSec: number }> {
+  await Tone.start()
+  const bpm = opts.bpm ?? 100
+  const beatSec = 60 / bpm
+  const now = Tone.now()
+  const scheduledVoices: Tone.PluckSynth[] = []
+
+  let lastEndBeat = 0
+  for (const n of notes) {
+    if (n.fret < 0 || n.string < 1 || n.string > 6) continue
+    const startBeat = applySwing(n.beat, opts.swing === true)
+    const dur = n.duration ?? 1
+    const startSec = now + startBeat * beatSec
+    const durSec = Math.max(0.05, dur * beatSec * 0.95) // tiny gap so notes don't overlap themselves
+    const baseNote = noteForFret(n.string, n.fret)
+    const voice = await nextVoice()
+    scheduledVoices.push(voice)
+    voice.triggerAttackRelease(baseNote, durSec, startSec)
+
+    // Visual-only bends are handled in the UI; we approximate audibly by
+    // re-triggering at the bent pitch a sliver later, like a quick hammer.
+    if (n.bend && n.bend > 0) {
+      const bentNote = Tone.Frequency(baseNote).transpose(n.bend).toNote()
+      const bendVoice = await nextVoice()
+      scheduledVoices.push(bendVoice)
+      bendVoice.triggerAttackRelease(bentNote, durSec * 0.7, startSec + durSec * 0.25)
+    }
+    lastEndBeat = Math.max(lastEndBeat, startBeat + dur)
+  }
+
+  const durationSec = lastEndBeat * beatSec
+  let stopped = false
+  return {
+    stop: () => {
+      if (stopped) return
+      stopped = true
+      for (const v of scheduledVoices) {
+        try { v.triggerRelease() } catch { /* ignore */ }
+      }
+    },
+    durationSec,
+  }
+}
+
+/** Shuffle/swing: shift off-beat eighths to a 2:1 triplet feel. */
+function applySwing(beat: number, swing: boolean): number {
+  if (!swing) return beat
+  const frac = beat - Math.floor(beat)
+  // 0.5 (straight off-beat) → 0.667 (triplet off-beat)
+  if (Math.abs(frac - 0.5) < 0.01) return Math.floor(beat) + 0.667
+  return beat
+}
