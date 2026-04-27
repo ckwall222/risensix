@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Milestone, MilestoneStatus, MILESTONES, STAGES, computeMilestoneStatus } from '../lib/milestones'
 
 type Props = {
@@ -7,12 +8,18 @@ type Props = {
 
 export function JourneyTimeline({ completedSlugs, startedSlugs }: Props) {
   return (
-    <div className="space-y-12">
+    <div className="space-y-3">
       {STAGES.map((stage, idx) => {
         const stageMilestones = MILESTONES.filter(m => m.stage === stage.id)
         const earned = stageMilestones.filter(
           m => computeMilestoneStatus(m, completedSlugs, startedSlugs) === 'earned'
         ).length
+        const inProgress = stageMilestones.filter(
+          m => computeMilestoneStatus(m, completedSlugs, startedSlugs) === 'in_progress'
+        ).length
+        const isComplete = earned === stageMilestones.length
+        // Default open: stages with anything in progress, or first not-yet-completed stage
+        const defaultOpen = inProgress > 0
         return (
           <Stage
             key={stage.id}
@@ -24,6 +31,8 @@ export function JourneyTimeline({ completedSlugs, startedSlugs }: Props) {
             milestones={stageMilestones}
             completedSlugs={completedSlugs}
             startedSlugs={startedSlugs}
+            defaultOpen={defaultOpen}
+            isComplete={isComplete}
           />
         )
       })}
@@ -32,7 +41,7 @@ export function JourneyTimeline({ completedSlugs, startedSlugs }: Props) {
 }
 
 function Stage({
-  num, name, subtitle, earned, total, milestones, completedSlugs, startedSlugs,
+  num, name, subtitle, earned, total, milestones, completedSlugs, startedSlugs, defaultOpen, isComplete,
 }: {
   num: string
   name: string
@@ -42,34 +51,50 @@ function Stage({
   milestones: Milestone[]
   completedSlugs: Set<string>
   startedSlugs: Set<string>
+  defaultOpen: boolean
+  isComplete: boolean
 }) {
+  const [open, setOpen] = useState(defaultOpen)
   const pct = total === 0 ? 0 : Math.round((earned / total) * 100)
   return (
-    <div>
-      <div className="flex items-baseline gap-4 mb-1">
-        <div className="prefix-num">{num}</div>
-        <h3 className="font-display text-xl md:text-2xl tracking-[0.06em] text-cream-50">{name}</h3>
-        <div className="ml-auto text-[10px] uppercase tracking-[0.28em] text-cream-50/45">
-          {earned} / {total}
+    <div className="border-b border-cream-50/[0.06]">
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="w-full text-left py-5 hover:bg-cream-50/[0.02] transition"
+        aria-expanded={open}
+      >
+        <div className="flex items-baseline gap-4 mb-1.5">
+          <span className={`text-gold-500 transition-transform inline-block ${open ? 'rotate-90' : ''}`}>▸</span>
+          <div className="prefix-num">{num}</div>
+          <h3 className="font-display text-lg md:text-xl tracking-[0.06em] text-cream-50">{name}</h3>
+          {isComplete && <span className="pill">✓ Stage complete</span>}
+          <div className="ml-auto text-[10px] uppercase tracking-[0.28em] text-cream-50/45">
+            {earned} / {total}
+          </div>
         </div>
-      </div>
-      <p className="text-sm text-cream-50/55 mb-4 ml-12">{subtitle}</p>
-      <div className="h-px bg-night-700 ml-12 mb-5">
-        <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
-      </div>
-      <ul className="ml-12 space-y-1">
-        {milestones.map(m => {
-          const status = computeMilestoneStatus(m, completedSlugs, startedSlugs)
-          return <MilestoneRow key={m.id} m={m} status={status} />
-        })}
-      </ul>
+        <div className="ml-12 flex items-center gap-3">
+          <p className="text-sm text-cream-50/55 flex-1">{subtitle}</p>
+        </div>
+        <div className="h-px bg-night-700 ml-12 mt-3">
+          <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
+        </div>
+      </button>
+      {open && (
+        <ul className="ml-12 pb-6 pt-1 space-y-1">
+          {milestones.map(m => {
+            const status = computeMilestoneStatus(m, completedSlugs, startedSlugs)
+            return <MilestoneRow key={m.id} m={m} status={status} />
+          })}
+        </ul>
+      )}
     </div>
   )
 }
 
 function MilestoneRow({ m, status }: { m: Milestone; status: MilestoneStatus }) {
   return (
-    <li className="flex items-start gap-4 py-3 border-b border-cream-50/[0.04]">
+    <li className="flex items-start gap-4 py-2.5 border-b border-cream-50/[0.04]">
       <StatusIcon status={status} />
       <div className="flex-1 min-w-0">
         <div className={`font-display text-base tracking-[0.04em] ${status === 'earned' ? 'text-cream-50' : 'text-cream-50/55'}`}>
@@ -104,21 +129,14 @@ function StatusIcon({ status }: { status: MilestoneStatus }) {
       <div className="mt-1 h-5 w-5 rounded-full border border-cream-50/20 shrink-0" aria-hidden="true" />
     )
   }
-  // future
   return (
     <div className="mt-1 h-5 w-5 rounded-full border border-dashed border-cream-50/15 shrink-0" aria-hidden="true" />
   )
 }
 
 function StatusLabel({ status }: { status: MilestoneStatus }) {
-  if (status === 'earned') {
-    return <span className="text-[10px] uppercase tracking-[0.28em] text-gold-100 shrink-0 mt-1">Earned</span>
-  }
-  if (status === 'in_progress') {
-    return <span className="text-[10px] uppercase tracking-[0.28em] text-ember-500 shrink-0 mt-1">In progress</span>
-  }
-  if (status === 'future') {
-    return <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/30 shrink-0 mt-1">Coming</span>
-  }
+  if (status === 'earned') return <span className="text-[10px] uppercase tracking-[0.28em] text-gold-100 shrink-0 mt-1">Earned</span>
+  if (status === 'in_progress') return <span className="text-[10px] uppercase tracking-[0.28em] text-ember-500 shrink-0 mt-1">In progress</span>
+  if (status === 'future') return <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/30 shrink-0 mt-1">Coming</span>
   return null
 }

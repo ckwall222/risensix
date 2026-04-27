@@ -49,6 +49,19 @@ export async function setLessonStatus(userId: string, lessonId: string, status: 
   await supabase.from('lesson_progress').upsert(payload, { onConflict: 'user_id,lesson_id' })
 }
 
+export async function bulkSetCompleted(userId: string, lessonIds: string[]): Promise<void> {
+  if (lessonIds.length === 0) return
+  const now = new Date().toISOString()
+  const rows = lessonIds.map(lessonId => ({
+    user_id: userId,
+    lesson_id: lessonId,
+    status: 'completed' as const,
+    completed_at: now,
+    updated_at: now,
+  }))
+  await supabase.from('lesson_progress').upsert(rows, { onConflict: 'user_id,lesson_id' })
+}
+
 export async function getProgressCountsByFocusArea(userId: string): Promise<Record<string, { completed: number; total: number }>> {
   const { data: lessons } = await supabase.from('lessons').select('id, focus_area_id')
   const { data: progress } = await supabase

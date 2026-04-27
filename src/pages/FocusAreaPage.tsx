@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { supabase } from '../lib/supabase'
 import { AppLayout } from '../components/AppLayout'
-import { getProgressForLessons, LessonProgressRow } from '../lib/lessonProgress'
+import { bulkSetCompleted, getProgressForLessons, LessonProgressRow } from '../lib/lessonProgress'
 
 type FocusArea = { id: string; name: string; description: string | null }
 
@@ -35,6 +35,10 @@ export function FocusAreaPage() {
   const [progress, setProgress] = useState<Record<string, LessonProgressRow>>({})
   const [loading, setLoading] = useState(true)
   const [foundationalOpen, setFoundationalOpen] = useState(false)
+  const [bulkSaving, setBulkSaving] = useState(false)
+  const [refreshTick, setRefreshTick] = useState(0)
+
+  const refresh = useCallback(() => setRefreshTick(t => t + 1), [])
 
   useEffect(() => {
     let mounted = true
@@ -56,7 +60,7 @@ export function FocusAreaPage() {
     }
     load()
     return () => { mounted = false }
-  }, [id, user])
+  }, [id, user, refreshTick])
 
   if (loading) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/40 tracking-widest uppercase text-sm">Loading…</div></AppLayout>
   if (!area) return <AppLayout><div className="max-w-5xl mx-auto px-6 py-16 text-cream-50/55">Focus area not found.</div></AppLayout>
@@ -67,6 +71,17 @@ export function FocusAreaPage() {
   const minDifficulty = ABILITY_MIN_DIFFICULTY[profile?.ability_level ?? 'beginner'] ?? 1
   const foundational = lessons.filter(l => l.difficulty < minDifficulty)
   const current      = lessons.filter(l => l.difficulty >= minDifficulty)
+  const foundationalCompleted = foundational.filter(l => progress[l.id]?.status === 'completed').length
+  const foundationalAllDone = foundational.length > 0 && foundationalCompleted === foundational.length
+
+  const handleBulkComplete = async () => {
+    if (!user) return
+    setBulkSaving(true)
+    const idsToMark = foundational.filter(l => progress[l.id]?.status !== 'completed').map(l => l.id)
+    await bulkSetCompleted(user.id, idsToMark)
+    setBulkSaving(false)
+    refresh()
+  }
 
   return (
     <AppLayout>
@@ -106,26 +121,37 @@ export function FocusAreaPage() {
 
             {foundational.length > 0 && (
               <div className="mt-12">
-                <button
-                  type="button"
-                  onClick={() => setFoundationalOpen(o => !o)}
-                  className="w-full flex items-center justify-between gap-4 py-4 border-y border-cream-50/[0.06] hover:border-gold-500/40 transition group"
-                >
-                  <div className="flex items-baseline gap-3">
+                <div className="flex items-center justify-between gap-4 py-4 border-y border-cream-50/[0.06]">
+                  <button
+                    type="button"
+                    onClick={() => setFoundationalOpen(o => !o)}
+                    className="flex items-baseline gap-3 flex-1 text-left group"
+                  >
                     <span className={`text-gold-500 transition-transform ${foundationalOpen ? 'rotate-90' : ''}`}>▸</span>
                     <span className="font-display text-base tracking-[0.06em] text-cream-50 group-hover:text-gold-100 transition">
                       Foundational lessons
                     </span>
-                  </div>
-                  <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/45">
-                    {foundationalOpen ? 'Hide' : `${foundational.length} · Show`}
-                  </span>
-                </button>
+                    <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/45">
+                      {foundationalCompleted}/{foundational.length}
+                    </span>
+                  </button>
+                  {!foundationalAllDone && (
+                    <button
+                      type="button"
+                      onClick={handleBulkComplete}
+                      disabled={bulkSaving}
+                      className="text-[10px] uppercase tracking-[0.22em] text-gold-500 hover:text-gold-100 transition border border-gold-500/40 hover:border-gold-500 px-3 py-1.5 disabled:opacity-50"
+                    >
+                      {bulkSaving ? 'Marking…' : 'Mark all done'}
+                    </button>
+                  )}
+                  {foundationalAllDone && <span className="pill">✓ All done</span>}
+                </div>
 
                 {foundationalOpen && (
                   <div className="pt-2">
                     <p className="text-xs text-cream-50/45 mt-3 mb-2 leading-relaxed max-w-2xl">
-                      Below your current level — review them anytime, but they aren't counted against your at-level progress.
+                      Below your current level — review them anytime, or mark them all done if you don't need to walk through them.
                     </p>
                     <LessonList
                       lessons={foundational}

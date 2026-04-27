@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { supabase } from '../lib/supabase'
 import { AppLayout } from '../components/AppLayout'
 import { JourneyTimeline } from '../components/JourneyTimeline'
+import { FocusAreaCard, FocusAreaCardLesson } from '../components/FocusAreaCard'
+import { LessonProgressRow } from '../lib/lessonProgress'
 import { computeMilestoneStatus, MILESTONES } from '../lib/milestones'
 
 type FocusArea = {
@@ -23,15 +25,26 @@ const ABILITY_DIFFICULTY: Record<string, number[]> = {
   intermediate:      [3, 4],
   advanced:          [4, 5],
 }
+const ABILITY_MIN_DIFFICULTY: Record<string, number> = {
+  absolute_beginner: 1,
+  beginner:          1,
+  novice:            2,
+  intermediate:      3,
+  advanced:          4,
+}
 
 export function Dashboard() {
   const { profile, user } = useAuth()
   const [focusAreas, setFocusAreas] = useState<FocusArea[]>([])
-  const [counts, setCounts] = useState<Record<string, { completed: number; total: number }>>({})
+  const [lessonsByArea, setLessonsByArea] = useState<Record<string, FocusAreaCardLesson[]>>({})
+  const [progress, setProgress] = useState<Record<string, LessonProgressRow>>({})
   const [next, setNext] = useState<RecommendedLesson | null>(null)
   const [completedSlugs, setCompletedSlugs] = useState<Set<string>>(new Set())
   const [startedSlugs, setStartedSlugs] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
+  const [refreshTick, setRefreshTick] = useState(0)
+
+  const refresh = useCallback(() => setRefreshTick(t => t + 1), [])
 
   useEffect(() => {
     let mounted = true
@@ -41,51 +54,44 @@ export function Dashboard() {
 
       const [{ data: areas }, allLessonsRes, progressRes, recommended] = await Promise.all([
         supabase.from('focus_areas').select('*').order('sort_order'),
-        supabase.from('lessons').select('id, slug, focus_area_id'),
-        supabase.from('lesson_progress').select('lesson_id, status').eq('user_id', user.id),
+        supabase.from('lessons').select('id, slug, title, summary, difficulty, duration_minutes, focus_area_id, sort_order').order('sort_order'),
+        supabase.from('lesson_progress').select('*').eq('user_id', user.id),
         recommendNextLesson(user.id, profile.ability_level),
       ])
       if (!mounted) return
       setFocusAreas((areas as FocusArea[] | null) ?? [])
 
-      const lessons = (allLessonsRes.data as { id: string; slug: string; focus_area_id: string }[] | null) ?? []
-      const progress = (progressRes.data as { lesson_id: string; status: string }[] | null) ?? []
+      const lessons = (allLessonsRes.data as (FocusAreaCardLesson & { focus_area_id: string })[] | null) ?? []
+      const byArea: Record<string, FocusAreaCardLesson[]> = {}
+      for (const l of lessons) {
+        const list = byArea[l.focus_area_id] ?? (byArea[l.focus_area_id] = [])
+        list.push(l)
+      }
+      setLessonsByArea(byArea)
 
-      // Build slug ↔ id maps
+      const progRows = (progressRes.data as LessonProgressRow[] | null) ?? []
+      const progMap: Record<string, LessonProgressRow> = {}
+      for (const r of progRows) progMap[r.lesson_id] = r
+      setProgress(progMap)
+
+      // Build slug → status sets for milestones
       const idToSlug = new Map(lessons.map(l => [l.id, l.slug] as const))
       const completed = new Set<string>()
       const started = new Set<string>()
-      const completedByArea: Record<string, number> = {}
-
-      for (const row of progress) {
-        const slug = idToSlug.get(row.lesson_id)
+      for (const r of progRows) {
+        const slug = idToSlug.get(r.lesson_id)
         if (!slug) continue
-        if (row.status === 'completed') completed.add(slug)
-        if (row.status === 'in_progress' || row.status === 'completed') started.add(slug)
+        if (r.status === 'completed') completed.add(slug)
+        if (r.status === 'in_progress' || r.status === 'completed') started.add(slug)
       }
-      for (const lesson of lessons) {
-        if (completed.has(lesson.slug)) {
-          completedByArea[lesson.focus_area_id] = (completedByArea[lesson.focus_area_id] ?? 0) + 1
-        }
-      }
-      const totalsByArea: Record<string, number> = {}
-      for (const lesson of lessons) {
-        totalsByArea[lesson.focus_area_id] = (totalsByArea[lesson.focus_area_id] ?? 0) + 1
-      }
-      const c: Record<string, { completed: number; total: number }> = {}
-      for (const a of (areas as FocusArea[] | null) ?? []) {
-        c[a.id] = { completed: completedByArea[a.id] ?? 0, total: totalsByArea[a.id] ?? 0 }
-      }
-
       setCompletedSlugs(completed)
       setStartedSlugs(started)
-      setCounts(c)
       setNext(recommended)
       setLoading(false)
     }
     load()
     return () => { mounted = false }
-  }, [user, profile])
+  }, [user, profile, refreshTick])
 
   const greeting = profile?.display_name ? `Welcome back, ${profile.display_name}.` : 'Welcome back.'
 
@@ -93,14 +99,13 @@ export function Dashboard() {
     m => computeMilestoneStatus(m, completedSlugs, startedSlugs) === 'earned'
   ).length
   const totalAvailable = MILESTONES.filter(m => m.requiredLessonSlugs.length > 0).length
+  const minDifficulty = ABILITY_MIN_DIFFICULTY[profile?.ability_level ?? 'beginner'] ?? 1
 
   return (
     <AppLayout>
       <div className="max-w-6xl mx-auto px-5 sm:px-6 py-12 md:py-16">
         <div className="eyebrow mb-3">Dashboard</div>
-        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-3">
-          {greeting}
-        </h1>
+        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-3">{greeting}</h1>
         {!loading && totalAvailable > 0 && (
           <p className="text-cream-50/55 text-sm mb-10">
             <span className="text-gold-100">{earnedCount}</span> of{' '}
@@ -136,10 +141,8 @@ export function Dashboard() {
 
         {/* Journey */}
         <div className="mt-16">
-          <div className="flex items-baseline justify-between mb-6">
-            <h2 className="h-section">Your journey</h2>
-          </div>
-          <div className="hairline mb-10" />
+          <h2 className="h-section">Your journey</h2>
+          <div className="hairline mt-2 mb-10" />
           {loading ? (
             <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
           ) : (
@@ -147,42 +150,37 @@ export function Dashboard() {
           )}
         </div>
 
-        {/* Focus areas */}
+        {/* Focus areas — accordions */}
         <div className="mt-20">
-          <div className="flex items-baseline justify-between mb-6">
+          <div className="flex items-baseline justify-between mb-2">
             <h2 className="h-section">Focus areas</h2>
             <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-500 hover:text-gold-100 transition">
               Theory library →
             </Link>
           </div>
-          <div className="hairline mb-6" />
+          <div className="hairline mt-2 mb-6" />
+          <p className="text-xs text-cream-50/45 mb-5 leading-relaxed">
+            Click any area to expand its lesson list. Foundational lessons (below your level) collapse by default — you can mark them complete in bulk if you don't need to walk through them.
+          </p>
 
           {loading ? (
             <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-50/[0.06]">
-              {focusAreas.map((fa, idx) => {
-                const c = counts[fa.id] ?? { completed: 0, total: 0 }
-                const pct = c.total === 0 ? 0 : Math.round((c.completed / c.total) * 100)
-                return (
-                  <Link
-                    key={fa.id}
-                    to={`/focus/${fa.id}`}
-                    className="block bg-night-900 hover:bg-night-700/30 transition p-7"
-                  >
-                    <div className="flex items-baseline justify-between mb-5">
-                      <div className="prefix-num">0{idx + 1}</div>
-                      <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/40">{c.completed}/{c.total}</div>
-                    </div>
-                    <div className="h-display text-xl md:text-2xl mb-3">{fa.name}</div>
-                    <p className="text-sm text-cream-50/60 leading-relaxed line-clamp-2 mb-5">{fa.description}</p>
-                    <div className="h-px bg-night-700">
-                      <div className="h-full bg-gold-500" style={{ width: `${pct}%` }} />
-                    </div>
-                    <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/45 mt-2">{pct}% complete</div>
-                  </Link>
-                )
-              })}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-cream-50/[0.06]">
+              {focusAreas.map((fa, idx) => (
+                <FocusAreaCard
+                  key={fa.id}
+                  num={String(idx + 1).padStart(2, '0')}
+                  focusAreaId={fa.id}
+                  name={fa.name}
+                  description={fa.description}
+                  lessons={lessonsByArea[fa.id] ?? []}
+                  progress={progress}
+                  minDifficulty={minDifficulty}
+                  userId={user!.id}
+                  onProgressChange={refresh}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -190,8 +188,8 @@ export function Dashboard() {
         {/* Profile snapshot */}
         {profile && (
           <div className="mt-20">
-            <h2 className="h-section mb-6">Your profile</h2>
-            <div className="hairline mb-6" />
+            <h2 className="h-section">Your profile</h2>
+            <div className="hairline mt-2 mb-6" />
             <dl className="grid grid-cols-2 md:grid-cols-4 gap-y-5 gap-x-8 text-sm">
               <Item label="Ability">{prettyAbility(profile.ability_level)}</Item>
               <Item label="Reads tab">{profile.reads_tab ? 'Yes' : 'Not yet'}</Item>
