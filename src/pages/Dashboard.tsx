@@ -1,11 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { supabase } from '../lib/supabase'
 import { AppLayout } from '../components/AppLayout'
 import { JourneyTimeline } from '../components/JourneyTimeline'
-import { FocusAreaCard, FocusAreaCardLesson } from '../components/FocusAreaCard'
-import { LessonProgressRow } from '../lib/lessonProgress'
 import { computeMilestoneStatus, MILESTONES } from '../lib/milestones'
 
 type FocusArea = {
@@ -25,26 +23,15 @@ const ABILITY_DIFFICULTY: Record<string, number[]> = {
   intermediate:      [3, 4],
   advanced:          [4, 5],
 }
-const ABILITY_MIN_DIFFICULTY: Record<string, number> = {
-  absolute_beginner: 1,
-  beginner:          1,
-  novice:            2,
-  intermediate:      3,
-  advanced:          4,
-}
 
 export function Dashboard() {
   const { profile, user } = useAuth()
   const [focusAreas, setFocusAreas] = useState<FocusArea[]>([])
-  const [lessonsByArea, setLessonsByArea] = useState<Record<string, FocusAreaCardLesson[]>>({})
-  const [progress, setProgress] = useState<Record<string, LessonProgressRow>>({})
+  const [counts, setCounts] = useState<Record<string, { completed: number; total: number }>>({})
   const [next, setNext] = useState<RecommendedLesson | null>(null)
   const [completedSlugs, setCompletedSlugs] = useState<Set<string>>(new Set())
   const [startedSlugs, setStartedSlugs] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
-  const [refreshTick, setRefreshTick] = useState(0)
-
-  const refresh = useCallback(() => setRefreshTick(t => t + 1), [])
 
   useEffect(() => {
     let mounted = true
@@ -54,44 +41,49 @@ export function Dashboard() {
 
       const [{ data: areas }, allLessonsRes, progressRes, recommended] = await Promise.all([
         supabase.from('focus_areas').select('*').order('sort_order'),
-        supabase.from('lessons').select('id, slug, title, summary, difficulty, duration_minutes, focus_area_id, sort_order').order('sort_order'),
-        supabase.from('lesson_progress').select('*').eq('user_id', user.id),
+        supabase.from('lessons').select('id, slug, focus_area_id'),
+        supabase.from('lesson_progress').select('lesson_id, status').eq('user_id', user.id),
         recommendNextLesson(user.id, profile.ability_level),
       ])
       if (!mounted) return
       setFocusAreas((areas as FocusArea[] | null) ?? [])
 
-      const lessons = (allLessonsRes.data as (FocusAreaCardLesson & { focus_area_id: string })[] | null) ?? []
-      const byArea: Record<string, FocusAreaCardLesson[]> = {}
-      for (const l of lessons) {
-        const list = byArea[l.focus_area_id] ?? (byArea[l.focus_area_id] = [])
-        list.push(l)
-      }
-      setLessonsByArea(byArea)
+      const lessons = (allLessonsRes.data as { id: string; slug: string; focus_area_id: string }[] | null) ?? []
+      const progress = (progressRes.data as { lesson_id: string; status: string }[] | null) ?? []
 
-      const progRows = (progressRes.data as LessonProgressRow[] | null) ?? []
-      const progMap: Record<string, LessonProgressRow> = {}
-      for (const r of progRows) progMap[r.lesson_id] = r
-      setProgress(progMap)
-
-      // Build slug → status sets for milestones
       const idToSlug = new Map(lessons.map(l => [l.id, l.slug] as const))
       const completed = new Set<string>()
       const started = new Set<string>()
-      for (const r of progRows) {
+      const completedByArea: Record<string, number> = {}
+      const completedIds = new Set<string>()
+      for (const r of progress) {
+        if (r.status === 'completed') completedIds.add(r.lesson_id)
         const slug = idToSlug.get(r.lesson_id)
         if (!slug) continue
         if (r.status === 'completed') completed.add(slug)
         if (r.status === 'in_progress' || r.status === 'completed') started.add(slug)
       }
+      const totalsByArea: Record<string, number> = {}
+      for (const lesson of lessons) {
+        totalsByArea[lesson.focus_area_id] = (totalsByArea[lesson.focus_area_id] ?? 0) + 1
+        if (completedIds.has(lesson.id)) {
+          completedByArea[lesson.focus_area_id] = (completedByArea[lesson.focus_area_id] ?? 0) + 1
+        }
+      }
+      const c: Record<string, { completed: number; total: number }> = {}
+      for (const a of (areas as FocusArea[] | null) ?? []) {
+        c[a.id] = { completed: completedByArea[a.id] ?? 0, total: totalsByArea[a.id] ?? 0 }
+      }
+
       setCompletedSlugs(completed)
       setStartedSlugs(started)
+      setCounts(c)
       setNext(recommended)
       setLoading(false)
     }
     load()
     return () => { mounted = false }
-  }, [user, profile, refreshTick])
+  }, [user, profile])
 
   const greeting = profile?.display_name ? `Welcome back, ${profile.display_name}.` : 'Welcome back.'
 
@@ -99,7 +91,6 @@ export function Dashboard() {
     m => computeMilestoneStatus(m, completedSlugs, startedSlugs) === 'earned'
   ).length
   const totalAvailable = MILESTONES.filter(m => m.requiredLessonSlugs.length > 0).length
-  const minDifficulty = ABILITY_MIN_DIFFICULTY[profile?.ability_level ?? 'beginner'] ?? 1
 
   return (
     <AppLayout>
@@ -160,27 +151,38 @@ export function Dashboard() {
           </div>
           <div className="hairline mt-2 mb-6" />
           <p className="text-xs text-cream-50/45 mb-5 leading-relaxed">
-            Click any area to expand its lesson list. Foundational lessons (below your level) collapse by default — you can mark them complete in bulk if you don't need to walk through them.
+            Click a topic to open its lessons. Foundational lessons (below your level) are collapsible inside each focus area, and you can mark them complete in bulk there.
           </p>
 
           {loading ? (
             <div className="text-sm text-cream-50/40 tracking-widest uppercase">Loading…</div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-cream-50/[0.06]">
-              {focusAreas.map((fa, idx) => (
-                <FocusAreaCard
-                  key={fa.id}
-                  num={String(idx + 1).padStart(2, '0')}
-                  focusAreaId={fa.id}
-                  name={fa.name}
-                  description={fa.description}
-                  lessons={lessonsByArea[fa.id] ?? []}
-                  progress={progress}
-                  minDifficulty={minDifficulty}
-                  userId={user!.id}
-                  onProgressChange={refresh}
-                />
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-50/[0.06]">
+              {focusAreas.map((fa, idx) => {
+                const c = counts[fa.id] ?? { completed: 0, total: 0 }
+                const pct = c.total === 0 ? 0 : Math.round((c.completed / c.total) * 100)
+                return (
+                  <Link
+                    key={fa.id}
+                    to={`/focus/${fa.id}`}
+                    className="block bg-night-900 hover:bg-night-700/30 transition p-7 group"
+                  >
+                    <div className="flex items-baseline justify-between mb-5">
+                      <div className="prefix-num">{String(idx + 1).padStart(2, '0')}</div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/40">{c.completed}/{c.total}</div>
+                        <span className="text-cream-50/30 group-hover:text-gold-100 group-hover:translate-x-1 transition">→</span>
+                      </div>
+                    </div>
+                    <div className="h-display text-xl md:text-2xl mb-3 group-hover:text-gold-100 transition">{fa.name}</div>
+                    <p className="text-sm text-cream-50/60 leading-relaxed line-clamp-2 mb-5">{fa.description}</p>
+                    <div className="h-px bg-night-700">
+                      <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                    <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/45 mt-2">{pct}% complete</div>
+                  </Link>
+                )
+              })}
             </div>
           )}
         </div>

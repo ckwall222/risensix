@@ -2,6 +2,7 @@ import ReactMarkdown, { Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Fretboard } from './Fretboard'
 import { ChordDiagram } from './ChordDiagram'
+import { CircleOfFifths } from './CircleOfFifths'
 
 const components: Components = {
   code({ className, children, node: _node, ref: _ref, ...rest }) {
@@ -28,6 +29,18 @@ const components: Components = {
         return (
           <pre className="diagram-error">
             Invalid <code>chord</code> JSON: {(e as Error).message}
+          </pre>
+        )
+      }
+    }
+    if (lang === 'cof') {
+      try {
+        const data = JSON.parse(raw)
+        return <CircleOfFifths {...data} />
+      } catch (e) {
+        return (
+          <pre className="diagram-error">
+            Invalid <code>cof</code> JSON: {(e as Error).message}
           </pre>
         )
       }
