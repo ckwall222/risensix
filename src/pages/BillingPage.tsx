@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AppLayout } from '../components/AppLayout'
 import { useAuth } from '../auth/AuthContext'
 import type { SubscriptionStatus } from '../auth/AuthContext'
+import { supabase } from '../lib/supabase'
 
 const STATUS_LABEL: Record<SubscriptionStatus, string> = {
   free: 'Free',
@@ -22,30 +24,82 @@ const STATUS_TONE: Record<SubscriptionStatus, string> = {
 }
 
 export function BillingPage() {
-  const { profile } = useAuth()
+  const { profile, refreshProfile } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [busy, setBusy] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
   const status = profile?.subscription_status ?? 'free'
   const tone = STATUS_TONE[status]
   const endsAt = profile?.subscription_ends_at
     ? new Date(profile.subscription_ends_at).toLocaleDateString()
     : null
+  const checkoutResult = searchParams.get('checkout')
 
-  const handleSubscribeClick = (plan: string) => {
-    // TODO: POST to /api/stripe/create-checkout-session (Vercel serverless)
-    // with { plan, user_id: profile.id }. Endpoint returns { url } from
-    // Stripe Checkout. window.location = url.
-    alert(
-      `Stripe Checkout for "${plan}" isn't live yet.\n\n` +
-      'Once Stripe is connected:\n' +
-      '1. POST /api/stripe/create-checkout-session\n' +
-      '2. Redirect to the returned Stripe URL\n' +
-      '3. Webhook updates profile.subscription_status\n\n' +
-      'See BILLING.md for the integration checklist.'
-    )
+  // When the user returns from Stripe Checkout, refresh the profile so the
+  // updated subscription_status (set by the webhook) shows up.
+  useEffect(() => {
+    if (checkoutResult === 'success') {
+      void refreshProfile()
+      // Poll once more after a brief delay — webhooks can land slightly after
+      // the redirect lands.
+      const t = setTimeout(() => { void refreshProfile() }, 2500)
+      return () => clearTimeout(t)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkoutResult])
+
+  const clearCheckoutParam = () => {
+    if (checkoutResult) {
+      searchParams.delete('checkout')
+      setSearchParams(searchParams, { replace: true })
+    }
   }
 
-  const handleManageClick = () => {
-    // TODO: POST to /api/stripe/create-portal-session to open Stripe Customer Portal
-    alert('Stripe Customer Portal not wired up yet — see BILLING.md.')
+  const handleSubscribeClick = async (plan: string) => {
+    setError(null)
+    setBusy(plan)
+    try {
+      const { data: sessionData } = await supabase.auth.getSession()
+      const token = sessionData.session?.access_token
+      if (!token) throw new Error('Not signed in')
+      const res = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ plan }),
+      })
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(body.error ?? `Checkout failed (${res.status})`)
+      if (!body.url) throw new Error('No checkout URL returned')
+      window.location.href = body.url
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err))
+      setBusy(null)
+    }
+  }
+
+  const handleManageClick = async () => {
+    setError(null)
+    setBusy('manage')
+    try {
+      const { data: sessionData } = await supabase.auth.getSession()
+      const token = sessionData.session?.access_token
+      if (!token) throw new Error('Not signed in')
+      const res = await fetch('/api/stripe/create-portal-session', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(body.error ?? `Portal failed (${res.status})`)
+      if (!body.url) throw new Error('No portal URL returned')
+      window.location.href = body.url
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err))
+      setBusy(null)
+    }
   }
 
   return (
@@ -66,6 +120,41 @@ export function BillingPage() {
       </section>
 
       <div className="max-w-[920px] mx-auto px-5 sm:px-6 pb-14">
+        {/* Status banner after returning from Stripe Checkout */}
+        {checkoutResult === 'success' && (
+          <div
+            className="rounded-[14px] p-4 mb-5 flex items-start justify-between gap-4"
+            style={{ background: 'rgba(29,127,63,0.06)', border: '1px solid rgba(29,127,63,0.30)', color: '#1D7F3F' }}
+          >
+            <div className="text-[14px]">
+              <strong className="font-semibold">Welcome to Pro.</strong> Your subscription is live.
+              If the status below still says Free, it'll catch up in a few seconds (webhook running).
+            </div>
+            <button type="button" onClick={clearCheckoutParam} className="text-[14px] underline opacity-80 hover:opacity-100">
+              Dismiss
+            </button>
+          </div>
+        )}
+        {checkoutResult === 'canceled' && (
+          <div
+            className="rounded-[14px] p-4 mb-5 flex items-start justify-between gap-4"
+            style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.10)' }}
+          >
+            <div className="text-[14px] text-cream-50/85">Checkout canceled — no charge.</div>
+            <button type="button" onClick={clearCheckoutParam} className="text-[14px] underline opacity-80 hover:opacity-100">
+              Dismiss
+            </button>
+          </div>
+        )}
+        {error && (
+          <div
+            className="rounded-[14px] p-4 mb-5 text-[14px]"
+            style={{ background: 'rgba(214,57,35,0.06)', border: '1px solid rgba(214,57,35,0.25)', color: '#A52917' }}
+          >
+            {error}
+          </div>
+        )}
+
         {/* Current status */}
         <div className="card mb-8" style={{ padding: '1.5rem 1.75rem' }}>
           <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -89,8 +178,14 @@ export function BillingPage() {
               )}
             </div>
             {(status === 'active' || status === 'trialing' || status === 'past_due') && (
-              <button type="button" onClick={handleManageClick} className="btn btn-ghost" style={{ padding: '0.55rem 1.25rem' }}>
-                Manage subscription
+              <button
+                type="button"
+                onClick={handleManageClick}
+                disabled={busy === 'manage'}
+                className="btn btn-ghost"
+                style={{ padding: '0.55rem 1.25rem' }}
+              >
+                {busy === 'manage' ? 'Opening…' : 'Manage subscription'}
               </button>
             )}
           </div>
@@ -110,6 +205,7 @@ export function BillingPage() {
               'Cancel anytime',
             ]}
             current={profile?.plan === 'pro_monthly'}
+            busy={busy === 'pro_monthly'}
             onSubscribe={() => handleSubscribeClick('pro_monthly')}
           />
           <PlanCard
@@ -123,6 +219,7 @@ export function BillingPage() {
               'Cancel anytime',
             ]}
             current={profile?.plan === 'pro_annual'}
+            busy={busy === 'pro_annual'}
             featured
             onSubscribe={() => handleSubscribeClick('pro_annual')}
           />
@@ -143,7 +240,7 @@ export function BillingPage() {
 }
 
 function PlanCard({
-  name, price, cadence, highlights, current, featured, onSubscribe,
+  name, price, cadence, highlights, current, featured, busy, onSubscribe,
 }: {
   name: string
   price: string
@@ -151,6 +248,7 @@ function PlanCard({
   highlights: string[]
   current?: boolean
   featured?: boolean
+  busy?: boolean
   onSubscribe: () => void
 }) {
   return (
@@ -219,19 +317,21 @@ function PlanCard({
             <button
               type="button"
               onClick={onSubscribe}
+              disabled={busy}
               className="btn w-full"
               style={{ background: '#FFFFFF', color: '#1D1D1F', padding: '0.65rem 1rem', fontWeight: 600 }}
             >
-              Subscribe
+              {busy ? 'Opening Stripe…' : 'Subscribe'}
             </button>
           ) : (
             <button
               type="button"
               onClick={onSubscribe}
+              disabled={busy}
               className="btn btn-primary w-full"
               style={{ padding: '0.65rem 1rem' }}
             >
-              Subscribe
+              {busy ? 'Opening Stripe…' : 'Subscribe'}
             </button>
           )}
         </div>
