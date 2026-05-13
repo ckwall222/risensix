@@ -131,26 +131,28 @@ export function Dashboard() {
                 className="absolute inset-0 pointer-events-none"
                 style={{
                   background:
-                    'radial-gradient(900px 480px at 75% 25%, rgba(214,57,35,0.22), transparent 60%), radial-gradient(700px 460px at 15% 70%, rgba(0,102,204,0.12), transparent 60%)',
+                    'radial-gradient(700px 360px at 80% 25%, rgba(214,57,35,0.18), transparent 60%), radial-gradient(540px 320px at 15% 75%, rgba(0,102,204,0.10), transparent 60%)',
                 }}
               />
-              <div className="relative p-8 md:p-12 min-h-[400px] flex flex-col">
-                <div className="text-[12px] font-semibold tracking-[0.10em] uppercase text-white/70">
-                  Today · Recommended lesson
+              <div className="relative p-6 md:p-8 flex items-start gap-6 flex-wrap">
+                <div className="flex-1 min-w-0">
+                  <div className="text-[12px] font-semibold tracking-[0.10em] uppercase text-white/70">
+                    Today · Recommended lesson
+                  </div>
+                  <h2 className="font-display font-medium tracking-[-0.02em] text-2xl md:text-3xl leading-[1.1] mt-3 max-w-[640px]" style={{ fontVariationSettings: '"opsz" 96' }}>
+                    {next.title}
+                  </h2>
+                  {next.summary && (
+                    <p className="mt-2.5 text-[15px] md:text-base text-white/70 max-w-[560px] leading-snug">
+                      {next.summary}
+                    </p>
+                  )}
                 </div>
-                <h2 className="font-display font-medium tracking-[-0.02em] text-3xl md:text-5xl leading-[1.05] mt-6 max-w-[680px]" style={{ fontVariationSettings: '"opsz" 144' }}>
-                  {next.title}
-                </h2>
-                {next.summary && (
-                  <p className="mt-4 text-base md:text-lg text-white/75 max-w-[560px] leading-snug">
-                    {next.summary}
-                  </p>
-                )}
-                <div className="mt-auto pt-8 flex items-center gap-5 flex-wrap">
-                  <span className="btn" style={{ background: '#FFFFFF', color: '#1D1D1F', padding: '0.7rem 1.5rem', fontWeight: 600 }}>
+                <div className="flex items-center gap-4 flex-wrap shrink-0">
+                  <span className="btn" style={{ background: '#FFFFFF', color: '#1D1D1F', padding: '0.55rem 1.25rem', fontWeight: 600, fontSize: '14px' }}>
                     Open lesson
                   </span>
-                  <span className="text-[#2997FF] text-base">See plan&nbsp;›</span>
+                  <span className="text-[#2997FF] text-[14px]">See plan&nbsp;›</span>
                 </div>
               </div>
             </Link>
@@ -253,17 +255,17 @@ export function Dashboard() {
                 const c = counts[fa.id] ?? { completed: 0, total: 0 }
                 const pct = c.total === 0 ? 0 : Math.round((c.completed / c.total) * 100)
                 return (
-                  <Link key={fa.id} to={`/focus/${fa.id}`} className="card group block" style={{ padding: '1.75rem' }}>
-                    <div className="flex items-baseline justify-between mb-5">
-                      <div className="prefix-num">{String(idx + 1).padStart(2, '0')}</div>
+                  <Link key={fa.id} to={`/focus/${fa.id}`} className="card group block" style={{ padding: '1.25rem 1.35rem' }}>
+                    <div className="flex items-baseline justify-between mb-3">
+                      <div className="prefix-num" style={{ fontSize: 16 }}>{String(idx + 1).padStart(2, '0')}</div>
                       <div className="text-[12px] text-gold-100">{c.completed}/{c.total}</div>
                     </div>
-                    <div className="h-display text-xl md:text-2xl mb-2 group-hover:text-ember-500 transition">{fa.name}</div>
-                    <p className="text-[14px] text-cream-50/70 leading-snug line-clamp-2 mb-4">{fa.description}</p>
+                    <div className="h-display text-lg md:text-xl mb-1.5 group-hover:text-ember-500 transition leading-tight">{fa.name}</div>
+                    <p className="text-[13.5px] text-cream-50/70 leading-snug line-clamp-2 mb-3">{fa.description}</p>
                     <div className="h-1 rounded-full bg-black/[0.08] overflow-hidden">
                       <div className="h-full bg-cream-50" style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="text-[12px] text-gold-100 mt-2">{pct}% complete</div>
+                    <div className="text-[12px] text-gold-100 mt-1.5">{pct}% complete</div>
                   </Link>
                 )
               })}
@@ -277,11 +279,11 @@ export function Dashboard() {
 
 function ToolTile({ to, eyebrow, title, caption }: { to: string; eyebrow: string; title: string; caption: string }) {
   return (
-    <Link to={to} className="card flex flex-col group" style={{ padding: '1.5rem 1.5rem 1.25rem' }}>
-      <div className="eyebrow mb-2">{eyebrow}</div>
-      <h4 className="h-display text-lg md:text-xl mb-1.5 group-hover:text-ember-500 transition leading-[1.2]">{title}</h4>
-      <p className="text-[14px] text-cream-50/70 leading-snug flex-1">{caption}</p>
-      <div className="mt-4 text-[13px] text-ember-500">Open&nbsp;›</div>
+    <Link to={to} className="card flex flex-col group" style={{ padding: '1.15rem 1.25rem 1.1rem' }}>
+      <div className="eyebrow mb-1.5" style={{ fontSize: 13 }}>{eyebrow}</div>
+      <h4 className="h-display text-base md:text-lg mb-1 group-hover:text-ember-500 transition leading-[1.2]">{title}</h4>
+      <p className="text-[13.5px] text-cream-50/70 leading-snug flex-1">{caption}</p>
+      <div className="mt-3 text-[12.5px] text-ember-500">Open&nbsp;›</div>
     </Link>
   )
 }
