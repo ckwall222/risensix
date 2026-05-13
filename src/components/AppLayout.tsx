@@ -40,9 +40,18 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <NavItem to="/metronome">Metronome</NavItem>
             <NavItem to="/play-along">Play Along</NavItem>
             <NavItem to="/theory">Theory</NavItem>
+            {profile?.role === 'admin' && (
+              <NavItem to="/admin">Admin</NavItem>
+            )}
           </nav>
 
           <div className="flex items-center gap-3">
+            <Link
+              to="/billing"
+              className="hidden sm:inline text-[12px] text-cream-50/85 hover:text-cream-50 transition tracking-[-0.005em]"
+            >
+              Billing
+            </Link>
             <button
               type="button"
               onClick={handleSignOut}
@@ -85,6 +94,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
             </FootCol>
             <FootCol heading="Account">
               <FootLink to="/dashboard">Profile</FootLink>
+              <FootLink to="/billing">Billing</FootLink>
+              {profile?.role === 'admin' && <FootLink to="/admin">Admin</FootLink>}
               <button
                 type="button"
                 onClick={handleSignOut}

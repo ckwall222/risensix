@@ -2,6 +2,10 @@ import { createContext, useContext, useEffect, useState, ReactNode, useCallback 
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
+export type Role = 'user' | 'admin'
+export type SubscriptionStatus =
+  | 'free' | 'trialing' | 'active' | 'past_due' | 'canceled' | 'expired'
+
 export type Profile = {
   id: string
   display_name: string | null
@@ -12,6 +16,12 @@ export type Profile = {
   has_acoustic: boolean
   has_electric: boolean
   onboarded_at: string | null
+  role: Role
+  subscription_status: SubscriptionStatus
+  plan: string | null
+  stripe_customer_id: string | null
+  stripe_subscription_id: string | null
+  subscription_ends_at: string | null
 }
 
 type AuthContextValue = {

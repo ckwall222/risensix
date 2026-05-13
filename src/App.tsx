@@ -23,6 +23,8 @@ import { SongbookPage } from './pages/SongbookPage'
 import { SongDetailPage } from './pages/SongDetailPage'
 import { RoutinePage } from './pages/RoutinePage'
 import { PlayAlongPage } from './pages/PlayAlongPage'
+import { AdminPage } from './pages/AdminPage'
+import { BillingPage } from './pages/BillingPage'
 
 export default function App() {
   return (
@@ -51,6 +53,8 @@ export default function App() {
           <Route path="/songs/:slug" element={<AuthGate requireOnboarded><SongDetailPage /></AuthGate>} />
           <Route path="/routine" element={<AuthGate requireOnboarded><RoutinePage /></AuthGate>} />
           <Route path="/play-along" element={<AuthGate requireOnboarded><PlayAlongPage /></AuthGate>} />
+          <Route path="/billing" element={<AuthGate requireOnboarded><BillingPage /></AuthGate>} />
+          <Route path="/admin" element={<AuthGate requireAdmin><AdminPage /></AuthGate>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
