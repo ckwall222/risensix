@@ -70,27 +70,31 @@ function Stage({
   const [open, setOpen] = useState(defaultOpen)
   const pct = total === 0 ? 0 : Math.round((earned / total) * 100)
   return (
-    <div className="border-b border-cream-50/[0.06]">
+    <div className="border-b border-black/[0.08]">
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
-        className="w-full text-left py-5 hover:bg-cream-50/[0.02] transition"
+        className="w-full text-left py-5 hover:bg-black/[0.02] transition"
         aria-expanded={open}
       >
-        <div className="flex items-baseline gap-4 mb-1.5">
-          <span className={`text-gold-100 transition-transform inline-block ${open ? 'rotate-90' : ''}`}>▸</span>
-          <div className="prefix-num">{num}</div>
-          <h3 className="font-display text-lg md:text-xl tracking-[0.06em] text-cream-50">{name}</h3>
-          {isComplete && <span className="pill">✓ Stage complete</span>}
-          <div className="ml-auto text-[10px] uppercase tracking-[0.28em] text-cream-50/80">
+        <div className="flex items-baseline gap-4 mb-1.5 flex-wrap">
+          <span className={`text-gold-500 transition-transform inline-block ${open ? 'rotate-90' : ''}`}>▸</span>
+          <div className="prefix-num" style={{ fontSize: 17 }}>{num}</div>
+          <h3 className="font-display font-semibold text-lg md:text-xl tracking-[-0.015em] text-cream-50">{name}</h3>
+          {isComplete && (
+            <span className="pill" style={{ color: '#1D7F3F', borderColor: 'rgba(29,127,63,0.30)', background: 'rgba(29,127,63,0.06)' }}>
+              ✓ Stage complete
+            </span>
+          )}
+          <div className="ml-auto text-[13px] text-gold-100 font-medium">
             {earned} / {total}
           </div>
         </div>
         <div className="ml-12 flex items-center gap-3">
-          <p className="text-sm text-cream-50/70 flex-1">{subtitle}</p>
+          <p className="text-[14px] text-cream-50/70 flex-1 leading-snug">{subtitle}</p>
         </div>
-        <div className="h-px bg-night-700 ml-12 mt-3">
-          <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
+        <div className="h-1 rounded-full ml-12 mt-3 bg-black/[0.08] overflow-hidden">
+          <div className="h-full transition-all" style={{ width: `${pct}%`, background: '#0066CC' }} />
         </div>
       </button>
       {open && (
@@ -117,14 +121,14 @@ function MilestoneRow({ m, status, targetSlug }: { m: Milestone; status: Milesto
     <>
       <StatusIcon status={status} />
       <div className="flex-1 min-w-0">
-        <div className={`font-display text-base tracking-[0.04em] ${status === 'earned' ? 'text-cream-50' : 'text-cream-50/70'}`}>
+        <div className={`font-display font-semibold text-[16px] tracking-[-0.015em] ${status === 'earned' ? 'text-cream-50' : 'text-cream-50/70'}`}>
           {m.title}
         </div>
-        <div className="text-xs text-cream-50/80 mt-0.5 leading-relaxed">{m.description}</div>
+        <div className="text-[13px] text-cream-50/65 mt-0.5 leading-snug">{m.description}</div>
       </div>
       <StatusLabel status={status} />
       {targetSlug && (
-        <span className="text-cream-50/75 group-hover:text-gold-100 group-hover:translate-x-1 transition shrink-0 mt-1" aria-hidden="true">→</span>
+        <span className="text-gold-100 group-hover:text-ember-500 transition shrink-0 mt-1.5" aria-hidden="true">›</span>
       )}
     </>
   )
@@ -134,7 +138,7 @@ function MilestoneRow({ m, status, targetSlug }: { m: Milestone; status: Milesto
       <li>
         <Link
           to={`/lessons/${targetSlug}`}
-          className="flex items-start gap-4 py-2.5 border-b border-cream-50/[0.04] hover:bg-cream-50/[0.02] -mx-2 px-2 transition group"
+          className="flex items-start gap-4 py-2.5 border-b border-black/[0.04] hover:bg-black/[0.02] -mx-2 px-2 transition group"
         >
           {inner}
         </Link>
@@ -143,7 +147,7 @@ function MilestoneRow({ m, status, targetSlug }: { m: Milestone; status: Milesto
   }
 
   return (
-    <li className="flex items-start gap-4 py-2.5 border-b border-cream-50/[0.04] -mx-2 px-2">
+    <li className="flex items-start gap-4 py-2.5 border-b border-black/[0.04] -mx-2 px-2">
       {inner}
     </li>
   )
@@ -152,33 +156,41 @@ function MilestoneRow({ m, status, targetSlug }: { m: Milestone; status: Milesto
 function StatusIcon({ status }: { status: MilestoneStatus }) {
   if (status === 'earned') {
     return (
-      <div className="mt-1 h-5 w-5 rounded-full bg-gold-500 flex items-center justify-center shrink-0" aria-hidden="true">
+      <div
+        className="mt-1 h-5 w-5 rounded-full flex items-center justify-center shrink-0"
+        style={{ background: '#1D7F3F' }}
+        aria-hidden="true"
+      >
         <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-          <path d="M2 5.5L4.5 8L9 2.5" stroke="#0A0A0A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M2 5.5L4.5 8L9 2.5" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
     )
   }
   if (status === 'in_progress') {
     return (
-      <div className="mt-1 h-5 w-5 rounded-full border-2 border-ember-500 flex items-center justify-center shrink-0" aria-hidden="true">
-        <div className="h-1.5 w-1.5 rounded-full bg-ember-500" />
+      <div
+        className="mt-1 h-5 w-5 rounded-full flex items-center justify-center shrink-0"
+        style={{ border: '2px solid #0066CC' }}
+        aria-hidden="true"
+      >
+        <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#0066CC' }} />
       </div>
     )
   }
   if (status === 'locked') {
     return (
-      <div className="mt-1 h-5 w-5 rounded-full border border-cream-50/20 shrink-0" aria-hidden="true" />
+      <div className="mt-1 h-5 w-5 rounded-full shrink-0" style={{ border: '1px solid rgba(0,0,0,0.18)' }} aria-hidden="true" />
     )
   }
   return (
-    <div className="mt-1 h-5 w-5 rounded-full border border-dashed border-cream-50/15 shrink-0" aria-hidden="true" />
+    <div className="mt-1 h-5 w-5 rounded-full shrink-0" style={{ border: '1px dashed rgba(0,0,0,0.16)' }} aria-hidden="true" />
   )
 }
 
 function StatusLabel({ status }: { status: MilestoneStatus }) {
-  if (status === 'earned') return <span className="text-[10px] uppercase tracking-[0.28em] text-gold-100 shrink-0 mt-1">Earned</span>
-  if (status === 'in_progress') return <span className="text-[10px] uppercase tracking-[0.28em] text-ember-500 shrink-0 mt-1">In progress</span>
-  if (status === 'future') return <span className="text-[10px] uppercase tracking-[0.28em] text-cream-50/75 shrink-0 mt-1">Coming</span>
+  if (status === 'earned') return <span className="text-[12px] font-semibold shrink-0 mt-1.5" style={{ color: '#1D7F3F' }}>Earned</span>
+  if (status === 'in_progress') return <span className="text-[12px] font-semibold shrink-0 mt-1.5" style={{ color: '#0066CC' }}>In progress</span>
+  if (status === 'future') return <span className="text-[12px] font-medium text-gold-100 shrink-0 mt-1.5">Coming</span>
   return null
 }

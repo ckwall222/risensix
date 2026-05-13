@@ -13,62 +13,130 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-night-900 text-cream-50">
-      <header className="border-b border-cream-50/[0.06]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link to="/dashboard" className="flex items-center gap-3 shrink-0" aria-label="Risen Six — Dashboard">
-            <img src="/risensix-logo.png" alt="" className="h-9 w-9 object-contain" />
-            <span className="hidden sm:inline font-display tracking-[0.28em] text-xs text-gold-100">RISEN&nbsp;SIX</span>
+      <header
+        className="sticky top-0 z-50 border-b border-black/[0.06]"
+        style={{
+          background: 'rgba(245,245,247,0.80)',
+          backdropFilter: 'saturate(180%) blur(20px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+        }}
+      >
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-6 h-11 flex items-center justify-between gap-4">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2 shrink-0"
+            aria-label="Risen Six — Dashboard"
+          >
+            <img
+              src="/risen-six-mark-mono-dark.svg"
+              alt=""
+              className="h-5 w-5 object-contain"
+            />
+            <span className="font-semibold text-[15px] tracking-[-0.02em] text-cream-50">
+              Risen Six
+            </span>
           </Link>
 
-          <nav className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] uppercase tracking-[0.16em] sm:tracking-[0.22em]">
-            <NavItem to="/dashboard">Home</NavItem>
+          <nav className="flex items-center gap-5 sm:gap-7">
+            <NavItem to="/dashboard" end>Home</NavItem>
             <NavItem to="/chords">Chords</NavItem>
             <NavItem to="/tuner">Tuner</NavItem>
-            <NavItem to="/metronome">Metro</NavItem>
-            <NavItem to="/circle">Circle</NavItem>
+            <NavItem to="/metronome">Metronome</NavItem>
+            <NavItem to="/play-along">Play Along</NavItem>
             <NavItem to="/theory">Theory</NavItem>
           </nav>
 
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="hidden sm:flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-gold-500/15 border border-gold-500/30 flex items-center justify-center font-display text-sm text-gold-100">
-                {initial}
-              </div>
-              <div className="leading-tight">
-                <div className="text-[10px] text-cream-50/80 uppercase tracking-[0.22em]">Signed in</div>
-                <div className="text-sm text-cream-50">{profile?.display_name ?? '...'}</div>
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={handleSignOut}
-              className="text-[10px] uppercase tracking-[0.22em] text-cream-50/80 hover:text-gold-100 transition px-2"
+              className="hidden sm:inline text-[12px] text-cream-50/85 hover:text-cream-50 transition tracking-[-0.005em]"
             >
               Sign out
             </button>
+            <div
+              className="h-7 w-7 rounded-full bg-cream-50 text-night-900 flex items-center justify-center text-[11px] font-medium"
+              title={profile?.display_name ?? ''}
+            >
+              {initial}
+            </div>
           </div>
         </div>
       </header>
+
       <main className="flex-1">{children}</main>
-      <footer className="border-t border-cream-50/[0.06] mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-cream-50/80">
-          Risen Six · A CW Custom Guitars venture · 2026
+
+      <footer className="bg-night-900 mt-16 pt-10 pb-10 text-[12px] text-gold-100 leading-relaxed border-t border-black/[0.08]">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <FootCol heading="Practice">
+              <FootLink to="/routine">Today's session</FootLink>
+              <FootLink to="/dashboard">Lessons</FootLink>
+              <FootLink to="/theory">Theory</FootLink>
+              <FootLink to="/daily">Daily challenge</FootLink>
+            </FootCol>
+            <FootCol heading="Tools">
+              <FootLink to="/play-along">Play Along</FootLink>
+              <FootLink to="/licks">Lick Library</FootLink>
+              <FootLink to="/jam">Jam Studio</FootLink>
+              <FootLink to="/tuner">Tuner</FootLink>
+              <FootLink to="/metronome">Metronome</FootLink>
+            </FootCol>
+            <FootCol heading="Library">
+              <FootLink to="/songs">Songbook</FootLink>
+              <FootLink to="/chords">Chord library</FootLink>
+              <FootLink to="/circle">Circle of fifths</FootLink>
+            </FootCol>
+            <FootCol heading="Account">
+              <FootLink to="/dashboard">Profile</FootLink>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="block py-1 text-left text-gold-100 hover:text-cream-50 transition"
+              >
+                Sign out
+              </button>
+            </FootCol>
+          </div>
+          <div className="border-t border-black/[0.08] mt-8 pt-5 flex flex-wrap items-center justify-between gap-3 text-[11px] text-gold-100">
+            <span>Copyright © 2026 CW Custom Guitars. All rights reserved.</span>
+            <span className="text-gold-100">Risen Six</span>
+          </div>
         </div>
       </footer>
     </div>
   )
 }
 
-function NavItem({ to, children }: { to: string; children: ReactNode }) {
+function NavItem({ to, end, children }: { to: string; end?: boolean; children: ReactNode }) {
   return (
     <NavLink
       to={to}
-      end={to === '/dashboard'}
+      end={end}
       className={({ isActive }) =>
-        `transition ${isActive ? 'text-gold-100' : 'text-cream-50/70 hover:text-cream-50'}`
+        `text-[12px] tracking-[-0.005em] transition ${
+          isActive ? 'text-cream-50 font-medium' : 'text-cream-50/85 hover:text-cream-50'
+        }`
       }
     >
       {children}
     </NavLink>
+  )
+}
+
+function FootCol({ heading, children }: { heading: string; children: ReactNode }) {
+  return (
+    <div>
+      <div className="text-cream-50 font-semibold text-[12px] mb-2.5">{heading}</div>
+      <div className="space-y-1">{children}</div>
+    </div>
+  )
+}
+
+function FootLink({ to, children }: { to: string; children: ReactNode }) {
+  return (
+    <Link to={to} className="block py-1 text-gold-100 hover:text-cream-50 transition">
+      {children}
+    </Link>
   )
 }

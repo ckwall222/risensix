@@ -1,14 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { cloudflare } from '@cloudflare/vite-plugin'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    cloudflare(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
@@ -19,8 +17,8 @@ export default defineConfig({
         name: 'Risen Six',
         short_name: 'Risen Six',
         description: 'Become the guitarist you imagined.',
-        theme_color: '#000000',
-        background_color: '#000000',
+        theme_color: '#F5F5F7',
+        background_color: '#F5F5F7',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',

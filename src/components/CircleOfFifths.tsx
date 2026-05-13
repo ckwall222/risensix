@@ -41,14 +41,16 @@ const R_OUTER = 158        // wheel outer edge
 const R_MID = 100          // boundary between major and minor rings
 const R_INNER = 52         // inner edge (center hole)
 
-const STROKE = '#3a2f17'
-const RING_FILL = '#0a0a0a'
-const TEXT_DIM = '#FAF6EE'
-const TEXT_TITLE = '#F8DC91'
-const FILL_I = '#E25C2B'
-const FILL_IV = '#C9962B'
-const FILL_V = '#C9962B'
-const FILL_VI = '#7A4F12'
+const STROKE = 'rgba(0,0,0,0.10)'
+const RING_FILL = '#FFFFFF'
+const TEXT_DIM = '#1D1D1F'
+const TEXT_TITLE = '#D63923'
+const FILL_I = '#D63923'         // phoenix red — selected
+const FILL_IV = '#FF8674'        // softer flame — IV
+const FILL_V = '#FF8674'         // softer flame — V
+const FILL_VI = '#0066CC'        // Apple blue — relative minor
+const SF_DISPLAY = '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif'
+const SF_TEXT = '-apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, sans-serif'
 
 function rad(degrees: number) { return (degrees * Math.PI) / 180 }
 
@@ -100,7 +102,7 @@ export function CircleOfFifths({
           y={18}
           textAnchor="middle"
           fontSize={11}
-          fontFamily="Cinzel, serif"
+          fontFamily={SF_DISPLAY}
           fill={TEXT_TITLE}
           letterSpacing="0.18em"
         >
@@ -114,7 +116,7 @@ export function CircleOfFifths({
 
       {/* Highlight wedges (drawn before dividers so they sit beneath the lines) */}
       {ghostIdx.size > 0 && Array.from(ghostIdx).map(i => (
-        <path key={`ghost-${i}`} d={wedge(i, R_MID, R_OUTER)} fill="rgba(201,150,43,0.10)" />
+        <path key={`ghost-${i}`} d={wedge(i, R_MID, R_OUTER)} fill="rgba(0,0,0,0.04)" />
       ))}
       {iIV >= 0 && <path d={wedge(iIV, R_MID, R_OUTER)} fill={FILL_IV} fillOpacity={0.55} />}
       {iV >= 0  && <path d={wedge(iV,  R_MID, R_OUTER)} fill={FILL_V}  fillOpacity={0.55} />}
@@ -143,9 +145,9 @@ export function CircleOfFifths({
             x={x} y={y + 5}
             textAnchor="middle"
             fontSize={i === iI || i === iIV || i === iV ? 18 : 16}
-            fontFamily="Cinzel, serif"
+            fontFamily={SF_DISPLAY}
             fontWeight={700}
-            fill={isHighlighted ? '#0A0A0A' : TEXT_DIM}
+            fill={isHighlighted ? '#FFFFFF' : TEXT_DIM}
             letterSpacing="0.04em"
           >
             {k}
@@ -163,8 +165,8 @@ export function CircleOfFifths({
             x={x} y={y + 4}
             textAnchor="middle"
             fontSize={11}
-            fontFamily="Inter, sans-serif"
-            fill={i === iVi ? '#FAF6EE' : 'rgba(250,246,238,0.55)'}
+            fontFamily={SF_TEXT}
+            fill={i === iVi ? '#FFFFFF' : 'rgba(0,0,0,0.55)'}
             letterSpacing="0.06em"
           >
             {k}
@@ -182,7 +184,7 @@ export function CircleOfFifths({
             x={x} y={y + 3}
             textAnchor="middle"
             fontSize={10}
-            fontFamily="Inter, sans-serif"
+            fontFamily={SF_TEXT}
             fill="rgba(250,246,238,0.45)"
           >
             {sig}

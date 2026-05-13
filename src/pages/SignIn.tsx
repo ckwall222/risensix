@@ -18,12 +18,11 @@ export function SignIn() {
     const { error } = await signIn(email, password)
     setSubmitting(false)
     if (error) { setError(error); return }
-    // Always land on the dashboard after sign-in — never deep into a previous URL.
     navigate('/dashboard', { replace: true })
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Six strings. Endless rise.">
+    <AuthLayout title="Welcome back." subtitle="Six strings. Endless rise.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <Field label="Email">
           <input
@@ -47,7 +46,14 @@ export function SignIn() {
         </Field>
 
         {error && (
-          <div className="text-sm text-red-300 bg-red-900/20 border border-red-500/30 rounded p-3">
+          <div
+            className="text-[14px] rounded-[10px] p-3"
+            style={{
+              color: '#A52917',
+              background: 'rgba(214,57,35,0.06)',
+              border: '1px solid rgba(214,57,35,0.25)',
+            }}
+          >
             {error}
           </div>
         )}
@@ -55,14 +61,15 @@ export function SignIn() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full px-6 py-3 bg-ember-500 hover:bg-ember-500/90 text-cream-50 font-semibold tracking-[0.18em] uppercase text-sm rounded transition disabled:opacity-50"
+          className="btn btn-primary w-full"
+          style={{ padding: '0.85rem 1.5rem', fontSize: '16px' }}
         >
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
 
-        <p className="text-center text-sm text-cream-50/80 pt-2">
+        <p className="text-center text-[15px] text-cream-50/70 pt-2">
           New here?{' '}
-          <Link to="/signup" className="text-gold-100 underline underline-offset-4 hover:text-gold-100">
+          <Link to="/signup" className="text-ember-500 hover:underline">
             Create an account
           </Link>
         </p>
@@ -74,7 +81,7 @@ export function SignIn() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-xs uppercase tracking-widest text-cream-50/80 mb-2">{label}</span>
+      <span className="block text-[13px] font-medium text-cream-50 mb-1.5 tracking-[-0.005em]">{label}</span>
       {children}
     </label>
   )

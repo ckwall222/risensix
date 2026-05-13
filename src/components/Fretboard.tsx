@@ -44,15 +44,17 @@ const LEFT_PADDING = 32
 const RIGHT_PADDING = 12
 const BOTTOM_PADDING = 28
 
-const NUT_COLOR = '#FAF6EE'
-const FRET_COLOR = '#6B4515'
-const STRING_COLOR = '#C9962B'
-const INLAY_COLOR = '#3a2f17'
-const TEXT_DIM = '#F8DC91'         // brand gold-100, readable on black
-const TEXT_TUNING = '#FAF6EE'      // cream — brightest for tuning labels
-const TEXT_TITLE = '#F8DC91'
-const ROOT_FILL = '#E25C2B'
-const NOTE_FILL = '#C9962B'
+const NUT_COLOR = '#1D1D1F'
+const FRET_COLOR = 'rgba(0,0,0,0.30)'
+const STRING_COLOR = 'rgba(0,0,0,0.50)'
+const INLAY_COLOR = 'rgba(0,0,0,0.10)'
+const TEXT_DIM = '#6E6E73'          // muted gray (fret numbers)
+const TEXT_TUNING = '#1D1D1F'       // near-black for tuning labels
+const TEXT_TITLE = '#D63923'        // phoenix red for title
+const ROOT_FILL = '#D63923'         // phoenix red for root note
+const NOTE_FILL = '#0066CC'         // Apple blue for other notes
+const SF_DISPLAY = '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif'
+const SF_TEXT = '-apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, sans-serif'
 
 const DEFAULT_TUNING = ['E', 'B', 'G', 'D', 'A', 'E']
 
@@ -107,7 +109,7 @@ export function Fretboard({
           y={16}
           textAnchor="middle"
           fontSize={11}
-          fontFamily="Cinzel, serif"
+          fontFamily={SF_DISPLAY}
           fill={TEXT_TITLE}
           letterSpacing="0.18em"
         >
@@ -179,7 +181,7 @@ export function Fretboard({
             y={stringY(stringNum) + 3.5}
             textAnchor="end"
             fontSize={11}
-            fontFamily="Inter, system-ui, sans-serif"
+            fontFamily={SF_TEXT}
             fontWeight={600}
             fill={TEXT_TUNING}
           >
@@ -199,7 +201,7 @@ export function Fretboard({
             y={stringY(6) + 20}
             textAnchor="middle"
             fontSize={11}
-            fontFamily="Inter, system-ui, sans-serif"
+            fontFamily={SF_TEXT}
             fontWeight={500}
             fill={TEXT_DIM}
           >
@@ -221,8 +223,8 @@ export function Fretboard({
         if (n.emphasis === 'muted') {
           return (
             <g key={`note-${i}`}>
-              <line x1={cx - 4} y1={cy - 4} x2={cx + 4} y2={cy + 4} stroke="#FAF6EE" strokeWidth={1.5} />
-              <line x1={cx - 4} y1={cy + 4} x2={cx + 4} y2={cy - 4} stroke="#FAF6EE" strokeWidth={1.5} />
+              <line x1={cx - 4} y1={cy - 4} x2={cx + 4} y2={cy + 4} stroke="#1D1D1F" strokeWidth={1.5} />
+              <line x1={cx - 4} y1={cy + 4} x2={cx + 4} y2={cy - 4} stroke="#1D1D1F" strokeWidth={1.5} />
             </g>
           )
         }
@@ -238,9 +240,9 @@ export function Fretboard({
               style={{ cursor: 'pointer' }}
             >
               <circle cx={cx} cy={cy} r={9} fill="transparent" />
-              <circle cx={cx} cy={cy} r={6} fill="none" stroke="#FAF6EE" strokeWidth={1.4} />
+              <circle cx={cx} cy={cy} r={6} fill="none" stroke="#1D1D1F" strokeWidth={1.4} />
               {n.label && (
-                <text x={cx} y={cy + 3} textAnchor="middle" fontSize={8.5} fontFamily="Inter, sans-serif" fontWeight={600} fill="#FAF6EE">
+                <text x={cx} y={cy + 3} textAnchor="middle" fontSize={8.5} fontFamily={SF_TEXT} fontWeight={600} fill="#1D1D1F">
                   {n.label}
                 </text>
               )}
@@ -258,16 +260,16 @@ export function Fretboard({
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handlePlay(e) }}
             style={{ cursor: 'pointer' }}
           >
-            <circle cx={cx} cy={cy} r={9} fill={fill} stroke="#0A0A0A" strokeWidth={1.2} />
+            <circle cx={cx} cy={cy} r={9} fill={fill} stroke="#FFFFFF" strokeWidth={1.2} />
             {n.label && (
               <text
                 x={cx}
                 y={cy + 3.2}
                 textAnchor="middle"
                 fontSize={9}
-                fontFamily="Inter, sans-serif"
+                fontFamily={SF_TEXT}
                 fontWeight={700}
-                fill="#0A0A0A"
+                fill="#FFFFFF"
               >
                 {n.label}
               </text>

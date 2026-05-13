@@ -22,6 +22,7 @@ import { JamPage } from './pages/JamPage'
 import { SongbookPage } from './pages/SongbookPage'
 import { SongDetailPage } from './pages/SongDetailPage'
 import { RoutinePage } from './pages/RoutinePage'
+import { PlayAlongPage } from './pages/PlayAlongPage'
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/songs" element={<AuthGate requireOnboarded><SongbookPage /></AuthGate>} />
           <Route path="/songs/:slug" element={<AuthGate requireOnboarded><SongDetailPage /></AuthGate>} />
           <Route path="/routine" element={<AuthGate requireOnboarded><RoutinePage /></AuthGate>} />
+          <Route path="/play-along" element={<AuthGate requireOnboarded><PlayAlongPage /></AuthGate>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

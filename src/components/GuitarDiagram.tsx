@@ -223,7 +223,7 @@ export function GuitarDiagram({ variant }: GuitarDiagramProps) {
               const isSelected = h.id === selectedId
               const fillOpacity = isSelected ? 0.32 : 0.0001
               const strokeOpacity = isSelected ? 1 : 0
-              const fill = '#E25C2B'
+              const fill = '#D63923'
               const handler = () => setSelectedId(prev => prev === h.id ? null : h.id)
               if (h.shape.kind === 'rect') {
                 return (

@@ -49,26 +49,30 @@ export function TheoryDetail() {
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto px-5 sm:px-6 py-12">
-        <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Theory library</Link>
-        <div className="eyebrow mt-6 mb-3">Theory · Difficulty {entry.difficulty} / 5</div>
-        <h1 className="h-display text-4xl md:text-5xl tracking-[0.04em] leading-[1.08]">{entry.title}</h1>
-        {entry.summary && <p className="text-lg text-cream-50/70 mt-5 leading-relaxed">{entry.summary}</p>}
+      <div className="max-w-[840px] mx-auto px-5 sm:px-6 pt-10 md:pt-14 pb-14">
+        <Link to="/theory" className="btn-link text-ember-500 text-[14px]">‹ Theory library</Link>
+        <div className="eyebrow-hero mt-4">Theory · Difficulty {entry.difficulty} / 5</div>
+        <h1 className="h-display text-4xl md:text-6xl mt-2 leading-[1.05]">{entry.title}</h1>
+        {entry.summary && (
+          <p className="text-lg text-cream-50/75 mt-4 max-w-[680px] leading-snug tracking-[-0.012em]">
+            {entry.summary}
+          </p>
+        )}
 
-        <div className="hairline mt-10 mb-10" />
+        <hr className="hairline mt-8 mb-10" />
 
         {entry.body && <Markdown>{entry.body}</Markdown>}
 
         {lessons.length > 0 && (
-          <div className="mt-16 pt-8 border-t border-cream-50/[0.06]">
+          <div className="mt-14 pt-8 border-t border-black/[0.08]">
             <div className="eyebrow mb-4">Lessons that use this</div>
             <ul className="space-y-3">
               {lessons.map(l => (
-                <li key={l.id} className="flex items-baseline gap-3">
-                  <Link to={`/lessons/${l.slug}`} className="text-cream-50 hover:text-gold-100 transition">
+                <li key={l.id} className="flex items-baseline gap-3 flex-wrap">
+                  <Link to={`/lessons/${l.slug}`} className="text-[16px] font-medium text-cream-50 hover:text-ember-500 transition">
                     {l.title}
                   </Link>
-                  <span className="text-[10px] text-cream-50/80 tracking-[0.28em] uppercase">{l.focus_area_id}</span>
+                  <span className="text-[12px] text-gold-100">{l.focus_area_id}</span>
                 </li>
               ))}
             </ul>

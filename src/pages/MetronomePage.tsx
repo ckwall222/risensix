@@ -98,115 +98,142 @@ export function MetronomePage() {
 
   return (
     <AppLayout>
-      <div className="max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
-        <div className="eyebrow mt-6 mb-3">Tools</div>
-        <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Metronome</h1>
-        <p className="text-lg text-cream-50/70 mt-4 max-w-2xl leading-relaxed">
-          A steady click holds your timing together. Set the tempo, set the time signature, play to the pulse.
-        </p>
+      <section className="pt-14 md:pt-20 pb-6 text-center">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <Link to="/dashboard" className="btn-link text-ember-500 text-[14px]">← Back home</Link>
+          <div className="eyebrow-hero mt-6">Tools · Metronome</div>
+          <h1 className="h-display text-5xl md:text-6xl mt-2">
+            A steady click.<span className="block text-gold-100">A better player.</span>
+          </h1>
+          <p className="mt-4 text-lg text-cream-50/75 max-w-[560px] mx-auto leading-snug tracking-[-0.012em]">
+            Set the tempo. Set the time signature. Play to the pulse.
+          </p>
+        </div>
+      </section>
 
-        <div className="hairline mt-8 mb-10" />
-
-        {/* BPM display */}
-        <div className="text-center mb-6">
-          <div className="font-display text-7xl md:text-9xl tracking-[0.04em] text-cream-50 leading-none">
-            {bpm}
+      <div className="max-w-[640px] mx-auto px-5 sm:px-6 pb-14">
+        <div className="card" style={{ padding: '2.5rem 2rem 2.25rem' }}>
+          {/* BPM display */}
+          <div className="text-center mb-5">
+            <div className="font-display font-semibold tracking-[-0.03em] text-7xl md:text-8xl text-cream-50 leading-none">
+              {bpm}
+            </div>
+            <div className="text-[13px] text-gold-500 mt-2 font-semibold">
+              BPM · {tempoNameFor(bpm)}
+            </div>
           </div>
-          <div className="text-[10px] uppercase tracking-[0.32em] text-gold-100 mt-2">
-            BPM · {tempoNameFor(bpm)}
+
+          {/* BPM controls */}
+          <div className="flex items-center gap-2 justify-center mb-4 flex-wrap">
+            <PillStep onClick={() => adjust(-5)} label="−5" />
+            <PillStep onClick={() => adjust(-1)} label="−1" />
+            <PillStep onClick={() => adjust(1)} label="+1" />
+            <PillStep onClick={() => adjust(5)} label="+5" />
           </div>
-        </div>
-
-        {/* BPM controls */}
-        <div className="flex items-center gap-2 justify-center mb-3">
-          <button type="button" onClick={() => adjust(-5)} className="btn btn-ghost" style={{ padding: '0.6rem 0.9rem' }}>−5</button>
-          <button type="button" onClick={() => adjust(-1)} className="btn btn-ghost" style={{ padding: '0.6rem 0.9rem' }}>−1</button>
-          <button type="button" onClick={() => adjust(1)}  className="btn btn-ghost" style={{ padding: '0.6rem 0.9rem' }}>+1</button>
-          <button type="button" onClick={() => adjust(5)}  className="btn btn-ghost" style={{ padding: '0.6rem 0.9rem' }}>+5</button>
-        </div>
-        <input
-          type="range"
-          min={BPM_MIN} max={BPM_MAX} step={1}
-          value={bpm}
-          onChange={e => setBpm(Number(e.target.value))}
-          className="w-full accent-ember-500"
-          style={{ accentColor: '#E25C2B' }}
-        />
-        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.22em] text-cream-50/80 mt-1">
-          <span>{BPM_MIN}</span>
-          <span>{BPM_MAX}</span>
-        </div>
-
-        {/* Time signature */}
-        <div className="mt-10">
-          <div className="eyebrow mb-3">Time signature</div>
-          <div className="flex flex-wrap gap-2">
-            {SIGNATURES.map(s => {
-              const isActive = beatsPerBar === s.beats
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setBeatsPerBar(s.beats)}
-                  className={`px-4 py-2 text-[11px] uppercase tracking-[0.22em] border transition ${
-                    isActive ? 'border-gold-500 bg-gold-500/10 text-gold-100' : 'border-cream-50/[0.12] text-cream-50/70 hover:border-gold-500/40'
-                  }`}
-                >
-                  {s.id}
-                </button>
-              )
-            })}
+          <input
+            type="range"
+            min={BPM_MIN} max={BPM_MAX} step={1}
+            value={bpm}
+            onChange={e => setBpm(Number(e.target.value))}
+            className="w-full"
+            style={{ accentColor: '#0066CC' }}
+            aria-label="BPM"
+          />
+          <div className="flex items-center justify-between text-[12px] text-gold-100 mt-1.5">
+            <span>{BPM_MIN}</span>
+            <span>{BPM_MAX}</span>
           </div>
-        </div>
 
-        {/* Beat indicators */}
-        <div className="mt-10 mb-10">
-          <div className="eyebrow mb-3">Pulse</div>
-          <div className="flex gap-3 justify-center">
-            {Array.from({ length: beatsPerBar }).map((_, i) => {
-              const isCurrent = i === currentBeat
-              const isAccent = i === 0
-              return (
-                <div
-                  key={i}
-                  className={`h-12 w-12 rounded-full border-2 transition-all ${
-                    isCurrent
-                      ? isAccent ? 'bg-ember-500 border-ember-500 scale-110' : 'bg-gold-500 border-gold-500 scale-110'
-                      : isAccent ? 'border-ember-500/50 bg-ember-500/5' : 'border-cream-50/[0.12]'
-                  }`}
-                />
-              )
-            })}
+          {/* Time signature */}
+          <div className="mt-8">
+            <div className="eyebrow mb-3">Time signature</div>
+            <div className="flex flex-wrap gap-2">
+              {SIGNATURES.map(s => {
+                const isActive = beatsPerBar === s.beats
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setBeatsPerBar(s.beats)}
+                    className="px-4 py-2 rounded-full text-[14px] font-medium transition"
+                    style={{
+                      border: `1px solid ${isActive ? '#0066CC' : 'rgba(0,0,0,0.10)'}`,
+                      background: isActive ? '#0066CC' : '#FFFFFF',
+                      color: isActive ? '#FFFFFF' : '#1D1D1F',
+                    }}
+                  >
+                    {s.id}
+                  </button>
+                )
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Start / stop */}
-        <div className="text-center">
-          {running ? (
-            <button type="button" onClick={stop} className="btn btn-ghost" style={{ padding: '0.85rem 2.25rem' }}>
-              Stop
-            </button>
-          ) : (
-            <button type="button" onClick={start} className="btn btn-primary" style={{ padding: '0.85rem 2.25rem' }}>
-              Start
-            </button>
-          )}
+          {/* Beat indicators */}
+          <div className="mt-8 mb-8">
+            <div className="eyebrow mb-3">Pulse</div>
+            <div className="flex gap-3 justify-center">
+              {Array.from({ length: beatsPerBar }).map((_, i) => {
+                const isCurrent = i === currentBeat
+                const isAccent = i === 0
+                return (
+                  <div
+                    key={i}
+                    className="h-12 w-12 rounded-full transition-all"
+                    style={{
+                      background: isCurrent
+                        ? (isAccent ? '#D63923' : '#0066CC')
+                        : '#FFFFFF',
+                      border: isCurrent
+                        ? `2px solid ${isAccent ? '#D63923' : '#0066CC'}`
+                        : `2px solid ${isAccent ? 'rgba(214,57,35,0.30)' : 'rgba(0,0,0,0.10)'}`,
+                      transform: isCurrent ? 'scale(1.10)' : 'scale(1)',
+                    }}
+                  />
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Start / stop */}
+          <div className="text-center">
+            {running ? (
+              <button type="button" onClick={stop} className="btn btn-ghost" style={{ padding: '0.75rem 2rem', fontSize: '16px' }}>
+                Stop
+              </button>
+            ) : (
+              <button type="button" onClick={start} className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '16px' }}>
+                Start
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Tips */}
         {!running && (
-          <div className="mt-12 card" style={{ padding: '1.25rem 1.5rem' }}>
+          <div className="mt-6 card" style={{ padding: '1.75rem 2rem' }}>
             <div className="eyebrow mb-3">Practice with intention</div>
-            <ul className="text-sm text-cream-50/70 space-y-2 list-disc pl-5">
-              <li><strong className="text-cream-50">Slower than feels natural.</strong> If your target is 120, practice at 80 until it's clean. Then 90. Then 100.</li>
-              <li><strong className="text-cream-50">Subdivide.</strong> For 8th notes, count "1-and-2-and-3-and-4-and." For 16ths, "1-e-and-a."</li>
-              <li><strong className="text-cream-50">Lock to the click.</strong> Your goal is to make the click disappear into your playing — when you hit a beat exactly, the click sounds quieter.</li>
-              <li><strong className="text-cream-50">Vary the pulse.</strong> Try the click on beats 2 and 4 only (the backbeat). Or only on beat 1. Different feel, same internal time.</li>
+            <ul className="text-[15px] text-cream-50/80 space-y-2 list-disc pl-5 leading-snug">
+              <li><strong className="text-cream-50 font-semibold">Slower than feels natural.</strong> If your target is 120, practice at 80 until it's clean. Then 90. Then 100.</li>
+              <li><strong className="text-cream-50 font-semibold">Subdivide.</strong> For 8th notes, count "1-and-2-and-3-and-4-and." For 16ths, "1-e-and-a."</li>
+              <li><strong className="text-cream-50 font-semibold">Lock to the click.</strong> Your goal is to make the click disappear into your playing — when you hit a beat exactly, the click sounds quieter.</li>
+              <li><strong className="text-cream-50 font-semibold">Vary the pulse.</strong> Try the click on beats 2 and 4 only (the backbeat). Or only on beat 1. Different feel, same internal time.</li>
             </ul>
           </div>
         )}
       </div>
     </AppLayout>
+  )
+}
+
+function PillStep({ onClick, label }: { onClick: () => void; label: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-black/[0.05] text-cream-50 hover:bg-black/[0.10] transition"
+    >
+      {label}
+    </button>
   )
 }

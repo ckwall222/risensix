@@ -102,67 +102,72 @@ export function RoutinePage() {
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
-        <div className="eyebrow mt-6 mb-3">Today's practice · {today}</div>
-        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-2">
+      <div className="max-w-[1080px] mx-auto px-5 sm:px-6 pt-10 md:pt-14 pb-14">
+        <Link to="/dashboard" className="btn-link text-ember-500 text-[14px]">← Back home</Link>
+        <div className="eyebrow-hero mt-4">Today's practice · {today}</div>
+        <h1 className="h-display text-4xl md:text-6xl mt-2 leading-[1.05]">
           {allDone ? 'Done. See you tomorrow.' : 'One session, in order.'}
         </h1>
-        <p className="text-cream-50/80 mt-4 max-w-2xl leading-relaxed">
+        <p className="mt-4 text-lg text-cream-50/75 max-w-[680px] leading-snug tracking-[-0.012em]">
           A daily routine generated for your level. Work top to bottom — each block is a few focused minutes.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <span className="text-[10px] uppercase tracking-[0.22em] text-cream-50/80">Length</span>
-          {([10, 20, 30] as RoutineLength[]).map(n => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => setLength(n)}
-              className={`text-[11px] uppercase tracking-[0.22em] px-3.5 py-2 border transition ${
-                length === n
-                  ? 'border-gold-500 bg-gold-500/10 text-gold-100'
-                  : 'border-cream-50/[0.12] text-cream-50/80 hover:border-gold-500/50 hover:text-cream-50'
-              }`}
-            >
-              {n} min
-            </button>
-          ))}
-          <span className="ml-auto text-cream-50/80 text-[11px] uppercase tracking-[0.22em]">
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+          <span className="text-[13px] text-gold-100 font-medium">Length</span>
+          {([10, 20, 30] as RoutineLength[]).map(n => {
+            const isActive = length === n
+            return (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setLength(n)}
+                className="px-3.5 py-1.5 rounded-full text-[13px] font-medium transition"
+                style={{
+                  border: `1px solid ${isActive ? '#0066CC' : 'rgba(0,0,0,0.10)'}`,
+                  background: isActive ? '#0066CC' : '#FFFFFF',
+                  color: isActive ? '#FFFFFF' : '#1D1D1F',
+                }}
+              >
+                {n} min
+              </button>
+            )
+          })}
+          <span className="ml-auto text-gold-100 text-[13px] font-medium">
             {completedMinutes} / {routine.total_minutes} min done
           </span>
         </div>
 
-        <div className="hairline mt-8 mb-4" />
+        <hr className="hairline mt-7 mb-4" />
 
-        <ol className="space-y-4">
+        <ol className="space-y-3">
           {routine.blocks.map((b, i) => (
             <li key={i}>
-              <div className={`card p-5 md:p-6 transition ${b.completed ? 'opacity-60' : ''}`}>
+              <div className={`card transition ${b.completed ? 'opacity-65' : ''}`} style={{ padding: '1.5rem 1.75rem' }}>
                 <div className="flex items-start gap-4">
                   <button
                     type="button"
                     onClick={() => toggleBlock(i)}
                     disabled={saving}
                     aria-label={b.completed ? 'Mark incomplete' : 'Mark complete'}
-                    className={`shrink-0 w-7 h-7 rounded-full border transition flex items-center justify-center text-sm ${
-                      b.completed
-                        ? 'border-gold-500 bg-gold-500/20 text-gold-100'
-                        : 'border-cream-50/[0.2] hover:border-gold-500'
-                    }`}
+                    className="shrink-0 w-7 h-7 rounded-full transition flex items-center justify-center text-[13px] font-bold"
+                    style={{
+                      border: `1.5px solid ${b.completed ? '#1D7F3F' : 'rgba(0,0,0,0.18)'}`,
+                      background: b.completed ? '#1D7F3F' : 'transparent',
+                      color: b.completed ? '#FFFFFF' : '#1D1D1F',
+                    }}
                   >
                     {b.completed ? '✓' : ''}
                   </button>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline justify-between gap-3 mb-1.5">
-                      <span className="prefix-num">{TYPE_LABEL[b.type]}</span>
-                      <span className="text-cream-50/70 text-[10px] uppercase tracking-[0.22em]">{b.duration_min} min</span>
+                      <span className="text-[13px] text-gold-500 font-semibold">{TYPE_LABEL[b.type]}</span>
+                      <span className="text-gold-100 text-[12px] font-medium">{b.duration_min} min</span>
                     </div>
                     <div className={`h-display text-lg md:text-xl mb-1 ${b.completed ? 'line-through' : ''}`}>{b.title}</div>
-                    <p className="text-cream-50/80 text-sm leading-relaxed">{b.description}</p>
+                    <p className="text-cream-50/75 text-[14px] leading-snug">{b.description}</p>
                     {b.link && !b.completed && (
-                      <Link to={b.link} className="inline-block mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">
-                        Open →
+                      <Link to={b.link} className="inline-block mt-3 text-ember-500 text-[14px] hover:underline">
+                        Open&nbsp;›
                       </Link>
                     )}
                   </div>
@@ -172,7 +177,7 @@ export function RoutinePage() {
           ))}
         </ol>
 
-        <div className="hairline mt-12 mb-6" />
+        <hr className="hairline mt-12 mb-6" />
         <h2 className="h-section mb-5">This week</h2>
         <WeeklyPracticeChart days={days} target={20} />
       </div>

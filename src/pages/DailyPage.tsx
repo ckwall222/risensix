@@ -49,28 +49,32 @@ export function DailyPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
-        <div className="eyebrow mt-6 mb-3">Today · {today}</div>
-        <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">{challenge.title}</h1>
-        <p className="text-lg text-cream-50/80 mt-4 max-w-2xl leading-relaxed">{challenge.summary}</p>
+      <div className="max-w-[840px] mx-auto px-5 sm:px-6 pt-10 md:pt-14 pb-14">
+        <Link to="/dashboard" className="btn-link text-ember-500 text-[14px]">← Back home</Link>
+        <div className="eyebrow-hero mt-4">Today · {today}</div>
+        <h1 className="h-display text-4xl md:text-6xl mt-2 leading-[1.05]">{challenge.title}</h1>
+        <p className="mt-4 text-lg text-cream-50/75 max-w-[680px] leading-snug tracking-[-0.012em]">
+          {challenge.summary}
+        </p>
 
-        <div className="mt-6 flex flex-wrap items-center gap-4 text-[11px] uppercase tracking-[0.22em]">
+        <div className="mt-5 flex flex-wrap items-center gap-3">
           <span className="pill">{challenge.duration} min</span>
-          <span className="text-cream-50/80">
+          <span className="text-gold-100 text-[14px] font-medium">
             🔥 {streak === 0 ? 'Start your streak today' : `${streak}-day streak`}
           </span>
         </div>
 
-        <div className="hairline mt-8 mb-10" />
+        <hr className="hairline mt-8 mb-10" />
 
         <Markdown>{challenge.instructions}</Markdown>
 
-        <div className="mt-12 pt-6 border-t border-cream-50/[0.06] flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div className="mt-12 pt-6 border-t border-black/[0.08] flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           {done ? (
             <>
-              <span className="pill">✓ Done today</span>
-              <span className="text-cream-50/80 text-sm">
+              <span className="pill" style={{ color: '#1D7F3F', borderColor: 'rgba(29,127,63,0.30)', background: 'rgba(29,127,63,0.06)' }}>
+                ✓ Done today
+              </span>
+              <span className="text-cream-50/70 text-[14px]">
                 Back tomorrow for the next one. Streak: {streak} day{streak === 1 ? '' : 's'}.
               </span>
             </>
@@ -80,12 +84,13 @@ export function DailyPage() {
               onClick={markDone}
               disabled={saving || loading}
               className="btn btn-primary"
+              style={{ padding: '0.7rem 1.5rem', fontSize: '15px' }}
             >
               {saving ? 'Saving…' : 'Mark complete'}
             </button>
           )}
-          <Link to="/dashboard" className="btn btn-ghost sm:ml-auto">
-            Back to home →
+          <Link to="/dashboard" className="btn btn-ghost sm:ml-auto" style={{ padding: '0.7rem 1.5rem', fontSize: '15px' }}>
+            Back home&nbsp;›
           </Link>
         </div>
       </div>

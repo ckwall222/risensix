@@ -4,26 +4,37 @@ import { Link } from 'react-router-dom'
 export function AuthLayout({ children, title, subtitle, eyebrow }: { children: ReactNode; title: string; subtitle?: string; eyebrow?: string }) {
   return (
     <div className="min-h-screen flex flex-col bg-night-900 text-cream-50">
-      <header className="border-b border-cream-50/[0.06]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="/risensix-logo.png" alt="" className="h-9 w-9 object-contain" />
-            <span className="hidden sm:inline font-display tracking-[0.28em] text-xs text-gold-100">RISEN&nbsp;SIX</span>
+      <header
+        className="sticky top-0 z-50 border-b border-black/[0.06]"
+        style={{
+          background: 'rgba(245,245,247,0.80)',
+          backdropFilter: 'saturate(180%) blur(20px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+        }}
+      >
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-6 h-11 flex items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-2">
+            <img src="/risen-six-mark-mono-dark.svg" alt="" className="h-5 w-5 object-contain" />
+            <span className="font-semibold text-[15px] tracking-[-0.02em] text-cream-50">Risen Six</span>
           </Link>
-          <Link to="/" className="text-[10px] uppercase tracking-[0.22em] text-cream-50/70 hover:text-gold-100 transition">
+          <Link to="/" className="text-[13px] text-ember-500 hover:underline">
             ← Back
           </Link>
         </div>
       </header>
-      <main className="flex-1 flex items-start justify-center px-5 sm:px-6 py-12">
-        <div className="w-full max-w-md">
-          {eyebrow && <div className="eyebrow mb-3">{eyebrow}</div>}
-          <h1 className="h-display text-3xl tracking-[0.06em] mb-2">{title}</h1>
-          {subtitle && <p className="text-cream-50/70 text-sm mb-10">{subtitle}</p>}
-          {children}
+      <main className="flex-1 flex items-start justify-center px-5 sm:px-6 pt-16 md:pt-24 pb-12">
+        <div className="w-full max-w-[420px] text-center">
+          {eyebrow && <div className="eyebrow-hero mb-2">{eyebrow}</div>}
+          <h1 className="h-display text-4xl md:text-5xl mb-3">{title}</h1>
+          {subtitle && (
+            <p className="text-cream-50/70 text-[17px] mb-10 leading-snug tracking-[-0.01em]">
+              {subtitle}
+            </p>
+          )}
+          <div className="text-left">{children}</div>
         </div>
       </main>
-      <footer className="px-6 py-8 text-center text-[10px] tracking-[0.28em] uppercase text-cream-50/80">
+      <footer className="px-6 py-10 text-center text-[12px] text-gold-100">
         Risen Six · A CW Custom Guitars venture
       </footer>
     </div>

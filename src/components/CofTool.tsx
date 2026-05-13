@@ -73,21 +73,21 @@ export function CofTool({ initialKey = 'C', compact = false }: CofToolProps) {
       <div className="grid grid-cols-1 md:grid-cols-[420px_1fr] gap-8 items-start">
         <div className="mx-auto w-full" style={{ maxWidth: 420 }}>
           <svg viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`} width="100%" role="application" aria-label="Interactive Circle of Fifths">
-            <circle cx={CX} cy={CY} r={R_OUTER} fill="#0a0a0a" stroke="#3a2f17" strokeWidth={1.2} />
-            <circle cx={CX} cy={CY} r={R_MID} fill="#0a0a0a" stroke="#3a2f17" strokeWidth={1} />
+            <circle cx={CX} cy={CY} r={R_OUTER} fill="#FFFFFF" stroke="rgba(0,0,0,0.10)" strokeWidth={1.2} />
+            <circle cx={CX} cy={CY} r={R_MID} fill="#FFFFFF" stroke="rgba(0,0,0,0.10)" strokeWidth={1} />
 
-            <path d={wedge(iv, R_MID, R_OUTER)} fill="#C9962B" fillOpacity={0.35} />
-            <path d={wedge(v, R_MID, R_OUTER)} fill="#C9962B" fillOpacity={0.35} />
-            <path d={wedge(idx, R_MID, R_OUTER)} fill="#E25C2B" fillOpacity={0.85} />
-            <path d={wedge(idx, R_INNER, R_MID)} fill="#7A4F12" fillOpacity={0.6} />
+            <path d={wedge(iv, R_MID, R_OUTER)} fill="#FF8674" fillOpacity={0.45} />
+            <path d={wedge(v, R_MID, R_OUTER)} fill="#FF8674" fillOpacity={0.45} />
+            <path d={wedge(idx, R_MID, R_OUTER)} fill="#D63923" fillOpacity={0.95} />
+            <path d={wedge(idx, R_INNER, R_MID)} fill="#0066CC" fillOpacity={0.85} />
 
-            <circle cx={CX} cy={CY} r={R_INNER} fill="#0a0a0a" stroke="#3a2f17" strokeWidth={1} />
+            <circle cx={CX} cy={CY} r={R_INNER} fill="#FFFFFF" stroke="rgba(0,0,0,0.10)" strokeWidth={1} />
 
             {Array.from({ length: 12 }).map((_, i) => {
               const a = segStartDeg(i)
               const [x1, y1] = pointAt(a, R_INNER)
               const [x2, y2] = pointAt(a, R_OUTER)
-              return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#3a2f17" strokeWidth={0.8} />
+              return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(0,0,0,0.10)" strokeWidth={0.8} />
             })}
 
             {/* Click targets — invisible wedges over the major ring */}
@@ -114,9 +114,9 @@ export function CofTool({ initialKey = 'C', compact = false }: CofToolProps) {
                   x={x} y={y + 6}
                   textAnchor="middle"
                   fontSize={isSelected ? 20 : 17}
-                  fontFamily="Cinzel, serif"
+                  fontFamily='-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif'
                   fontWeight={700}
-                  fill={isSelected ? '#0A0A0A' : '#FAF6EE'}
+                  fill={isSelected ? '#FFFFFF' : '#1D1D1F'}
                   style={{ pointerEvents: 'none' }}
                 >
                   {k}
@@ -134,8 +134,8 @@ export function CofTool({ initialKey = 'C', compact = false }: CofToolProps) {
                   x={x} y={y + 4}
                   textAnchor="middle"
                   fontSize={11}
-                  fontFamily="Inter, sans-serif"
-                  fill={i === idx ? '#FAF6EE' : 'rgba(250,246,238,0.55)'}
+                  fontFamily='-apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, sans-serif'
+                  fill={i === idx ? '#FFFFFF' : 'rgba(0,0,0,0.55)'}
                   style={{ pointerEvents: 'none' }}
                 >
                   {m}
@@ -146,15 +146,15 @@ export function CofTool({ initialKey = 'C', compact = false }: CofToolProps) {
 
           <div className="mt-3 grid grid-cols-3 gap-2 text-[10px] uppercase tracking-[0.22em]">
             <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3" style={{ backgroundColor: '#E25C2B' }} />
+              <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: '#D63923' }} />
               <span className="text-cream-50/80">I — selected</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3" style={{ backgroundColor: '#C9962B' }} />
+              <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: '#FF8674' }} />
               <span className="text-cream-50/80">IV / V</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3" style={{ backgroundColor: '#7A4F12' }} />
+              <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: '#0066CC' }} />
               <span className="text-cream-50/80">vi (relative)</span>
             </div>
           </div>

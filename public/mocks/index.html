@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Risen Six — design directions</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Inter,sans-serif;
+    background:#0d0d10; color:#eaeaea; min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:48px 24px;
+  }
+  .wrap{max-width:1100px; width:100%}
+  h1{font-size:32px; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px}
+  p.lede{color:#8a8a92; margin-bottom:40px; font-size:15px}
+  .grid{display:grid; grid-template-columns:1fr; gap:16px}
+  @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+  a.card{
+    display:block; padding:24px; border-radius:14px;
+    text-decoration:none; color:inherit;
+    border:1px solid #1f1f25; background:#14141a;
+    transition:border-color .15s, transform .15s;
+  }
+  a.card:hover{border-color:#444; transform:translateY(-2px)}
+  .swatches{display:flex; gap:6px; margin-bottom:16px}
+  .sw{height:28px; flex:1; border-radius:6px}
+  .label{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#7a7a82; margin-bottom:6px}
+  .title{font-size:18px; font-weight:600; margin-bottom:8px}
+  .desc{font-size:13px; color:#9a9aa2; line-height:1.55}
+  .open{margin-top:14px; font-size:12px; font-weight:600; color:#fff; opacity:.7}
+  a.card:hover .open{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Risen Six — three design directions</h1>
+  <p class="lede">Same dashboard. Three different chrome. Open each, sit with it for a minute, pick one (or tell me which combination of pieces you want).</p>
+
+  <div class="grid">
+    <a class="card" href="/mocks/01-phoenix-fire.html">
+      <div class="swatches">
+        <div class="sw" style="background:#0a0a0d"></div>
+        <div class="sw" style="background:#FF4D2E"></div>
+        <div class="sw" style="background:#FF2EAA"></div>
+        <div class="sw" style="background:#2EE5C5"></div>
+        <div class="sw" style="background:#F5F4F7"></div>
+      </div>
+      <div class="label">Direction 1</div>
+      <div class="title">Phoenix Fire</div>
+      <div class="desc">Dark, but the gold is gone. Flame red-orange leads, hot magenta and electric teal back it up. Keeps the brand intensity, drops the heritage feel.</div>
+      <div class="open">Open mock →</div>
+    </a>
+    <a class="card" href="/mocks/02-studio-light.html">
+      <div class="swatches">
+        <div class="sw" style="background:#F8F7F2"></div>
+        <div class="sw" style="background:#FFFFFF;border:1px solid #ddd"></div>
+        <div class="sw" style="background:#15151A"></div>
+        <div class="sw" style="background:#FF5A40"></div>
+        <div class="sw" style="background:#6B6B72"></div>
+      </div>
+      <div class="label">Direction 2</div>
+      <div class="title">Studio Light</div>
+      <div class="desc">Daylight. Off-white canvas, ink type, coral as the single accent. Reads as a serious teaching tool, not a casino. The biggest departure from where you are now.</div>
+      <div class="open">Open mock →</div>
+    </a>
+    <a class="card" href="/mocks/03-pedalboard-neon.html">
+      <div class="swatches">
+        <div class="sw" style="background:#06060A"></div>
+        <div class="sw" style="background:#39FF14"></div>
+        <div class="sw" style="background:#FF2E88"></div>
+        <div class="sw" style="background:#00E5FF"></div>
+        <div class="sw" style="background:#EAEAF2"></div>
+      </div>
+      <div class="label">Direction 3</div>
+      <div class="title">Pedalboard Neon</div>
+      <div class="desc">Loudest of the three. Pure black, neon green + hot pink + cyan, brutalist grid lines. Feels like standing on a stage, not sitting in a museum.</div>
+      <div class="open">Open mock →</div>
+    </a>
+    <a class="card" href="/mocks/04-cupertino.html" style="border-color:#3a3a45">
+      <div class="swatches">
+        <div class="sw" style="background:#F5F5F7;border:1px solid #ddd"></div>
+        <div class="sw" style="background:#FFFFFF;border:1px solid #ddd"></div>
+        <div class="sw" style="background:#1D1D1F"></div>
+        <div class="sw" style="background:#0066CC"></div>
+        <div class="sw" style="background:#D63923"></div>
+      </div>
+      <div class="label">Direction 4 · NEW</div>
+      <div class="title">Cupertino</div>
+      <div class="desc">Apple.com aesthetic. White and black sections, massive SF Pro headlines, Apple-blue "Learn more ›" links, a single brand red used sparingly. Premium, restrained, the most "Apple."</div>
+      <div class="open">Open mock →</div>
+    </a>
+  </div>
+</div>
+</body>
+</html>

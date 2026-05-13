@@ -106,43 +106,54 @@ export function LessonPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto px-5 sm:px-6 py-12">
-        <div className="flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] mb-6">
-          <Link to={`/focus/${lesson.focus_area_id}`} className="text-gold-100 hover:text-cream-50 transition">
-            ← {lesson.focus_area_id}
+      <div className="max-w-[1080px] mx-auto px-5 sm:px-6 pt-10 md:pt-14 pb-14">
+        <div className="flex items-center gap-3 text-[13px] mb-4 flex-wrap">
+          <Link to={`/focus/${lesson.focus_area_id}`} className="text-ember-500 hover:underline">
+            ‹ {lesson.focus_area_id}
           </Link>
-          <span className="text-cream-50/75">·</span>
-          <span className="text-cream-50/80">Difficulty {lesson.difficulty} / 5</span>
+          <span className="text-gold-100">·</span>
+          <span className="text-gold-100">Difficulty {lesson.difficulty} / 5</span>
           {lesson.duration_minutes && (
             <>
-              <span className="text-cream-50/75">·</span>
-              <span className="text-cream-50/80">{lesson.duration_minutes} min</span>
+              <span className="text-gold-100">·</span>
+              <span className="text-gold-100">{lesson.duration_minutes} min</span>
             </>
           )}
           <span className="ml-auto">
-            {status === 'completed' && <span className="pill">✓ Completed</span>}
+            {status === 'completed' && (
+              <span className="pill" style={{ color: '#1D7F3F', borderColor: 'rgba(29,127,63,0.30)', background: 'rgba(29,127,63,0.06)' }}>
+                ✓ Completed
+              </span>
+            )}
           </span>
         </div>
 
-        <div className="eyebrow mb-3">Lesson</div>
-        <h1 className="h-display text-4xl md:text-5xl tracking-[0.04em] leading-[1.08]">{lesson.title}</h1>
-        {lesson.summary && <p className="text-lg text-cream-50/70 mt-5 max-w-3xl leading-relaxed">{lesson.summary}</p>}
+        <div className="eyebrow-hero">Lesson</div>
+        <h1 className="h-display text-4xl md:text-6xl mt-2 leading-[1.05]">{lesson.title}</h1>
+        {lesson.summary && (
+          <p className="text-lg text-cream-50/75 mt-4 max-w-[680px] leading-snug tracking-[-0.012em]">
+            {lesson.summary}
+          </p>
+        )}
 
-        <div className="hairline mt-10 mb-10" />
+        <hr className="hairline mt-8 mb-10" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-10">
           <div>
             {lesson.body && <Markdown>{lesson.body}</Markdown>}
 
-            <div className="mt-16 pt-6 border-t border-cream-50/[0.06] flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="mt-12 pt-6 border-t border-black/[0.08] flex flex-col sm:flex-row items-start sm:items-center gap-3">
               {status === 'completed' ? (
-                <span className="pill">✓ Completed</span>
+                <span className="pill" style={{ color: '#1D7F3F', borderColor: 'rgba(29,127,63,0.30)', background: 'rgba(29,127,63,0.06)' }}>
+                  ✓ Completed
+                </span>
               ) : (
                 <button
                   type="button"
                   onClick={markComplete}
                   disabled={saving}
                   className="btn btn-primary"
+                  style={{ padding: '0.7rem 1.5rem', fontSize: '15px' }}
                 >
                   {saving ? 'Saving…' : 'Mark complete'}
                 </button>
@@ -153,38 +164,36 @@ export function LessonPage() {
                   type="button"
                   onClick={goNext}
                   className="btn btn-ghost sm:ml-auto"
+                  style={{ padding: '0.7rem 1.5rem', fontSize: '15px' }}
                 >
-                  Next lesson →
+                  Next lesson&nbsp;›
                 </button>
               ) : (
-                <Link
-                  to="/dashboard"
-                  className="btn btn-ghost sm:ml-auto"
-                >
-                  Back to home →
+                <Link to="/dashboard" className="btn btn-ghost sm:ml-auto" style={{ padding: '0.7rem 1.5rem', fontSize: '15px' }}>
+                  Back home&nbsp;›
                 </Link>
               )}
             </div>
 
             {neighbors.prev && (
-              <div className="mt-6">
-                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-[11px] uppercase tracking-[0.22em] text-cream-50/80 hover:text-gold-100 transition">
-                  ← Prev: {neighbors.prev.title}
+              <div className="mt-5">
+                <Link to={`/lessons/${neighbors.prev.slug}`} className="text-[13px] text-ember-500 hover:underline">
+                  ‹ Prev: {neighbors.prev.title}
                 </Link>
               </div>
             )}
           </div>
 
-          <aside className="space-y-6">
+          <aside className="space-y-4">
             {theory.length > 0 && (
-              <div className="card is-feature">
+              <div className="card" style={{ padding: '1.5rem 1.5rem' }}>
                 <div className="eyebrow mb-3">Theory in this lesson</div>
                 <ul className="space-y-3">
                   {theory.map(t => (
                     <li key={t.id}>
                       <Link to={`/theory/${t.id}`} className="block group">
-                        <div className="font-display text-base tracking-[0.04em] text-cream-50 group-hover:text-gold-100 transition">{t.title}</div>
-                        {t.summary && <div className="text-xs text-cream-50/70 mt-1 leading-relaxed">{t.summary}</div>}
+                        <div className="font-display font-semibold text-[16px] tracking-[-0.015em] text-cream-50 group-hover:text-ember-500 transition">{t.title}</div>
+                        {t.summary && <div className="text-[13px] text-cream-50/70 mt-1 leading-snug">{t.summary}</div>}
                       </Link>
                     </li>
                   ))}
@@ -193,16 +202,16 @@ export function LessonPage() {
             )}
 
             {(lesson.video_url || lesson.tab_url) && (
-              <div className="card">
+              <div className="card" style={{ padding: '1.5rem 1.5rem' }}>
                 <div className="eyebrow mb-3">Resources</div>
                 {lesson.video_url && (
-                  <a href={lesson.video_url} target="_blank" rel="noopener noreferrer" className="block text-sm text-cream-50 hover:text-gold-100 mb-2 underline underline-offset-4">
-                    Watch video →
+                  <a href={lesson.video_url} target="_blank" rel="noopener noreferrer" className="block text-[15px] text-ember-500 hover:underline mb-2">
+                    Watch video&nbsp;›
                   </a>
                 )}
                 {lesson.tab_url && (
-                  <a href={lesson.tab_url} target="_blank" rel="noopener noreferrer" className="block text-sm text-cream-50 hover:text-gold-100 underline underline-offset-4">
-                    Download tab →
+                  <a href={lesson.tab_url} target="_blank" rel="noopener noreferrer" className="block text-[15px] text-ember-500 hover:underline">
+                    Download tab&nbsp;›
                   </a>
                 )}
               </div>

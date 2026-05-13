@@ -64,12 +64,12 @@ export function Onboarding() {
 
   return (
     <AuthLayout
-      title={step === 1 ? "Let's tune you in" : "A few more"}
+      title={step === 1 ? "Let's tune you in." : "A few more."}
       subtitle={`Step ${step} of 5 — this builds your starting path.`}
     >
       {/* progress bar */}
-      <div className="h-1 bg-night-700 rounded-full overflow-hidden mb-8">
-        <div className="h-full bg-gold-500 transition-all" style={{ width: `${progress}%` }} />
+      <div className="h-1 rounded-full overflow-hidden mb-8 bg-black/[0.08]">
+        <div className="h-full bg-ember-500 transition-all" style={{ width: `${progress}%` }} />
       </div>
 
       {step === 1 && (
@@ -90,19 +90,13 @@ export function Onboarding() {
         <Step heading="Where are you in your guitar journey?">
           <div className="space-y-2">
             {ABILITY_LEVELS.map(opt => (
-              <button
+              <SelectableRow
                 key={opt.id}
-                type="button"
+                selected={ability === opt.id}
                 onClick={() => setAbility(opt.id)}
-                className={`w-full text-left px-4 py-3 rounded border transition ${
-                  ability === opt.id
-                    ? 'border-gold-500 bg-gold-500/10'
-                    : 'border-night-700 hover:border-gold-500/50'
-                }`}
-              >
-                <div className="text-cream-50 font-medium">{opt.label}</div>
-                <div className="text-xs text-cream-50/70 mt-0.5">{opt.desc}</div>
-              </button>
+                title={opt.label}
+                desc={opt.desc}
+              />
             ))}
           </div>
           <Buttons onBack={back} onNext={next} nextDisabled={!ability} />
@@ -113,18 +107,12 @@ export function Onboarding() {
         <Step heading="What styles do you listen to?" hint="Pick any that fit. Affects which lessons we surface first.">
           <div className="grid grid-cols-2 gap-2">
             {STYLES.map(s => (
-              <button
+              <SelectableChip
                 key={s}
-                type="button"
+                selected={styles.includes(s)}
                 onClick={() => toggleStyle(s)}
-                className={`px-4 py-2.5 rounded border text-sm transition ${
-                  styles.includes(s)
-                    ? 'border-gold-500 bg-gold-500/15 text-cream-50'
-                    : 'border-night-700 hover:border-gold-500/50 text-cream-50/70'
-                }`}
-              >
-                {s}
-              </button>
+                label={s}
+              />
             ))}
           </div>
           <Buttons onBack={back} onNext={next} />
@@ -138,18 +126,12 @@ export function Onboarding() {
               { id: true,  label: 'Yes' },
               { id: false, label: 'Not yet' },
             ].map(opt => (
-              <button
+              <SelectableBig
                 key={String(opt.id)}
-                type="button"
+                selected={readsTab === opt.id}
                 onClick={() => setReadsTab(opt.id)}
-                className={`flex-1 px-4 py-4 rounded border transition ${
-                  readsTab === opt.id
-                    ? 'border-gold-500 bg-gold-500/10'
-                    : 'border-night-700 hover:border-gold-500/50'
-                }`}
-              >
-                <div className="text-cream-50 font-medium">{opt.label}</div>
-              </button>
+                title={opt.label}
+              />
             ))}
           </div>
           <Buttons onBack={back} onNext={next} nextDisabled={readsTab === null} />
@@ -159,30 +141,29 @@ export function Onboarding() {
       {step === 5 && (
         <Step heading="What guitar do you have?" hint="Both is fine — pick all that apply.">
           <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
+            <SelectableBig
+              selected={hasAcoustic}
               onClick={() => setHasAcoustic(v => !v)}
-              className={`p-4 rounded border transition ${
-                hasAcoustic ? 'border-gold-500 bg-gold-500/15' : 'border-night-700 hover:border-gold-500/50'
-              }`}
-            >
-              <div className="text-cream-50 font-medium">Acoustic</div>
-              <div className="text-xs text-cream-50/70 mt-0.5">Steel-string or classical</div>
-            </button>
-            <button
-              type="button"
+              title="Acoustic"
+              subtitle="Steel-string or classical"
+            />
+            <SelectableBig
+              selected={hasElectric}
               onClick={() => setHasElectric(v => !v)}
-              className={`p-4 rounded border transition ${
-                hasElectric ? 'border-gold-500 bg-gold-500/15' : 'border-night-700 hover:border-gold-500/50'
-              }`}
-            >
-              <div className="text-cream-50 font-medium">Electric</div>
-              <div className="text-xs text-cream-50/70 mt-0.5">Strat, Tele, Les Paul, anything plugged in</div>
-            </button>
+              title="Electric"
+              subtitle="Strat, Tele, Les Paul, anything plugged in"
+            />
           </div>
 
           {error && (
-            <div className="text-sm text-red-300 bg-red-900/20 border border-red-500/30 rounded p-3 mt-4">
+            <div
+              className="text-[14px] rounded-[10px] p-3 mt-4"
+              style={{
+                color: '#A52917',
+                background: 'rgba(214,57,35,0.06)',
+                border: '1px solid rgba(214,57,35,0.25)',
+              }}
+            >
               {error}
             </div>
           )}
@@ -202,10 +183,61 @@ export function Onboarding() {
 function Step({ heading, hint, children }: { heading: string; hint?: string; children: React.ReactNode }) {
   return (
     <div className="space-y-4">
-      <h2 className="font-display text-xl tracking-wider text-cream-50">{heading}</h2>
-      {hint && <p className="text-sm text-cream-50/70">{hint}</p>}
+      <h2 className="h-display text-2xl">{heading}</h2>
+      {hint && <p className="text-[15px] text-cream-50/70 leading-snug">{hint}</p>}
       <div>{children}</div>
     </div>
+  )
+}
+
+function SelectableRow({ selected, onClick, title, desc }: { selected: boolean; onClick: () => void; title: string; desc: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full text-left px-4 py-3 rounded-[12px] transition"
+      style={{
+        border: `1px solid ${selected ? '#0066CC' : 'rgba(0,0,0,0.10)'}`,
+        background: selected ? 'rgba(0,102,204,0.06)' : '#FFFFFF',
+      }}
+    >
+      <div className="text-cream-50 font-medium text-[15px]">{title}</div>
+      <div className="text-[13px] text-cream-50/65 mt-0.5">{desc}</div>
+    </button>
+  )
+}
+
+function SelectableChip({ selected, onClick, label }: { selected: boolean; onClick: () => void; label: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="px-4 py-2.5 rounded-full text-[14px] font-medium transition"
+      style={{
+        border: `1px solid ${selected ? '#0066CC' : 'rgba(0,0,0,0.12)'}`,
+        background: selected ? '#0066CC' : '#FFFFFF',
+        color: selected ? '#FFFFFF' : '#1D1D1F',
+      }}
+    >
+      {label}
+    </button>
+  )
+}
+
+function SelectableBig({ selected, onClick, title, subtitle }: { selected: boolean; onClick: () => void; title: string; subtitle?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex-1 p-4 rounded-[14px] transition text-left"
+      style={{
+        border: `1px solid ${selected ? '#0066CC' : 'rgba(0,0,0,0.10)'}`,
+        background: selected ? 'rgba(0,102,204,0.06)' : '#FFFFFF',
+      }}
+    >
+      <div className="text-cream-50 font-semibold text-[16px]">{title}</div>
+      {subtitle && <div className="text-[13px] text-cream-50/65 mt-0.5">{subtitle}</div>}
+    </button>
   )
 }
 
@@ -223,7 +255,7 @@ function Buttons({
         <button
           type="button"
           onClick={onBack}
-          className="px-5 py-3 text-sm tracking-widest uppercase text-cream-50/80 hover:text-cream-50"
+          className="text-[15px] text-cream-50/70 hover:text-cream-50 transition px-2"
         >
           ← Back
         </button>
@@ -232,7 +264,8 @@ function Buttons({
         type="button"
         onClick={onNext}
         disabled={nextDisabled}
-        className="ml-auto px-6 py-3 bg-ember-500 hover:bg-ember-500/90 text-cream-50 font-semibold tracking-[0.18em] uppercase text-sm rounded transition disabled:opacity-40"
+        className="btn btn-primary ml-auto"
+        style={{ padding: '0.7rem 1.5rem', fontSize: '15px' }}
       >
         {nextLabel}
       </button>

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Risen Six — Studio Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F7F2;
+    --paper:#FFFFFF;
+    --paper-2:#EFEDE6;
+    --ink:#15151A;
+    --ink-2:#2A2A30;
+    --muted:#6B6B72;
+    --line:#E5E2D9;
+    --line-hi:#D7D3C7;
+    --coral:#FF5A40;
+    --coral-deep:#E3401D;
+    --sage:#4F7A5A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg); color:var(--ink); font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif; font-size:15px; line-height:1.55; min-height:100vh; -webkit-font-smoothing:antialiased}
+  .container{max-width:1180px; margin:0 auto; padding:0 28px}
+  .display{font-family:Fraunces,serif; font-weight:500; letter-spacing:-0.02em}
+
+  /* Header */
+  header{border-bottom:1px solid var(--line); background:rgba(248,247,242,0.85); backdrop-filter:blur(10px); position:sticky; top:0; z-index:50}
+  .header-inner{display:flex; align-items:center; justify-content:space-between; height:72px}
+  .brand{display:flex; align-items:center; gap:12px; font-weight:600; font-size:14px; letter-spacing:.04em}
+  .mark{width:30px; height:30px; border-radius:50%; background:var(--ink); display:flex; align-items:center; justify-content:center; color:var(--paper); font-weight:600; font-size:12px; font-family:Fraunces,serif}
+  nav.top{display:flex; gap:24px}
+  nav.top a{color:var(--ink-2); text-decoration:none; font-size:14px; font-weight:500; padding:6px 0; border-bottom:2px solid transparent; transition:border-color .15s, color .15s}
+  nav.top a:hover{color:var(--ink)}
+  nav.top a.active{border-bottom-color:var(--ink)}
+  .header-right{display:flex; align-items:center; gap:18px}
+  .header-right .sign{font-size:13px; color:var(--muted)}
+  .avatar{width:34px; height:34px; border-radius:50%; background:var(--paper-2); border:1px solid var(--line-hi); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:var(--ink)}
+
+  /* Hero */
+  .hero{padding:88px 0 40px}
+  .eyebrow{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--coral); font-weight:600}
+  h1.title{font-size:72px; line-height:1.0; letter-spacing:-0.035em; margin-top:18px; max-width:880px; font-weight:500}
+  .sub{margin-top:24px; color:var(--muted); font-size:19px; max-width:620px; line-height:1.55}
+  .stats{margin-top:48px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; border-top:1px solid var(--line)}
+  .stat{padding:20px 0; border-bottom:1px solid var(--line); padding-right:24px}
+  .stat .n{font-size:36px; font-weight:500; letter-spacing:-0.02em; font-family:Fraunces,serif}
+  .stat .n small{color:var(--muted); font-size:18px}
+  .stat .l{font-size:12px; color:var(--muted); letter-spacing:.10em; text-transform:uppercase; margin-top:4px}
+
+  /* Sections */
+  section{padding:32px 0}
+  .section-head{display:flex; align-items:end; justify-content:space-between; margin-bottom:24px}
+  .section-head h2{font-family:Fraunces,serif; font-size:22px; letter-spacing:-0.01em; font-weight:500}
+  .section-head a{font-size:13px; color:var(--coral); text-decoration:none; font-weight:600}
+
+  /* Feature */
+  .feature{
+    display:grid; grid-template-columns:1fr; gap:0;
+    background:var(--paper); border:1px solid var(--line); border-radius:4px; overflow:hidden;
+  }
+  @media(min-width:780px){.feature{grid-template-columns:1.6fr 1fr}}
+  .feature .left{padding:40px}
+  .feature .right{padding:40px; background:var(--paper-2); border-left:1px solid var(--line)}
+  .feature h3{font-family:Fraunces,serif; font-size:38px; line-height:1.05; letter-spacing:-0.02em; font-weight:500; margin-top:14px; max-width:520px}
+  .feature p{margin-top:16px; color:var(--muted); font-size:16px; max-width:520px}
+  .cta-row{margin-top:28px; display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:13px 22px; border-radius:4px; font-weight:600; font-size:14px; text-decoration:none; border:1px solid transparent; transition:background .15s, border-color .15s, color .15s, transform .12s}
+  .btn-primary{background:var(--coral); color:#fff}
+  .btn-primary:hover{background:var(--coral-deep)}
+  .btn-ghost{background:transparent; color:var(--ink); border-color:var(--line-hi)}
+  .btn-ghost:hover{border-color:var(--ink)}
+
+  .right .label{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600}
+  .right h4{font-family:Fraunces,serif; font-size:20px; margin-top:8px; font-weight:500}
+  .progress-bar{margin-top:18px; height:4px; background:#DDDACE; border-radius:99px; overflow:hidden}
+  .progress-bar > i{display:block; height:100%; background:var(--ink); border-radius:99px}
+  .progress-meta{margin-top:8px; font-size:12px; color:var(--muted); display:flex; justify-content:space-between}
+  .streak{margin-top:22px; padding:16px; border-radius:4px; border:1px dashed var(--line-hi); background:#fff}
+  .streak .h{font-family:Fraunces,serif; font-size:17px; font-weight:500}
+  .streak p{margin-top:4px; font-size:13px; color:var(--muted)}
+
+  /* Tools — editorial cards */
+  .tools{display:grid; grid-template-columns:1fr; gap:0; border-top:1px solid var(--line); border-left:1px solid var(--line)}
+  @media(min-width:640px){.tools{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.tools{grid-template-columns:repeat(4,1fr)}}
+  .tool{display:block; padding:28px 24px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); text-decoration:none; color:inherit; background:var(--paper); transition:background .15s}
+  .tool:hover{background:#FFFCF5}
+  .tool .num{font-family:Fraunces,serif; font-size:15px; color:var(--muted); margin-bottom:30px; font-weight:500}
+  .tool h4{font-family:Fraunces,serif; font-size:22px; line-height:1.15; letter-spacing:-0.015em; font-weight:500}
+  .tool p{margin-top:10px; font-size:14px; color:var(--muted); line-height:1.5}
+  .tool .more{margin-top:18px; font-size:12px; font-weight:600; color:var(--coral); display:flex; align-items:center; gap:6px}
+
+  /* Tracks */
+  .tracks{}
+  .track{display:grid; grid-template-columns:60px 1fr auto; gap:28px; align-items:center; padding:24px 0; border-bottom:1px solid var(--line); text-decoration:none; color:inherit}
+  .track:hover .t-title{color:var(--coral)}
+  .t-num{font-family:Fraunces,serif; font-size:32px; color:var(--muted); font-weight:500; line-height:1}
+  .t-meta{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+  .t-title{font-family:Fraunces,serif; font-size:22px; font-weight:500; margin-top:6px; letter-spacing:-0.01em; transition:color .15s}
+  .t-desc{font-size:14px; color:var(--muted); margin-top:6px}
+  .t-pill{font-size:11px; letter-spacing:.10em; text-transform:uppercase; color:var(--muted)}
+  .t-pill.done{color:var(--sage)}
+
+  footer{padding:80px 0 50px; color:var(--muted); font-size:12px; letter-spacing:.16em; text-transform:uppercase; text-align:center; border-top:1px solid var(--line); margin-top:60px}
+
+  .ribbon{position:fixed; bottom:16px; right:16px; background:var(--ink); color:var(--paper); padding:10px 14px; border-radius:99px; font-size:12px; z-index:60}
+  .ribbon a{color:#fff; margin-left:6px; text-decoration:none; font-weight:600; opacity:.85}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <div class="mark">R6</div>
+      <span>RISEN&nbsp;SIX</span>
+    </div>
+    <nav class="top">
+      <a class="active" href="#">Home</a>
+      <a href="#">Lessons</a>
+      <a href="#">Theory</a>
+      <a href="#">Tools</a>
+      <a href="#">Songbook</a>
+    </nav>
+    <div class="header-right">
+      <span class="sign">Signed in as</span>
+      <div class="avatar">CW</div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div class="eyebrow">Wednesday · Day 47</div>
+    <h1 class="title display">Welcome back, Colton.<br/>One lick closer.</h1>
+    <p class="sub">A short session is waiting. Pick it up where you left off, or jump straight into the tools.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">12 <small>/64</small></div><div class="l">Lessons</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">Day streak</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">Milestones</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Today's session</h2><a href="#">Open routine →</a></div>
+    <div class="feature">
+      <div class="left">
+        <div class="eyebrow">15-minute drill</div>
+        <h3>Open chords: locking down C → G → Am.</h3>
+        <p>Get clean transitions between three of the most-played chords in folk and rock. Warmup, drill, then strum along to "House of the Rising Sun" at 70% speed.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#">Start session →</a>
+          <a class="btn btn-ghost" href="#">See plan</a>
+        </div>
+      </div>
+      <div class="right">
+        <div class="label">Beginner I · 62%</div>
+        <h4>The journey so far</h4>
+        <div class="progress-bar"><i style="width:62%"></i></div>
+        <div class="progress-meta"><span>12 lessons</span><span>20 to go</span></div>
+        <div class="streak">
+          <div class="h">▲ Five days in a row</div>
+          <p>Two more sessions earns the "Steady Hand" milestone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Practice tools</h2><a href="#">All tools →</a></div>
+    <div class="tools">
+      <a class="tool" href="#">
+        <div class="num">01</div>
+        <h4>Play Along</h4>
+        <p>Slow any song down without changing the key. Drop in a file you own and lift the lick.</p>
+        <div class="more">Open →</div>
+      </a>
+      <a class="tool" href="#">
+        <div class="num">02</div>
+        <h4>Lick Library</h4>
+        <p>Curated blues, rock, country, jazz, folk phrases. Playback at any tempo.</p>
+        <div class="more">Browse →</div>
+      </a>
+      <a class="tool" href="#">
+        <div class="num">03</div>
+        <h4>Jam Studio</h4>
+        <p>Drums, bass, chord pad in any key. Pick a progression and start practicing.</p>
+        <div class="more">Open studio →</div>
+      </a>
+      <a class="tool" href="#">
+        <div class="num">04</div>
+        <h4>Tuner</h4>
+        <p>Standard tuning in seconds. Chromatic mode for drop tunings and capo work.</p>
+        <div class="more">Open tuner →</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Continue</h2><a href="#">See all lessons →</a></div>
+    <div class="tracks">
+      <a class="track" href="#">
+        <div class="t-num">04</div>
+        <div>
+          <div class="t-meta">Focus · Chord shapes</div>
+          <div class="t-title">The C major shape, anchored.</div>
+          <div class="t-desc">Wrist position, finger curl, why the third fret matters more than you think.</div>
+        </div>
+        <div class="t-pill">8 MIN</div>
+      </a>
+      <a class="track" href="#">
+        <div class="t-num">02</div>
+        <div>
+          <div class="t-meta">Theory · CAGED</div>
+          <div class="t-title">Why every chord shape is the same chord.</div>
+          <div class="t-desc">The whole fretboard, with five shapes you already know.</div>
+        </div>
+        <div class="t-pill">12 MIN</div>
+      </a>
+      <a class="track" href="#">
+        <div class="t-num">01</div>
+        <div>
+          <div class="t-meta">Focus · Rhythm</div>
+          <div class="t-title">Down-down-up-up-down-up.</div>
+          <div class="t-desc">The strum pattern under most folk and country songs.</div>
+        </div>
+        <div class="t-pill done">✓ Completed</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>Risen Six · A CW Custom Guitars venture · 2026</footer>
+</main>
+
+<div class="ribbon">Direction 2: Studio Light · <a href="/mocks/">switch →</a></div>
+
+</body>
+</html>

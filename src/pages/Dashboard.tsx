@@ -98,125 +98,224 @@ export function Dashboard() {
     return () => { mounted = false }
   }, [user, profile])
 
-  const greeting = profile?.display_name ? `Welcome back, ${profile.display_name}.` : 'Welcome back.'
-
+  const firstName = profile?.display_name?.split(' ')[0] ?? 'friend'
   const earnedCount = MILESTONES.filter(
     m => computeMilestoneStatus(m, completedSlugs, startedSlugs) === 'earned'
   ).length
   const totalAvailable = MILESTONES.filter(m => m.requiredLessonSlugs.length > 0).length
 
+  const completedTotal = completedSlugs.size
+  const startedTotal = startedSlugs.size
+
   return (
     <AppLayout>
-      <div className="max-w-6xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <div className="eyebrow mb-3">Dashboard</div>
-        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-3">{greeting}</h1>
-        {!loading && totalAvailable > 0 && (
-          <p className="text-cream-50/70 text-sm mb-10">
-            <span className="text-gold-100">{earnedCount}</span> of{' '}
-            <span className="text-cream-50">{totalAvailable}</span> milestones earned
-            {' · '}
-            <span className="text-cream-50/80">{MILESTONES.length - totalAvailable} on the path ahead</span>
+      {/* Hero */}
+      <section className="pt-16 md:pt-20 pb-6 text-center">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <div className="eyebrow-hero">Welcome back</div>
+          <h1 className="h-display text-5xl md:text-7xl mt-2 max-w-[920px] mx-auto">
+            Hi, {firstName}.<span className="block text-gold-100">One lick closer.</span>
+          </h1>
+          <p className="mt-4 text-lg md:text-xl text-cream-50/75 max-w-[640px] mx-auto leading-snug tracking-[-0.012em]">
+            A short session is queued. Pick it up where you left off — or jump straight into the tools.
           </p>
-        )}
-
-        {/* Today's practice routine */}
-        <Link
-          to="/routine"
-          className="block card is-feature group mb-6"
-          style={{ padding: '1.75rem 2rem' }}
-        >
-          <div className="eyebrow mb-3">Today's routine</div>
-          <div className="h-display text-2xl md:text-3xl mb-2 group-hover:text-gold-100 transition">Open today's session →</div>
-          <p className="text-cream-50/80 text-sm md:text-base max-w-2xl">
-            A short, focused practice session generated for your level — warmup, drill, theory, jam, cooldown. 10, 20, or 30 minutes.
-          </p>
-        </Link>
-
-        {/* Today's challenge */}
-        {dailyChallenge && (
-          <Link
-            to="/daily"
-            className="block card group mb-6"
-            style={{ padding: '1.5rem 1.75rem' }}
-          >
-            <div className="flex items-start justify-between gap-4 flex-wrap">
-              <div className="flex-1 min-w-0">
-                <div className="eyebrow mb-2">Today's challenge · {dailyChallenge.duration} min</div>
-                <div className="h-display text-xl md:text-2xl mb-2 group-hover:text-gold-100 transition">{dailyChallenge.title}</div>
-                <p className="text-cream-50/80 text-sm md:text-base">{dailyChallenge.summary}</p>
-              </div>
-              <div className="flex flex-col items-end gap-2 shrink-0">
-                {dailyDone ? (
-                  <span className="pill">✓ Done today</span>
-                ) : (
-                  <span className="text-ember-500 font-semibold tracking-[0.22em] uppercase text-[11px]">
-                    Start →
-                  </span>
-                )}
-                <span className="text-cream-50/80 text-[11px] uppercase tracking-[0.22em]">
-                  🔥 {streak === 0 ? 'No streak yet' : `${streak} day${streak === 1 ? '' : 's'}`}
-                </span>
-              </div>
-            </div>
-          </Link>
-        )}
-
-        {/* Recommended next lesson */}
-        {next ? (
-          <Link
-            to={`/lessons/${next.slug}`}
-            className="block card is-feature group"
-            style={{ padding: '1.75rem 2rem' }}
-          >
-            <div className="eyebrow mb-3">Your next lesson · {next.focus_area_id}</div>
-            <div className="h-display text-2xl md:text-3xl mb-3 group-hover:text-gold-100 transition">{next.title}</div>
-            {next.summary && <p className="text-cream-50/70 text-base md:text-lg max-w-2xl">{next.summary}</p>}
-            <div className="mt-5 inline-flex items-center gap-2 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[11px]">
-              Open lesson <span className="transition group-hover:translate-x-1">→</span>
-            </div>
-          </Link>
-        ) : (
-          !loading && (
-            <div className="card is-feature" style={{ padding: '1.75rem 2rem' }}>
-              <div className="eyebrow mb-3">All caught up</div>
-              <div className="h-display text-2xl">Nice work.</div>
-              <p className="text-cream-50/80 mt-2">You've completed every lesson available at your level.</p>
-            </div>
-          )
-        )}
-
-        {/* Practice tools */}
-        <div className="mt-16">
-          <h2 className="h-section">Practice tools</h2>
-          <div className="hairline mt-2 mb-6" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-50/[0.06]">
-            <Link to="/licks" className="block bg-night-900 hover:bg-night-700/30 transition p-6 group">
-              <div className="eyebrow mb-3">Lick Library</div>
-              <div className="h-display text-xl mb-2 group-hover:text-gold-100 transition">Solo phrases worth stealing</div>
-              <p className="text-cream-50/80 text-sm leading-relaxed">Curated blues, rock, country, jazz, and folk licks with playback at any tempo.</p>
-              <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Browse →</div>
+          <div className="mt-7 flex items-center gap-5 justify-center flex-wrap">
+            <Link to="/routine" className="btn btn-primary" style={{ padding: '0.7rem 1.5rem' }}>
+              Start today's session
             </Link>
-            <Link to="/jam" className="block bg-night-900 hover:bg-night-700/30 transition p-6 group">
-              <div className="eyebrow mb-3">Jam Tracks Studio</div>
-              <div className="h-display text-xl mb-2 group-hover:text-gold-100 transition">Solo over a real groove</div>
-              <p className="text-cream-50/80 text-sm leading-relaxed">Drums, bass, and chord pad in any key. Pick a progression and start practicing.</p>
-              <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Open studio →</div>
-            </Link>
-            <Link to="/songs" className="block bg-night-900 hover:bg-night-700/30 transition p-6 group">
-              <div className="eyebrow mb-3">Songbook</div>
-              <div className="h-display text-xl mb-2 group-hover:text-gold-100 transition">Songs you can actually play</div>
-              <p className="text-cream-50/80 text-sm leading-relaxed">12 traditional folk tunes with auto-scrolling chord charts and click track.</p>
-              <div className="mt-3 text-ember-500 font-semibold tracking-[0.22em] uppercase text-[10px]">Browse songs →</div>
+            <Link to="/dashboard" className="btn-link text-ember-500">
+              See your routine
             </Link>
           </div>
         </div>
+      </section>
 
-        {/* Journey */}
-        <div className="mt-16">
+      {/* Today's session — dark feature card, like Apple's product hero */}
+      <section className="pb-4">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          {next ? (
+            <Link
+              to={`/lessons/${next.slug}`}
+              className="block relative overflow-hidden rounded-[18px] bg-black text-white"
+            >
+              <div
+                aria-hidden
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    'radial-gradient(900px 480px at 75% 25%, rgba(214,57,35,0.22), transparent 60%), radial-gradient(700px 460px at 15% 70%, rgba(0,102,204,0.12), transparent 60%)',
+                }}
+              />
+              <div className="relative p-8 md:p-12 min-h-[440px] flex flex-col">
+                <div className="text-[12px] font-semibold tracking-[0.10em] uppercase text-white/70">
+                  Today · 15-min drill
+                </div>
+                <h2 className="font-display font-semibold tracking-[-0.025em] text-3xl md:text-5xl leading-[1.05] mt-6 max-w-[680px]">
+                  {next.title}
+                </h2>
+                {next.summary && (
+                  <p className="mt-4 text-base md:text-lg text-white/75 max-w-[560px] leading-snug">
+                    {next.summary}
+                  </p>
+                )}
+                <div className="mt-auto pt-8 flex items-center gap-5 flex-wrap">
+                  <span className="btn btn-primary" style={{ background: '#FFFFFF', color: '#1D1D1F', padding: '0.7rem 1.5rem' }}>
+                    Start session
+                  </span>
+                  <span className="text-[#2997FF] text-base">See plan&nbsp;›</span>
+                </div>
+              </div>
+            </Link>
+          ) : !loading ? (
+            <div className="rounded-[18px] bg-white border border-black/[0.06] p-10 text-center">
+              <div className="eyebrow">All caught up</div>
+              <h2 className="h-display text-3xl mt-2">Nice work.</h2>
+              <p className="text-cream-50/70 mt-2 max-w-[480px] mx-auto">
+                You've completed every lesson available at your level. New material is on the way.
+              </p>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {/* Two-up: progress + Play Along (new feature spotlight) */}
+      <section className="pb-4">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            <div className="card flex flex-col text-center items-center" style={{ padding: '2.5rem 2rem 2rem', minHeight: '520px' }}>
+              <div className="eyebrow-hero">Your progress</div>
+              <h3 className="h-display text-3xl md:text-4xl mt-1 max-w-[440px]">
+                {completedTotal === 0
+                  ? `Your journey starts here.`
+                  : `${completedTotal} lesson${completedTotal === 1 ? '' : 's'} down${streak >= 2 ? `, ${streak}-day streak.` : '.'}`}
+              </h3>
+              <p className="mt-3 text-base text-cream-50/70 max-w-[420px] leading-snug">
+                {totalAvailable > 0
+                  ? `${earnedCount} of ${totalAvailable} milestones earned · ${MILESTONES.length - totalAvailable} on the path ahead.`
+                  : 'Build a streak, earn milestones, watch the fretboard open up.'}
+              </p>
+              <div className="mt-4 flex items-center gap-5 flex-wrap justify-center">
+                <Link to="/dashboard" className="btn-link text-ember-500">See your journey</Link>
+                <Link to="/routine" className="btn-link text-ember-500">All milestones</Link>
+              </div>
+              <div
+                className="mt-7 flex-1 w-full max-w-[440px] rounded-[14px] flex items-center justify-center relative"
+                style={{
+                  minHeight: '200px',
+                  background:
+                    'radial-gradient(360px 200px at 50% 30%, rgba(214,57,35,0.10), transparent 60%), linear-gradient(180deg,#F5F5F7,#E8E8ED)',
+                }}
+              >
+                <div className="text-center">
+                  <div className="font-display font-semibold tracking-[-0.03em] text-7xl md:text-8xl text-cream-50 leading-none">
+                    {startedTotal}
+                  </div>
+                  <div className="mt-2 text-[12px] tracking-[0.10em] uppercase text-gold-100 font-semibold">
+                    Lessons started
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              to="/play-along"
+              className="card is-dark flex flex-col text-center items-center group"
+              style={{ padding: '2.5rem 2rem 2rem', minHeight: '520px' }}
+            >
+              <div className="eyebrow-hero" style={{ color: '#FF8674' }}>Play Along · New</div>
+              <h3 className="h-display text-3xl md:text-4xl mt-1 max-w-[440px] text-white">
+                Slow any song down. Same key. Half the speed.
+              </h3>
+              <p className="mt-3 text-base text-white/75 max-w-[420px] leading-snug">
+                Drop in an MP3 you own. Drag the tempo to 50% and lift the lick — no pitch drift.
+              </p>
+              <div className="mt-4 flex items-center gap-5 flex-wrap justify-center">
+                <span className="btn-link" style={{ color: '#2997FF' }}>Open Play Along</span>
+                <span className="btn-link" style={{ color: '#2997FF' }}>How it works</span>
+              </div>
+              <div
+                className="mt-7 flex-1 w-full max-w-[440px] rounded-[14px] flex items-center justify-center relative"
+                style={{
+                  minHeight: '200px',
+                  background:
+                    'radial-gradient(360px 200px at 50% 30%, rgba(255,134,116,0.20), transparent 60%), linear-gradient(180deg,#0B0B0E,#15151A)',
+                }}
+              >
+                <div className="text-center">
+                  <div className="font-display font-semibold tracking-[-0.03em] text-7xl md:text-8xl text-white leading-none">
+                    50<span className="text-4xl md:text-5xl text-white/60 align-top ml-1">%</span>
+                  </div>
+                  <div className="mt-2 text-[12px] tracking-[0.10em] uppercase text-white/60 font-semibold">
+                    Tempo · pitch preserved
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Daily challenge — slim row */}
+      {dailyChallenge && (
+        <section className="pb-4">
+          <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+            <Link
+              to="/daily"
+              className="card flex items-start justify-between gap-6 flex-wrap"
+              style={{ padding: '1.5rem 1.75rem' }}
+            >
+              <div className="flex-1 min-w-0">
+                <div className="text-[13px] font-semibold text-gold-500">
+                  Today's challenge · {dailyChallenge.duration} min
+                </div>
+                <h3 className="h-display text-xl md:text-2xl mt-1">{dailyChallenge.title}</h3>
+                <p className="mt-1.5 text-[15px] text-cream-50/70 max-w-[640px] leading-snug">
+                  {dailyChallenge.summary}
+                </p>
+              </div>
+              <div className="flex flex-col items-end gap-2 shrink-0">
+                {dailyDone ? (
+                  <span className="pill" style={{ color: '#1D7F3F', borderColor: 'rgba(29,127,63,0.30)', background: 'rgba(29,127,63,0.06)' }}>✓ Done today</span>
+                ) : (
+                  <span className="text-ember-500 font-medium text-[15px]">Start&nbsp;›</span>
+                )}
+                <span className="text-[12px] text-gold-100">
+                  {streak === 0 ? 'No streak yet' : `🔥 ${streak} day${streak === 1 ? '' : 's'}`}
+                </span>
+              </div>
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* Practice tools — Apple-style centered tiles */}
+      <section className="pt-10 pb-4">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <div className="text-center mb-8">
+            <h2 className="h-section text-3xl md:text-4xl">Built around how guitarists actually practice.</h2>
+            <p className="mt-3 text-base md:text-lg text-cream-50/70 max-w-[560px] mx-auto leading-snug">
+              Tools designed to fit between your warmup and the moment you set the guitar down.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <ToolTile to="/play-along" eyebrow="Play Along" title="Slow it down without changing the key." caption="Drop in a file you own." glyph="▶" accent="#D63923" />
+            <ToolTile to="/licks" eyebrow="Lick Library" title="Solo phrases worth stealing." caption="Curated blues, rock, jazz, folk." glyph="♪" accent="#0066CC" />
+            <ToolTile to="/jam" eyebrow="Jam Studio" title="Solo over a real groove." caption="Drums, bass, chord pad — any key." glyph="∿" accent="#1D7F3F" />
+            <ToolTile to="/tuner" eyebrow="Tuner" title="Get in tune in seconds." caption="Standard and chromatic modes." glyph="◷" accent="#1D1D1F" />
+          </div>
+          <div className="mt-5 text-center">
+            <Link to="/songs" className="btn-link text-ember-500">Browse the songbook</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Journey */}
+      <section className="pt-12 pb-4">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
           <h2 className="h-section">Your journey</h2>
-          <div className="hairline mt-2 mb-10" />
+          <hr className="hairline mt-3 mb-8" />
           {loading ? (
-            <div className="text-sm text-cream-50/80 tracking-widest uppercase">Loading…</div>
+            <div className="text-sm text-cream-50/60">Loading…</div>
           ) : (
             <JourneyTimeline
               completedSlugs={completedSlugs}
@@ -225,58 +324,52 @@ export function Dashboard() {
             />
           )}
         </div>
+      </section>
 
-        {/* Focus areas — accordions */}
-        <div className="mt-20">
-          <div className="flex items-baseline justify-between mb-2">
+      {/* Focus areas */}
+      <section className="pt-12 pb-4">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <div className="flex items-baseline justify-between mb-3">
             <h2 className="h-section">Focus areas</h2>
-            <Link to="/theory" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">
-              Theory library →
-            </Link>
+            <Link to="/theory" className="btn-link text-ember-500">Theory library</Link>
           </div>
-          <div className="hairline mt-2 mb-6" />
-          <p className="text-xs text-cream-50/80 mb-5 leading-relaxed">
-            Click a topic to open its lessons. Foundational lessons (below your level) are collapsible inside each focus area, and you can mark them complete in bulk there.
+          <hr className="hairline mb-6" />
+          <p className="text-[14px] text-cream-50/70 mb-5 leading-snug max-w-[680px]">
+            Click a topic to open its lessons. Foundational lessons below your level live inside each focus area.
           </p>
-
           {loading ? (
-            <div className="text-sm text-cream-50/80 tracking-widest uppercase">Loading…</div>
+            <div className="text-sm text-cream-50/60">Loading…</div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-50/[0.06]">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
               {focusAreas.map((fa, idx) => {
                 const c = counts[fa.id] ?? { completed: 0, total: 0 }
                 const pct = c.total === 0 ? 0 : Math.round((c.completed / c.total) * 100)
                 return (
-                  <Link
-                    key={fa.id}
-                    to={`/focus/${fa.id}`}
-                    className="block bg-night-900 hover:bg-night-700/30 transition p-7 group"
-                  >
+                  <Link key={fa.id} to={`/focus/${fa.id}`} className="card group block" style={{ padding: '1.75rem' }}>
                     <div className="flex items-baseline justify-between mb-5">
                       <div className="prefix-num">{String(idx + 1).padStart(2, '0')}</div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/80">{c.completed}/{c.total}</div>
-                        <span className="text-cream-50/75 group-hover:text-gold-100 group-hover:translate-x-1 transition">→</span>
-                      </div>
+                      <div className="text-[12px] text-gold-100">{c.completed}/{c.total}</div>
                     </div>
-                    <div className="h-display text-xl md:text-2xl mb-3 group-hover:text-gold-100 transition">{fa.name}</div>
-                    <p className="text-sm text-cream-50/80 leading-relaxed line-clamp-2 mb-5">{fa.description}</p>
-                    <div className="h-px bg-night-700">
-                      <div className="h-full bg-gold-500 transition-all" style={{ width: `${pct}%` }} />
+                    <div className="h-display text-xl md:text-2xl mb-2 group-hover:text-ember-500 transition">{fa.name}</div>
+                    <p className="text-[14px] text-cream-50/70 leading-snug line-clamp-2 mb-4">{fa.description}</p>
+                    <div className="h-1 rounded-full bg-black/[0.08] overflow-hidden">
+                      <div className="h-full bg-cream-50" style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="text-[10px] uppercase tracking-[0.22em] text-cream-50/80 mt-2">{pct}% complete</div>
+                    <div className="text-[12px] text-gold-100 mt-2">{pct}% complete</div>
                   </Link>
                 )
               })}
             </div>
           )}
         </div>
+      </section>
 
-        {/* Profile snapshot */}
-        {profile && (
-          <div className="mt-20">
+      {/* Profile snapshot */}
+      {profile && (
+        <section className="pt-12 pb-6">
+          <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
             <h2 className="h-section">Your profile</h2>
-            <div className="hairline mt-2 mb-6" />
+            <hr className="hairline mt-3 mb-6" />
             <dl className="grid grid-cols-2 md:grid-cols-4 gap-y-5 gap-x-8 text-sm">
               <Item label="Ability">{prettyAbility(profile.ability_level)}</Item>
               <Item label="Reads tab">{profile.reads_tab ? 'Yes' : 'Not yet'}</Item>
@@ -284,9 +377,34 @@ export function Dashboard() {
               <Item label="Styles">{profile.preferred_styles.length ? profile.preferred_styles.join(', ') : '—'}</Item>
             </dl>
           </div>
-        )}
-      </div>
+        </section>
+      )}
     </AppLayout>
+  )
+}
+
+function ToolTile({
+  to, eyebrow, title, caption, glyph, accent,
+}: {
+  to: string; eyebrow: string; title: string; caption: string; glyph: string; accent: string
+}) {
+  return (
+    <Link to={to} className="card flex flex-col text-center items-center group" style={{ padding: '2rem 1.5rem', minHeight: '380px' }}>
+      <div className="text-[13px] font-semibold" style={{ color: accent }}>{eyebrow}</div>
+      <h4 className="h-display text-xl md:text-2xl mt-1 max-w-[200px] group-hover:text-ember-500 transition">{title}</h4>
+      <p className="mt-1.5 text-[14px] text-cream-50/70 leading-snug max-w-[220px]">{caption}</p>
+      <div
+        className="mt-5 flex-1 w-full rounded-[12px] flex items-center justify-center text-[48px] font-semibold tracking-[-0.03em] leading-none"
+        style={{
+          minHeight: '120px',
+          color: accent,
+          background: 'linear-gradient(180deg,#F5F5F7,#E8E8ED)',
+        }}
+      >
+        {glyph}
+      </div>
+      <div className="mt-4 text-[13px] text-ember-500">Open&nbsp;›</div>
+    </Link>
   )
 }
 
@@ -322,8 +440,8 @@ async function recommendNextLesson(userId: string, abilityLevel: string): Promis
 function Item({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-[10px] uppercase tracking-[0.28em] text-cream-50/80 mb-1">{label}</dt>
-      <dd className="text-cream-50">{children}</dd>
+      <dt className="text-[12px] text-gold-100 mb-1 font-medium">{label}</dt>
+      <dd className="text-cream-50 text-[15px]">{children}</dd>
     </div>
   )
 }

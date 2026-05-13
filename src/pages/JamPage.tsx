@@ -69,47 +69,65 @@ export function JamPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
-        <div className="eyebrow mt-6 mb-3">Jam Tracks Studio</div>
-        <h1 className="h-display text-3xl md:text-5xl tracking-[0.06em] mb-4">Solo over a real groove.</h1>
-        <p className="text-cream-50/80 text-base md:text-lg max-w-2xl leading-relaxed mb-10">
-          Pick a key, a progression, and a tempo. Drums, bass, and chord pad will hold down the groove while you take the wheel.
-        </p>
+      <section className="pt-14 md:pt-20 pb-6 text-center">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <Link to="/dashboard" className="btn-link text-ember-500 text-[14px]">← Back home</Link>
+          <div className="eyebrow-hero mt-6">Jam Tracks Studio</div>
+          <h1 className="h-display text-5xl md:text-6xl mt-2">
+            Solo over<span className="block text-gold-100">a real groove.</span>
+          </h1>
+          <p className="mt-4 text-lg text-cream-50/75 max-w-[640px] mx-auto leading-snug tracking-[-0.012em]">
+            Pick a key, a progression, a tempo. Drums, bass, and chord pad hold down the groove. You take the wheel.
+          </p>
+        </div>
+      </section>
 
-        {/* Now playing card */}
-        <div className="card is-feature p-6 md:p-8 mb-10">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10">
-            <div className="flex-1 min-w-0">
-              <div className="eyebrow mb-2">{playing ? 'Now playing' : 'Ready'}</div>
-              <div className="h-display text-5xl md:text-6xl text-gold-100 tabular-nums">
-                {bar?.symbol ?? '—'}
-              </div>
-              {playing && totalBars > 0 && (
-                <div className="text-cream-50/80 text-sm mt-3 tracking-[0.22em] uppercase">
-                  Bar {barIdx + 1} of {totalBars}
+      <div className="max-w-[960px] mx-auto px-5 sm:px-6 pb-14">
+        {/* Now playing — dark feature card */}
+        <div className="rounded-[18px] bg-black text-white overflow-hidden relative mb-8">
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(700px 360px at 80% 20%, rgba(255,134,116,0.15), transparent 60%), radial-gradient(560px 320px at 20% 80%, rgba(41,151,255,0.10), transparent 60%)',
+            }}
+          />
+          <div className="relative p-7 md:p-9">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10">
+              <div className="flex-1 min-w-0">
+                <div className="text-[12px] font-semibold tracking-[0.10em] uppercase text-white/70">
+                  {playing ? 'Now playing' : 'Ready'}
                 </div>
-              )}
+                <div className="font-display font-semibold tracking-[-0.03em] text-6xl md:text-7xl text-white tabular-nums mt-2">
+                  {bar?.symbol ?? '—'}
+                </div>
+                {playing && totalBars > 0 && (
+                  <div className="text-white/70 text-[14px] mt-3 font-medium">
+                    Bar {barIdx + 1} of {totalBars}
+                  </div>
+                )}
+              </div>
+              {bar && <ChordDiagram {...bar.diagram} />}
             </div>
-            {bar && <ChordDiagram {...bar.diagram} />}
-          </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={handlePlay}
-              className="btn btn-primary"
-            >
-              {playing ? '■ Stop' : '▶ Play'}
-            </button>
-            <ChannelToggle label="Drums" muted={muted.drums} onClick={() => toggleMute('drums')} />
-            <ChannelToggle label="Bass" muted={muted.bass} onClick={() => toggleMute('bass')} />
-            <ChannelToggle label="Pad" muted={muted.pad} onClick={() => toggleMute('pad')} />
+            <div className="mt-7 flex flex-wrap gap-2.5">
+              <button
+                type="button"
+                onClick={handlePlay}
+                className="btn"
+                style={{ background: '#FFFFFF', color: '#1D1D1F', padding: '0.7rem 1.5rem', fontWeight: 600 }}
+              >
+                {playing ? '■ Stop' : '▶ Play'}
+              </button>
+              <ChannelToggle label="Drums" muted={muted.drums} onClick={() => toggleMute('drums')} />
+              <ChannelToggle label="Bass" muted={muted.bass} onClick={() => toggleMute('bass')} />
+              <ChannelToggle label="Pad" muted={muted.pad} onClick={() => toggleMute('pad')} />
+            </div>
           </div>
         </div>
 
         {/* Tempo */}
-        <div className="mb-10">
+        <div className="card mb-3.5" style={{ padding: '1.75rem 2rem' }}>
           <div className="eyebrow mb-3">Tempo</div>
           <div className="flex items-center gap-4">
             <input
@@ -119,14 +137,18 @@ export function JamPage() {
               step={1}
               value={bpm}
               onChange={e => handleBpm(Number(e.target.value))}
-              className="flex-1 accent-gold-500"
+              className="flex-1"
+              style={{ accentColor: '#0066CC' }}
+              aria-label="Tempo"
             />
-            <span className="text-cream-50 tabular-nums w-20 text-right text-lg">{bpm} BPM</span>
+            <span className="text-cream-50 tabular-nums w-24 text-right text-[18px] font-semibold">
+              {bpm} BPM
+            </span>
           </div>
         </div>
 
         {/* Key */}
-        <div className="mb-10">
+        <div className="card mb-3.5" style={{ padding: '1.75rem 2rem' }}>
           <div className="eyebrow mb-3">Key</div>
           <div className="flex flex-wrap gap-2">
             {ALL_KEYS.map(k => (
@@ -134,11 +156,12 @@ export function JamPage() {
                 key={k}
                 type="button"
                 onClick={() => handleKey(k)}
-                className={`text-sm font-display tracking-wider px-4 py-2 border transition ${
-                  k === keyRoot
-                    ? 'border-gold-500 bg-gold-500/10 text-gold-100'
-                    : 'border-cream-50/[0.12] text-cream-50/80 hover:border-gold-500/50 hover:text-cream-50'
-                }`}
+                className="px-4 py-2 rounded-full text-[14px] font-medium transition"
+                style={{
+                  border: `1px solid ${k === keyRoot ? '#0066CC' : 'rgba(0,0,0,0.10)'}`,
+                  background: k === keyRoot ? '#0066CC' : '#FFFFFF',
+                  color: k === keyRoot ? '#FFFFFF' : '#1D1D1F',
+                }}
               >
                 {k}
               </button>
@@ -147,31 +170,34 @@ export function JamPage() {
         </div>
 
         {/* Progression */}
-        <div className="mb-10">
+        <div className="card" style={{ padding: '1.75rem 2rem' }}>
           <div className="eyebrow mb-3">Progression</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-cream-50/[0.06]">
-            {PROGRESSIONS.map(p => (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => handleProgression(p)}
-                className={`block text-left p-5 transition ${
-                  p.id === progression.id
-                    ? 'bg-gold-500/10 border-l-2 border-gold-500'
-                    : 'bg-night-900 hover:bg-night-700/30 border-l-2 border-transparent'
-                }`}
-              >
-                <div className="h-display text-lg mb-1">{p.name}</div>
-                <p className="text-cream-50/80 text-sm leading-relaxed">{p.summary}</p>
-                <div className="mt-2 text-[10px] uppercase tracking-[0.22em] text-cream-50/60">
-                  {p.bars.length} bars · {p.drumStyle}
-                </div>
-              </button>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {PROGRESSIONS.map(p => {
+              const isActive = p.id === progression.id
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => handleProgression(p)}
+                  className="block text-left rounded-[12px] p-5 transition"
+                  style={{
+                    border: `1px solid ${isActive ? '#0066CC' : 'rgba(0,0,0,0.10)'}`,
+                    background: isActive ? 'rgba(0,102,204,0.05)' : '#FFFFFF',
+                  }}
+                >
+                  <div className="h-display text-lg mb-1">{p.name}</div>
+                  <p className="text-cream-50/70 text-[14px] leading-snug">{p.summary}</p>
+                  <div className="mt-2 text-[12px] text-gold-100 font-medium">
+                    {p.bars.length} bars · {p.drumStyle}
+                  </div>
+                </button>
+              )
+            })}
           </div>
         </div>
 
-        <p className="text-xs text-cream-50/60 mt-8">
+        <p className="text-[13px] text-gold-100 mt-6 leading-snug">
           Tip: solo over the chord shown above. The notes inside the chord are always safe; the rest of the diatonic scale gives you melodic options.
         </p>
       </div>
@@ -184,11 +210,12 @@ function ChannelToggle({ label, muted, onClick }: { label: string; muted: boolea
     <button
       type="button"
       onClick={onClick}
-      className={`text-[11px] uppercase tracking-[0.22em] px-3.5 py-2 border transition ${
-        muted
-          ? 'border-cream-50/[0.12] text-cream-50/40'
-          : 'border-gold-500/40 text-gold-100 bg-gold-500/5'
-      }`}
+      className="px-3.5 py-1.5 rounded-full text-[13px] font-medium transition"
+      style={{
+        border: `1px solid ${muted ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.30)'}`,
+        background: muted ? 'transparent' : 'rgba(255,255,255,0.12)',
+        color: muted ? 'rgba(255,255,255,0.45)' : '#FFFFFF',
+      }}
       aria-pressed={!muted}
     >
       {muted ? `${label} muted` : label}

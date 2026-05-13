@@ -7,10 +7,9 @@ import {
   STANDARD_TUNING,
 } from '../lib/pitch'
 
-/**
- * Basic tuner — minimal UI focused on the six strings of standard tuning.
- * No cents, no Hz. Pluck a string; the page tells you up / down / in tune.
- */
+const COLOR_IN_TUNE = '#1D7F3F'
+const COLOR_NEEDS_TUNE = '#D63923'
+
 export function TunerPage() {
   const [listening, setListening] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -78,7 +77,6 @@ export function TunerPage() {
 
   useEffect(() => () => stop(), [])
 
-  // Determine the active string + state
   let activeStringName: string | null = null
   let direction: 'up' | 'down' | 'in' | null = null
   if (pitch && pitch > 30 && pitch < 2000) {
@@ -90,110 +88,119 @@ export function TunerPage() {
   }
 
   const guidance =
-    direction === 'in' ? 'In tune'
-    : direction === 'up' ? 'Tune up — turn the peg toward higher pitch'
-    : direction === 'down' ? 'Tune down — turn the peg toward lower pitch'
-    : listening ? 'Listening — pluck a string'
-    : 'Tap "Start" then pluck any string'
+    listening ? 'Listening — pluck a string'
+    : 'Tap "Start" then pluck any string.'
 
   return (
     <AppLayout>
-      <div className="max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/dashboard" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Home</Link>
-        <div className="eyebrow mt-6 mb-3">Tools</div>
-        <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Tuner</h1>
-        <p className="text-lg text-cream-50/70 mt-4 max-w-2xl leading-relaxed">
-          Pluck any string. The right string lights up — gold means in tune.
-        </p>
+      <section className="pt-14 md:pt-20 pb-6 text-center">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <Link to="/dashboard" className="btn-link text-ember-500 text-[14px]">← Back home</Link>
+          <div className="eyebrow-hero mt-6">Tools · Tuner</div>
+          <h1 className="h-display text-5xl md:text-6xl mt-2">
+            Pluck a string.<span className="block text-gold-100">We'll do the rest.</span>
+          </h1>
+          <p className="mt-4 text-lg text-cream-50/75 max-w-[560px] mx-auto leading-snug tracking-[-0.012em]">
+            The right string lights up. Green means in tune. Red arrows tell you which way to turn.
+          </p>
+        </div>
+      </section>
 
-        <div className="hairline mt-8 mb-12" />
-
+      <div className="max-w-[920px] mx-auto px-5 sm:px-6 pb-14">
         {/* Six strings */}
-        <div className="grid grid-cols-6 gap-2 sm:gap-3 mb-10">
+        <div className="grid grid-cols-6 gap-2 sm:gap-3 mb-8">
           {STANDARD_TUNING.map(s => {
             const isActive = s.name === activeStringName
-            const cls =
-              isActive && direction === 'in'   ? 'border-gold-500 bg-gold-500/20 text-cream-50' :
-              isActive && direction === 'up'   ? 'border-ember-500 bg-ember-500/20 text-cream-50' :
-              isActive && direction === 'down' ? 'border-ember-500 bg-ember-500/20 text-cream-50' :
-              'border-cream-50/[0.12] text-cream-50/70'
+            const tintColor =
+              isActive && direction === 'in' ? COLOR_IN_TUNE :
+              isActive ? COLOR_NEEDS_TUNE : null
+
             return (
               <div
                 key={s.name}
-                className={`text-center py-6 sm:py-8 border-2 transition-all ${cls}`}
+                className="text-center py-6 sm:py-9 rounded-[14px] transition-all"
+                style={{
+                  border: `1px solid ${tintColor ?? 'rgba(0,0,0,0.10)'}`,
+                  background: tintColor ? `${tintColor}14` : '#FFFFFF',
+                }}
               >
-                <div className="font-display text-3xl sm:text-5xl tracking-[0.04em]">{s.name[0]}</div>
-                <div className="text-[9px] uppercase tracking-[0.22em] text-cream-50/80 mt-2">String {s.stringNum}</div>
+                <div
+                  className="font-display font-semibold text-3xl sm:text-5xl tracking-[-0.02em]"
+                  style={{ color: tintColor ?? '#1D1D1F' }}
+                >
+                  {s.name[0]}
+                </div>
+                <div className="text-[11px] text-gold-100 mt-2 font-medium">
+                  String {s.stringNum}
+                </div>
               </div>
             )
           })}
         </div>
 
         {/* Big direction display */}
-        <div className="text-center mb-8 min-h-[120px] flex flex-col items-center justify-center">
+        <div className="card text-center" style={{ padding: '2.5rem 2rem', minHeight: '180px' }}>
           {direction === 'in' && (
             <>
-              <div className="text-7xl mb-2" style={{ color: '#C9962B' }}>✓</div>
-              <div className="text-lg uppercase tracking-[0.18em]" style={{ color: '#C9962B' }}>In tune</div>
+              <div className="text-7xl mb-2" style={{ color: COLOR_IN_TUNE }}>✓</div>
+              <div className="text-lg font-semibold" style={{ color: COLOR_IN_TUNE }}>In tune</div>
             </>
           )}
           {direction === 'up' && (
             <>
-              <div className="text-7xl mb-2" style={{ color: '#E25C2B' }}>↑</div>
-              <div className="text-base uppercase tracking-[0.16em] text-cream-50/85">Tune up</div>
-              <div className="text-xs text-cream-50/70 mt-1">Turn the peg to raise the pitch</div>
+              <div className="text-7xl mb-2" style={{ color: COLOR_NEEDS_TUNE }}>↑</div>
+              <div className="text-base font-semibold text-cream-50">Tune up</div>
+              <div className="text-[14px] text-cream-50/70 mt-1">Turn the peg to raise the pitch.</div>
             </>
           )}
           {direction === 'down' && (
             <>
-              <div className="text-7xl mb-2" style={{ color: '#E25C2B' }}>↓</div>
-              <div className="text-base uppercase tracking-[0.16em] text-cream-50/85">Tune down</div>
-              <div className="text-xs text-cream-50/70 mt-1">Turn the peg to lower the pitch</div>
+              <div className="text-7xl mb-2" style={{ color: COLOR_NEEDS_TUNE }}>↓</div>
+              <div className="text-base font-semibold text-cream-50">Tune down</div>
+              <div className="text-[14px] text-cream-50/70 mt-1">Turn the peg to lower the pitch.</div>
             </>
           )}
           {!direction && (
-            <div className="text-cream-50/70">{guidance}</div>
+            <div className="text-cream-50/65 text-[16px] pt-8">{guidance}</div>
           )}
         </div>
 
         {/* Start / stop */}
-        <div className="text-center">
+        <div className="text-center mt-8">
           {listening ? (
-            <button type="button" onClick={stop} className="btn btn-ghost" style={{ padding: '0.85rem 2.25rem' }}>
+            <button type="button" onClick={stop} className="btn btn-ghost" style={{ padding: '0.75rem 2rem', fontSize: '16px' }}>
               Stop
             </button>
           ) : (
-            <button type="button" onClick={start} className="btn btn-primary" style={{ padding: '0.85rem 2.25rem' }}>
+            <button type="button" onClick={start} className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '16px' }}>
               Start
             </button>
           )}
         </div>
 
         {error && (
-          <div className="card mt-6" style={{ padding: '1rem 1.25rem', borderColor: 'rgba(226,92,43,0.5)' }}>
-            <div className="text-sm text-cream-50/85">{error}</div>
+          <div
+            className="mt-6 rounded-[12px] p-4 text-[14px]"
+            style={{ background: 'rgba(214,57,35,0.06)', border: '1px solid rgba(214,57,35,0.25)', color: '#A52917' }}
+          >
+            {error}
           </div>
         )}
 
-        {/* Link to advanced */}
-        <div className="mt-12 text-center">
-          <Link
-            to="/tuner/advanced"
-            className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition"
-          >
-            Need more detail? Open the chromatic tuner →
+        <div className="mt-10 text-center">
+          <Link to="/tuner/advanced" className="text-ember-500 text-[14px] hover:underline">
+            Need more detail? Open the chromatic tuner&nbsp;›
           </Link>
         </div>
 
-        {/* Tips */}
         {!listening && !error && (
-          <div className="mt-12 card" style={{ padding: '1.25rem 1.5rem' }}>
+          <div className="mt-10 card" style={{ padding: '1.75rem 2rem' }}>
             <div className="eyebrow mb-3">If a string won't light up</div>
-            <ul className="text-sm text-cream-50/70 space-y-2 list-disc pl-5">
+            <ul className="text-[15px] text-cream-50/75 space-y-2 list-disc pl-5 leading-snug">
               <li>Mute the strings you're not tuning so the tuner only hears one note.</li>
               <li>Pluck firmly. Whisper-quiet plucks fade too fast to read.</li>
               <li>For acoustic, point the soundhole at your phone.</li>
-              <li>Quiet room helps — air conditioning, traffic, and TVs throw the reading.</li>
+              <li>Quiet room helps — AC, traffic, and TVs throw the reading.</li>
             </ul>
           </div>
         )}

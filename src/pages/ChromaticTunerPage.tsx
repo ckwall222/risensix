@@ -97,28 +97,45 @@ export function ChromaticTunerPage() {
   const clampedCents = Math.max(-50, Math.min(50, displayCents))
   const needleRotate = (clampedCents / 50) * 45
 
+  const COLOR_IN = '#1D7F3F'
+  const COLOR_CLOSE = '#B07A1A'
+  const COLOR_OFF = '#D63923'
+  const COLOR_TICK = 'rgba(0,0,0,0.30)'
+  const COLOR_TICK_ZERO = '#1D7F3F'
+  const COLOR_DIAL = 'rgba(0,0,0,0.20)'
+  const needleColor = inTune ? COLOR_IN : close ? COLOR_CLOSE : COLOR_OFF
+
   return (
     <AppLayout>
-      <div className="max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-16">
-        <Link to="/tuner" className="text-[10px] uppercase tracking-[0.28em] text-gold-100 hover:text-cream-50 transition">← Basic tuner</Link>
-        <div className="eyebrow mt-6 mb-3">Tools</div>
-        <h1 className="h-display text-4xl md:text-5xl tracking-[0.06em]">Chromatic tuner</h1>
-        <p className="text-lg text-cream-50/70 mt-4 max-w-2xl leading-relaxed">
-          Any pitch, any semitone — with cents-off and frequency. For alternate tunings, intonation checks, and fine adjustments.
-        </p>
+      <section className="pt-14 md:pt-20 pb-6 text-center">
+        <div className="max-w-[1080px] mx-auto px-5 sm:px-6">
+          <Link to="/tuner" className="btn-link text-ember-500 text-[14px]">← Basic tuner</Link>
+          <div className="eyebrow-hero mt-6">Tools · Chromatic tuner</div>
+          <h1 className="h-display text-5xl md:text-6xl mt-2">
+            Any pitch.<span className="block text-gold-100">Cents-perfect.</span>
+          </h1>
+          <p className="mt-4 text-lg text-cream-50/75 max-w-[560px] mx-auto leading-snug tracking-[-0.012em]">
+            For alternate tunings, intonation checks, and fine adjustments.
+          </p>
+        </div>
+      </section>
 
-        <div className="hairline mt-8 mb-8" />
-
+      <div className="max-w-[720px] mx-auto px-5 sm:px-6 pb-14">
         {!listening && !error && (
-          <button type="button" onClick={start} className="btn btn-primary">
-            Start chromatic tuner
-          </button>
+          <div className="text-center">
+            <button type="button" onClick={start} className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '16px' }}>
+              Start chromatic tuner
+            </button>
+          </div>
         )}
 
         {error && (
-          <div className="card" style={{ padding: '1rem 1.25rem', borderColor: 'rgba(226,92,43,0.5)' }}>
-            <div className="text-sm text-cream-50/85">{error}</div>
-            <button type="button" onClick={start} className="btn btn-ghost mt-3" style={{ padding: '0.5rem 1rem' }}>
+          <div
+            className="rounded-[12px] p-4 text-[14px]"
+            style={{ background: 'rgba(214,57,35,0.06)', border: '1px solid rgba(214,57,35,0.25)', color: '#A52917' }}
+          >
+            <div>{error}</div>
+            <button type="button" onClick={start} className="btn btn-ghost mt-3" style={{ padding: '0.5rem 1.25rem', fontSize: '14px' }}>
               Try again
             </button>
           </div>
@@ -126,10 +143,10 @@ export function ChromaticTunerPage() {
 
         {listening && (
           <>
-            <div className="text-center">
+            <div className="card text-center" style={{ padding: '2.5rem 2rem 2rem' }}>
               <div className="relative mx-auto" style={{ width: 280, height: 200 }}>
                 <svg viewBox="-110 -100 220 130" width="100%" height="100%">
-                  <path d="M -90 0 A 90 90 0 0 1 90 0" fill="none" stroke="#1A1A1A" strokeWidth={2} />
+                  <path d="M -90 0 A 90 90 0 0 1 90 0" fill="none" stroke={COLOR_DIAL} strokeWidth={2} />
                   {[-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50].map(c => {
                     const angle = (c / 50) * 45 - 90
                     const rad = angle * Math.PI / 180
@@ -140,34 +157,29 @@ export function ChromaticTunerPage() {
                         key={c}
                         x1={r1 * Math.cos(rad)} y1={r1 * Math.sin(rad)}
                         x2={r2 * Math.cos(rad)} y2={r2 * Math.sin(rad)}
-                        stroke={c === 0 ? '#F8DC91' : '#6B4515'}
+                        stroke={c === 0 ? COLOR_TICK_ZERO : COLOR_TICK}
                         strokeWidth={c === 0 ? 2 : 1}
                       />
                     )
                   })}
                   <path
                     d={`M ${-Math.sin(5/50*45*Math.PI/180)*82} ${-Math.cos(5/50*45*Math.PI/180)*82} A 82 82 0 0 1 ${Math.sin(5/50*45*Math.PI/180)*82} ${-Math.cos(5/50*45*Math.PI/180)*82}`}
-                    fill="none" stroke="#C9962B" strokeWidth={3} opacity={inTune ? 0.9 : 0.4}
+                    fill="none" stroke={COLOR_IN} strokeWidth={3} opacity={inTune ? 0.9 : 0.25}
                   />
                   <g transform={`rotate(${needleRotate})`}>
-                    <line x1={0} y1={0} x2={0} y2={-72}
-                      stroke={inTune ? '#C9962B' : close ? '#F8DC91' : '#E25C2B'}
-                      strokeWidth={3} strokeLinecap="round" />
-                    <circle cx={0} cy={0} r={5} fill={inTune ? '#C9962B' : close ? '#F8DC91' : '#E25C2B'} />
+                    <line x1={0} y1={0} x2={0} y2={-72} stroke={needleColor} strokeWidth={3} strokeLinecap="round" />
+                    <circle cx={0} cy={0} r={5} fill={needleColor} />
                   </g>
-                  <text x={-90} y={20} fontSize={9} fill="#6B4515" textAnchor="middle" fontFamily="Cinzel, serif">−50¢</text>
-                  <text x={0}   y={20} fontSize={9} fill="#F8DC91" textAnchor="middle" fontFamily="Cinzel, serif">0</text>
-                  <text x={90}  y={20} fontSize={9} fill="#6B4515" textAnchor="middle" fontFamily="Cinzel, serif">+50¢</text>
+                  <text x={-90} y={20} fontSize={9} fill="rgba(0,0,0,0.45)" textAnchor="middle">−50¢</text>
+                  <text x={0}   y={20} fontSize={9} fill={COLOR_IN} textAnchor="middle" fontWeight="600">0</text>
+                  <text x={90}  y={20} fontSize={9} fill="rgba(0,0,0,0.45)" textAnchor="middle">+50¢</text>
                 </svg>
               </div>
 
-              <div className="font-display text-6xl md:text-8xl tracking-[0.04em] text-cream-50 mb-2">
+              <div className="font-display font-semibold tracking-[-0.03em] text-6xl md:text-7xl text-cream-50 mt-2">
                 {displayNote}
               </div>
-              <div
-                className="text-lg tracking-[0.08em] uppercase mb-1"
-                style={{ color: inTune ? '#C9962B' : close ? '#F8DC91' : '#E25C2B' }}
-              >
+              <div className="text-[15px] font-semibold mt-2" style={{ color: needleColor }}>
                 {pitch ? (
                   inTune ? '✓ In tune'
                   : displayCents > 0 ? `+${displayCents.toFixed(0)}¢ — flatten`
@@ -175,27 +187,32 @@ export function ChromaticTunerPage() {
                 ) : 'Listening…'}
               </div>
               {displayHz > 0 && (
-                <div className="text-xs text-cream-50/80 tracking-widest uppercase">{displayHz.toFixed(2)} Hz</div>
+                <div className="text-[12px] text-gold-100 font-medium mt-1">{displayHz.toFixed(2)} Hz</div>
               )}
             </div>
 
-            {/* Standard-tuning string row, for reference */}
-            <div className="mt-10">
+            <div className="mt-6">
               <div className="eyebrow mb-3 text-center">Standard tuning reference</div>
               <div className="grid grid-cols-6 gap-2">
                 {STANDARD_TUNING.map(s => {
                   const isClosest = s.name === closestStringName
+                  const tint = isClosest && inTune ? COLOR_IN : isClosest ? COLOR_OFF : null
                   return (
                     <div
                       key={s.name}
-                      className={`text-center py-3 border transition ${
-                        isClosest && inTune ? 'border-gold-500 bg-gold-500/15 text-cream-50'
-                        : isClosest ? 'border-ember-500 bg-ember-500/10 text-cream-50'
-                        : 'border-cream-50/[0.08] text-cream-50/70'
-                      }`}
+                      className="text-center py-3 rounded-[10px] transition"
+                      style={{
+                        border: `1px solid ${tint ?? 'rgba(0,0,0,0.10)'}`,
+                        background: tint ? `${tint}14` : '#FFFFFF',
+                      }}
                     >
-                      <div className="font-display text-lg tracking-[0.06em]">{s.name}</div>
-                      <div className="text-[10px] text-cream-50/80 tracking-widest mt-1">{s.freq.toFixed(2)} Hz</div>
+                      <div
+                        className="font-display font-semibold text-lg tracking-[-0.01em]"
+                        style={{ color: tint ?? '#1D1D1F' }}
+                      >
+                        {s.name}
+                      </div>
+                      <div className="text-[10px] text-gold-100 mt-1 font-medium">{s.freq.toFixed(2)} Hz</div>
                     </div>
                   )
                 })}
@@ -203,7 +220,7 @@ export function ChromaticTunerPage() {
             </div>
 
             <div className="mt-8 text-center">
-              <button type="button" onClick={stop} className="btn btn-ghost">
+              <button type="button" onClick={stop} className="btn btn-ghost" style={{ padding: '0.6rem 1.5rem' }}>
                 Stop tuner
               </button>
             </div>

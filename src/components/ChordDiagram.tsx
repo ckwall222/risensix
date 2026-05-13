@@ -38,12 +38,15 @@ const PAD_X = 16
 const PAD_TOP = 32
 const PAD_BOTTOM = 24
 
-const STRING_COLOR = '#C9962B'
-const FRET_COLOR = '#6B4515'
-const NUT_COLOR = '#FAF6EE'
-const DOT_FILL = '#E25C2B'
-const TEXT_BRIGHT = '#FAF6EE'
-const TEXT_TITLE = '#F8DC91'
+const STRING_COLOR = 'rgba(0,0,0,0.55)'
+const FRET_COLOR = 'rgba(0,0,0,0.30)'
+const NUT_COLOR = '#1D1D1F'
+const DOT_FILL = '#D63923'
+const DOT_STROKE = '#FFFFFF'
+const DOT_TEXT = '#FFFFFF'
+const TEXT_BRIGHT = '#1D1D1F'
+const TEXT_TITLE = '#D63923'
+const SYSTEM_FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, sans-serif'
 
 export function ChordDiagram({
   name,
@@ -102,7 +105,7 @@ export function ChordDiagram({
           y={14}
           textAnchor="middle"
           fontSize={12}
-          fontFamily="Cinzel, serif"
+          fontFamily={SYSTEM_FONT}
           fill={TEXT_TITLE}
           letterSpacing="0.16em"
         >
@@ -111,8 +114,8 @@ export function ChordDiagram({
       )}
 
       {/* Play affordance — small triangle in upper right */}
-      <g transform={`translate(${width - 14}, 10)`} opacity={playing ? 1 : 0.55}>
-        <circle r={6} fill="rgba(226,92,43,0.15)" stroke={DOT_FILL} strokeWidth={0.8} />
+      <g transform={`translate(${width - 14}, 10)`} opacity={playing ? 1 : 0.7}>
+        <circle r={6} fill="rgba(214,57,35,0.10)" stroke={DOT_FILL} strokeWidth={0.8} />
         <path d="M -1.5 -2.5 L 2.5 0 L -1.5 2.5 Z" fill={DOT_FILL} />
       </g>
 
@@ -159,7 +162,7 @@ export function ChordDiagram({
           y={fretLineY(1) + 4}
           textAnchor="start"
           fontSize={10}
-          fontFamily="Inter, system-ui, sans-serif"
+          fontFamily={SYSTEM_FONT}
           fontWeight={600}
           fill={TEXT_BRIGHT}
         >
@@ -195,7 +198,7 @@ export function ChordDiagram({
           height={12}
           rx={6}
           fill={DOT_FILL}
-          stroke="#0A0A0A"
+          stroke={DOT_STROKE}
           strokeWidth={1}
         />
       )}
@@ -211,16 +214,16 @@ export function ChordDiagram({
         const finger = fingers?.[i]
         return (
           <g key={`dot-${i}`}>
-            <circle cx={x} cy={y} r={7} fill={DOT_FILL} stroke="#0A0A0A" strokeWidth={1} />
+            <circle cx={x} cy={y} r={7} fill={DOT_FILL} stroke={DOT_STROKE} strokeWidth={1} />
             {finger && (
               <text
                 x={x}
                 y={y + 3}
                 textAnchor="middle"
                 fontSize={9}
-                fontFamily="Inter, sans-serif"
+                fontFamily={SYSTEM_FONT}
                 fontWeight={700}
-                fill="#0A0A0A"
+                fill={DOT_TEXT}
               >
                 {finger}
               </text>

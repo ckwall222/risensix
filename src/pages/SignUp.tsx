@@ -18,27 +18,28 @@ export function SignUp() {
     setError(null)
     const { error } = await signUp(email, password, displayName.trim() || undefined)
     setSubmitting(false)
-    if (error) {
-      setError(error)
-      return
-    }
+    if (error) { setError(error); return }
     setSentTo(email)
   }
 
   if (sentTo) {
     return (
-      <AuthLayout title="Check your inbox" subtitle="One last step before we tune you in.">
-        <div className="rounded-lg border border-gold-500/30 bg-gold-500/5 p-6 space-y-4">
-          <p className="text-cream-50">
-            We sent a confirmation link to <strong className="text-gold-100">{sentTo}</strong>.
+      <AuthLayout title="Check your inbox." subtitle="One last step before we tune you in.">
+        <div
+          className="rounded-[14px] p-5 space-y-3"
+          style={{ border: '1px solid rgba(0,0,0,0.10)', background: '#FFFFFF' }}
+        >
+          <p className="text-cream-50 text-[16px]">
+            We sent a confirmation link to <strong>{sentTo}</strong>.
           </p>
-          <p className="text-sm text-cream-50/70">
-            Click the link in that email to verify your account, then come back and sign in. The link expires in 24 hours.
+          <p className="text-[14px] text-cream-50/70 leading-snug">
+            Click the link in that email to verify your account, then come back and sign in.
+            The link expires in 24 hours.
           </p>
         </div>
-        <p className="text-center text-sm text-cream-50/80 pt-6">
+        <p className="text-center text-[15px] text-cream-50/70 pt-6">
           Already confirmed?{' '}
-          <Link to="/signin" className="text-gold-100 underline underline-offset-4 hover:text-gold-100">
+          <Link to="/signin" className="text-ember-500 hover:underline">
             Sign in
           </Link>
         </p>
@@ -47,7 +48,7 @@ export function SignUp() {
   }
 
   return (
-    <AuthLayout title="Create your account" subtitle="A few seconds. Then we'll learn what kind of guitarist you want to become.">
+    <AuthLayout title="Create your account." subtitle="A few seconds. Then we'll learn what kind of guitarist you want to become.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <Field label="First name (or what to call you)">
           <input
@@ -83,7 +84,14 @@ export function SignUp() {
         </Field>
 
         {error && (
-          <div className="text-sm text-red-300 bg-red-900/20 border border-red-500/30 rounded p-3">
+          <div
+            className="text-[14px] rounded-[10px] p-3"
+            style={{
+              color: '#A52917',
+              background: 'rgba(214,57,35,0.06)',
+              border: '1px solid rgba(214,57,35,0.25)',
+            }}
+          >
             {error}
           </div>
         )}
@@ -91,14 +99,15 @@ export function SignUp() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full px-6 py-3 bg-ember-500 hover:bg-ember-500/90 text-cream-50 font-semibold tracking-[0.18em] uppercase text-sm rounded transition disabled:opacity-50"
+          className="btn btn-primary w-full"
+          style={{ padding: '0.85rem 1.5rem', fontSize: '16px' }}
         >
           {submitting ? 'Creating…' : 'Create account'}
         </button>
 
-        <p className="text-center text-sm text-cream-50/80 pt-2">
+        <p className="text-center text-[15px] text-cream-50/70 pt-2">
           Already have one?{' '}
-          <Link to="/signin" className="text-gold-100 underline underline-offset-4 hover:text-gold-100">
+          <Link to="/signin" className="text-ember-500 hover:underline">
             Sign in
           </Link>
         </p>
@@ -110,7 +119,7 @@ export function SignUp() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-xs uppercase tracking-widest text-cream-50/80 mb-2">{label}</span>
+      <span className="block text-[13px] font-medium text-cream-50 mb-1.5 tracking-[-0.005em]">{label}</span>
       {children}
     </label>
   )

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Risen Six — Pedalboard Neon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#06060A;
+    --surface:#0E0E14;
+    --surface-2:#16161E;
+    --line:#1f1f29;
+    --line-hi:#2e2e3a;
+    --green:#39FF14;
+    --green-glow:#39FF1488;
+    --pink:#FF2E88;
+    --cyan:#00E5FF;
+    --text:#EAEAF2;
+    --muted:#7d7d8a;
+    --dim:#4a4a55;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg); color:var(--text); font-family:'Space Grotesk',-apple-system,sans-serif; font-size:14.5px; line-height:1.5; min-height:100vh; -webkit-font-smoothing:antialiased}
+  body{
+    background:
+      linear-gradient(transparent 0, transparent calc(100% - 1px), rgba(57,255,20,0.03) calc(100% - 1px)) 0 0 / 40px 40px,
+      linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(57,255,20,0.03) calc(100% - 1px)) 0 0 / 40px 40px,
+      radial-gradient(900px 500px at 100% -10%, rgba(255,46,136,0.10), transparent 60%),
+      radial-gradient(700px 400px at -5% 30%, rgba(0,229,255,0.08), transparent 60%),
+      var(--bg);
+  }
+  .container{max-width:1240px; margin:0 auto; padding:0 24px}
+  .mono{font-family:'JetBrains Mono',monospace; font-size:.85em}
+
+  /* Header */
+  header{border-bottom:1px solid var(--line); background:rgba(6,6,10,0.85); backdrop-filter:blur(10px); position:sticky; top:0; z-index:50}
+  .header-inner{display:flex; align-items:center; justify-content:space-between; height:62px}
+  .brand{display:flex; align-items:center; gap:12px; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:13px; letter-spacing:.08em}
+  .brand b{color:var(--green); text-shadow:0 0 12px var(--green-glow)}
+  .mark{width:30px; height:30px; border:1px solid var(--green); background:var(--bg); display:flex; align-items:center; justify-content:center; color:var(--green); font-weight:700; font-size:13px; box-shadow:0 0 12px var(--green-glow), inset 0 0 8px rgba(57,255,20,0.20); font-family:'JetBrains Mono',monospace}
+  nav.top{display:flex; gap:2px; padding:3px; border:1px solid var(--line); background:var(--surface)}
+  nav.top a{color:var(--muted); text-decoration:none; font-size:12px; padding:7px 12px; letter-spacing:.06em; font-family:'JetBrains Mono',monospace; transition:color .15s, background .15s, text-shadow .15s}
+  nav.top a:hover{color:var(--text)}
+  nav.top a.active{color:var(--bg); background:var(--green); text-shadow:none}
+  .avatar{width:32px; height:32px; border:1px solid var(--pink); background:var(--bg); display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--pink); box-shadow:0 0 10px rgba(255,46,136,0.4)}
+
+  /* Hero */
+  .hero{padding:60px 0 24px; position:relative}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--pink)}
+  .eyebrow::before{content:"▸ "; color:var(--green)}
+  h1.title{font-size:64px; line-height:0.98; letter-spacing:-0.03em; font-weight:700; margin-top:14px; max-width:920px; text-transform:uppercase}
+  h1.title em{font-style:normal; color:var(--green); text-shadow:0 0 24px var(--green-glow)}
+  .sub{margin-top:20px; color:var(--muted); font-size:17px; max-width:600px}
+
+  .stats{margin-top:36px; display:flex; gap:0; border:1px solid var(--line); background:var(--surface)}
+  .stat{flex:1; padding:18px 22px; border-right:1px solid var(--line); position:relative}
+  .stat:last-child{border-right:none}
+  .stat .l{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:.10em; text-transform:uppercase}
+  .stat .n{font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:600; margin-top:6px; letter-spacing:-.01em}
+  .stat:nth-child(1) .n{color:var(--green)}
+  .stat:nth-child(2) .n{color:var(--pink)}
+  .stat:nth-child(3) .n{color:var(--cyan)}
+
+  /* Sections */
+  section{padding:30px 0}
+  .section-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding-bottom:10px; border-bottom:1px solid var(--line)}
+  .section-head h2{font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--cyan)}
+  .section-head h2::before{content:"// "; color:var(--dim)}
+  .section-head a{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text); text-decoration:none; padding:6px 10px; border:1px solid var(--line-hi); transition:border-color .15s, color .15s}
+  .section-head a:hover{color:var(--green); border-color:var(--green)}
+
+  /* Feature */
+  .feature{display:grid; grid-template-columns:1fr; gap:0; background:var(--surface); border:1px solid var(--line); position:relative}
+  .feature::before{content:""; position:absolute; top:-1px; left:-1px; right:-1px; height:2px; background:linear-gradient(90deg, var(--pink), var(--green), var(--cyan)); z-index:1}
+  @media(min-width:780px){.feature{grid-template-columns:1.6fr 1fr}}
+  .feature .left{padding:32px}
+  .feature .right{padding:32px; background:var(--surface-2); border-left:1px solid var(--line)}
+  .feature h3{font-size:34px; line-height:1.05; letter-spacing:-0.02em; font-weight:600; margin-top:14px; text-transform:uppercase}
+  .feature p{margin-top:14px; color:var(--muted); font-size:15.5px; max-width:520px}
+  .cta-row{margin-top:24px; display:flex; gap:10px; flex-wrap:wrap}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:11px 18px; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:12px; letter-spacing:.10em; text-transform:uppercase; text-decoration:none; border:1px solid; transition:all .15s}
+  .btn-primary{background:var(--green); color:var(--bg); border-color:var(--green); box-shadow:0 0 18px rgba(57,255,20,0.45)}
+  .btn-primary:hover{background:#5cff3d; box-shadow:0 0 28px rgba(57,255,20,0.7)}
+  .btn-ghost{background:transparent; color:var(--text); border-color:var(--line-hi)}
+  .btn-ghost:hover{border-color:var(--pink); color:var(--pink)}
+
+  .right .label{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+  .right h4{font-size:18px; margin-top:6px; font-weight:600; text-transform:uppercase}
+  .progress-bar{margin-top:16px; height:8px; background:var(--bg); border:1px solid var(--line-hi); position:relative; overflow:hidden}
+  .progress-bar > i{display:block; height:100%; background:repeating-linear-gradient(90deg, var(--green) 0 6px, transparent 6px 8px); box-shadow:0 0 10px rgba(57,255,20,0.5)}
+  .progress-meta{margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); display:flex; justify-content:space-between; letter-spacing:.06em}
+  .streak{margin-top:22px; padding:14px; border:1px dashed var(--pink); background:rgba(255,46,136,0.05)}
+  .streak .h{font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--pink); letter-spacing:.06em; text-transform:uppercase}
+  .streak p{margin-top:6px; font-size:13px; color:var(--muted)}
+
+  /* Tools */
+  .tools{display:grid; grid-template-columns:1fr; gap:14px}
+  @media(min-width:640px){.tools{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.tools{grid-template-columns:repeat(4,1fr)}}
+  .tool{display:block; padding:20px; background:var(--surface); border:1px solid var(--line); text-decoration:none; color:inherit; position:relative; transition:transform .15s, border-color .15s, box-shadow .15s}
+  .tool:hover{transform:translateY(-3px)}
+  .tool.t1{border-top:2px solid var(--green)}
+  .tool.t1:hover{box-shadow:0 0 24px rgba(57,255,20,0.35); border-color:var(--green)}
+  .tool.t2{border-top:2px solid var(--pink)}
+  .tool.t2:hover{box-shadow:0 0 24px rgba(255,46,136,0.35); border-color:var(--pink)}
+  .tool.t3{border-top:2px solid var(--cyan)}
+  .tool.t3:hover{box-shadow:0 0 24px rgba(0,229,255,0.35); border-color:var(--cyan)}
+  .tool.t4{border-top:2px solid var(--text)}
+  .tool.t4:hover{box-shadow:0 0 24px rgba(234,234,242,0.20); border-color:var(--text)}
+  .tool .label{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:24px}
+  .tool h4{font-size:17px; font-weight:600; text-transform:uppercase; letter-spacing:.01em}
+  .tool p{margin-top:8px; font-size:13px; color:var(--muted); line-height:1.5}
+  .tool .more{margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.10em; text-transform:uppercase}
+  .tool.t1 .more{color:var(--green)}
+  .tool.t2 .more{color:var(--pink)}
+  .tool.t3 .more{color:var(--cyan)}
+  .tool.t4 .more{color:var(--text)}
+
+  /* Tracks */
+  .track{display:grid; grid-template-columns:80px 1fr auto; gap:24px; align-items:center; padding:18px 0; border-bottom:1px solid var(--line); text-decoration:none; color:inherit}
+  .track:hover .t-title{color:var(--green)}
+  .t-num{font-family:'JetBrains Mono',monospace; font-size:28px; color:var(--dim); font-weight:600}
+  .t-meta{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--cyan)}
+  .t-title{font-size:19px; font-weight:600; margin-top:4px; transition:color .15s}
+  .t-desc{font-size:13.5px; color:var(--muted); margin-top:4px}
+  .t-pill{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.10em; padding:5px 10px; border:1px solid var(--line-hi); color:var(--muted)}
+  .t-pill.done{color:var(--green); border-color:var(--green); background:rgba(57,255,20,0.05)}
+
+  footer{padding:80px 0 40px; font-family:'JetBrains Mono',monospace; color:var(--dim); font-size:11px; letter-spacing:.18em; text-transform:uppercase; text-align:center}
+
+  .ribbon{position:fixed; bottom:16px; right:16px; background:var(--surface-2); border:1px solid var(--pink); padding:9px 14px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text); z-index:60; letter-spacing:.10em; text-transform:uppercase}
+  .ribbon a{color:var(--green); margin-left:6px; text-decoration:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <div class="mark">R6</div>
+      <span>RISEN<b>_</b>SIX</span>
+    </div>
+    <nav class="top">
+      <a class="active" href="#">HOME</a>
+      <a href="#">LESSONS</a>
+      <a href="#">THEORY</a>
+      <a href="#">TOOLS</a>
+      <a href="#">SONGS</a>
+    </nav>
+    <div class="avatar">CW</div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div class="eyebrow">WED · DAY 047 · ONLINE</div>
+    <h1 class="title">Welcome back, Colton. <em>One lick closer.</em></h1>
+    <p class="sub">A short session is waiting. Pick it up where you left off, or jump straight into the tools.</p>
+    <div class="stats">
+      <div class="stat"><div class="l">LESSONS</div><div class="n">12/64</div></div>
+      <div class="stat"><div class="l">STREAK</div><div class="n">05_DAYS</div></div>
+      <div class="stat"><div class="l">MILESTONES</div><div class="n">03</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Today's session</h2><a href="#">OPEN ROUTINE_</a></div>
+    <div class="feature">
+      <div class="left">
+        <div class="eyebrow">15-MIN DRILL · BEGINNER I</div>
+        <h3>Open chords:<br/>locking down C → G → Am.</h3>
+        <p>Clean transitions between three of the most-played chords in folk and rock. Warmup, drill, then strum along to "House of the Rising Sun" at 70% speed.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#">▶ Start session</a>
+          <a class="btn btn-ghost" href="#">See plan</a>
+        </div>
+      </div>
+      <div class="right">
+        <div class="label">BEGINNER I · 62%</div>
+        <h4>Journey so far</h4>
+        <div class="progress-bar"><i style="width:62%"></i></div>
+        <div class="progress-meta"><span>12 LESSONS</span><span>20 TO GO</span></div>
+        <div class="streak">
+          <div class="h">▲ FIVE DAYS IN A ROW</div>
+          <p>Two more sessions earns the "Steady Hand" milestone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Practice tools</h2><a href="#">ALL TOOLS_</a></div>
+    <div class="tools">
+      <a class="tool t1" href="#">
+        <div class="label">TOOL_01</div>
+        <h4>Play Along</h4>
+        <p>Slow any song down without changing the key. Drop in a file you own and lift the lick.</p>
+        <div class="more">OPEN →</div>
+      </a>
+      <a class="tool t2" href="#">
+        <div class="label">TOOL_02</div>
+        <h4>Lick Library</h4>
+        <p>Curated blues, rock, country, jazz, folk phrases. Playback at any tempo.</p>
+        <div class="more">BROWSE →</div>
+      </a>
+      <a class="tool t3" href="#">
+        <div class="label">TOOL_03</div>
+        <h4>Jam Studio</h4>
+        <p>Drums, bass, chord pad in any key. Pick a progression and start practicing.</p>
+        <div class="more">OPEN STUDIO →</div>
+      </a>
+      <a class="tool t4" href="#">
+        <div class="label">TOOL_04</div>
+        <h4>Tuner</h4>
+        <p>Standard tuning in seconds. Chromatic mode for drop tunings and capo work.</p>
+        <div class="more">OPEN TUNER →</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Continue</h2><a href="#">ALL LESSONS_</a></div>
+    <div>
+      <a class="track" href="#">
+        <div class="t-num">04</div>
+        <div>
+          <div class="t-meta">FOCUS · CHORD SHAPES</div>
+          <div class="t-title">The C major shape, anchored.</div>
+          <div class="t-desc">Wrist position, finger curl, why the third fret matters more than you think.</div>
+        </div>
+        <div class="t-pill">08 MIN</div>
+      </a>
+      <a class="track" href="#">
+        <div class="t-num">02</div>
+        <div>
+          <div class="t-meta">THEORY · CAGED</div>
+          <div class="t-title">Why every chord shape is the same chord.</div>
+          <div class="t-desc">The whole fretboard, with five shapes you already know.</div>
+        </div>
+        <div class="t-pill">12 MIN</div>
+      </a>
+      <a class="track" href="#">
+        <div class="t-num">01</div>
+        <div>
+          <div class="t-meta">FOCUS · RHYTHM</div>
+          <div class="t-title">Down-down-up-up-down-up.</div>
+          <div class="t-desc">The strum pattern under most folk and country songs.</div>
+        </div>
+        <div class="t-pill done">[✓ DONE]</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>RISEN_SIX · A CW CUSTOM GUITARS VENTURE · 2026</footer>
+</main>
+
+<div class="ribbon">DIR_03 :: PEDALBOARD_NEON · <a href="/mocks/">SWITCH_</a></div>
+
+</body>
+</html>
