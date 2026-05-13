@@ -20,9 +20,20 @@ export function Home() {
         }}
       >
         <div className="max-w-[1280px] mx-auto px-5 sm:px-6 h-11 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img src="/risen-six-mark-mono-dark.svg" alt="" className="h-5 w-5 object-contain" />
-            <span className="font-semibold text-[15px] tracking-[-0.02em] text-cream-50">Risen Six</span>
+          <Link to="/" className="flex items-center gap-2.5 shrink-0">
+            <div
+              className="rounded-full overflow-hidden flex-shrink-0"
+              style={{ width: 28, height: 28, background: '#000' }}
+            >
+              <img
+                src="/risensix-logo.png"
+                alt=""
+                style={{ width: '142%', height: '142%', objectFit: 'cover', objectPosition: 'center 27%', marginLeft: '-21%', marginTop: '-12%', display: 'block' }}
+              />
+            </div>
+            <span className="font-display font-medium text-[18px] tracking-[-0.015em] text-cream-50" style={{ fontVariationSettings: '"opsz" 36' }}>
+              Risen Six
+            </span>
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
             {!session && (
@@ -188,8 +199,10 @@ export function Home() {
       {/* Footer */}
       <footer className="border-t border-black/[0.08] pt-10 pb-10">
         <div className="max-w-[1080px] mx-auto px-5 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[12px] text-gold-100">
-          <div className="flex items-center gap-2">
-            <img src="/risen-six-mark-mono-dark.svg" alt="" className="h-5 w-5 object-contain" />
+          <div className="flex items-center gap-2.5">
+            <div className="rounded-full overflow-hidden flex-shrink-0" style={{ width: 22, height: 22, background: '#000' }}>
+              <img src="/risensix-logo.png" alt="" style={{ width: '142%', height: '142%', objectFit: 'cover', objectPosition: 'center 27%', marginLeft: '-21%', marginTop: '-12%', display: 'block' }} />
+            </div>
             <span>Risen Six · Curriculum by CW Custom Guitars</span>
           </div>
           <div>risensix.com</div>

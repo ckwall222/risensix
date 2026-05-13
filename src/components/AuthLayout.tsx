@@ -13,9 +13,20 @@ export function AuthLayout({ children, title, subtitle, eyebrow }: { children: R
         }}
       >
         <div className="max-w-[1280px] mx-auto px-5 sm:px-6 h-11 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2">
-            <img src="/risen-six-mark-mono-dark.svg" alt="" className="h-5 w-5 object-contain" />
-            <span className="font-semibold text-[15px] tracking-[-0.02em] text-cream-50">Risen Six</span>
+          <Link to="/" className="flex items-center gap-2.5">
+            <div
+              className="rounded-full overflow-hidden flex-shrink-0"
+              style={{ width: 28, height: 28, background: '#000' }}
+            >
+              <img
+                src="/risensix-logo.png"
+                alt=""
+                style={{ width: '142%', height: '142%', objectFit: 'cover', objectPosition: 'center 27%', marginLeft: '-21%', marginTop: '-12%', display: 'block' }}
+              />
+            </div>
+            <span className="font-display font-medium text-[18px] tracking-[-0.015em] text-cream-50" style={{ fontVariationSettings: '"opsz" 36' }}>
+              Risen Six
+            </span>
           </Link>
           <Link to="/" className="text-[13px] text-ember-500 hover:underline">
             ← Back
