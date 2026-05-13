@@ -114,21 +114,6 @@ export function Dashboard() {
             <Link to="/routine" className="btn btn-primary" style={{ padding: '0.75rem 1.75rem', fontSize: '16px' }}>
               Start today's session
             </Link>
-            {dailyChallenge && (
-              <Link
-                to="/daily"
-                className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition"
-                style={{
-                  border: '1px solid rgba(0,0,0,0.10)',
-                  background: dailyDone ? 'rgba(29,127,63,0.06)' : '#FFFFFF',
-                  color: dailyDone ? '#1D7F3F' : '#1D1D1F',
-                }}
-              >
-                <span className="text-gold-500" aria-hidden>•</span>
-                {dailyDone ? `Daily challenge · done` : `Today's challenge · ${dailyChallenge.duration} min`}
-                {streak > 0 && <span className="text-gold-100">🔥 {streak}</span>}
-              </Link>
-            )}
           </div>
         </div>
       </section>
@@ -178,6 +163,40 @@ export function Dashboard() {
               </p>
             </div>
           ) : null}
+
+          {/* Daily challenge — slim row, distinct from the main session card */}
+          {dailyChallenge && (
+            <Link
+              to="/daily"
+              className="block card mt-3.5 group"
+              style={{ padding: '1.25rem 1.5rem' }}
+            >
+              <div className="flex items-center gap-5 flex-wrap">
+                <div
+                  className="h-10 w-10 rounded-full flex-shrink-0 flex items-center justify-center text-[15px] font-semibold"
+                  style={{
+                    background: dailyDone ? 'rgba(29,127,63,0.10)' : 'rgba(214,57,35,0.10)',
+                    color: dailyDone ? '#1D7F3F' : '#D63923',
+                    border: `1px solid ${dailyDone ? 'rgba(29,127,63,0.25)' : 'rgba(214,57,35,0.20)'}`,
+                  }}
+                >
+                  {dailyDone ? '✓' : '★'}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[12px] font-semibold text-gold-500 mb-0.5">
+                    Today's challenge · {dailyChallenge.duration} min
+                    {streak > 0 && <span className="text-gold-100 ml-2">🔥 {streak}-day streak</span>}
+                  </div>
+                  <div className="h-display text-lg md:text-xl group-hover:text-ember-500 transition leading-snug">
+                    {dailyChallenge.title}
+                  </div>
+                </div>
+                <div className="text-ember-500 text-[14px] font-medium shrink-0">
+                  {dailyDone ? 'Done ✓' : 'Start ›'}
+                </div>
+              </div>
+            </Link>
+          )}
         </div>
       </section>
 
